@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Hisense Air</string>
+    <string name="device_settings">Device Settings</string>
+    <string name="unknown">Unknown</string>
+    <string name="temp" translatable="false">\u0020%1$d°</string>
+    <string name="device_ambient_temp">Currently at %1$d°</string>
+
+    <!-- Fan Speed -->
+    <string name="fan_speed_auto">Auto</string>
+    <string name="fan_speed_lower">Low</string>
+    <string name="fan_speed_low">Mid-Low</string>
+    <string name="fan_speed_normal">Normal</string>
+    <string name="fan_speed_high">Mid-High</string>
+    <string name="fan_speed_higher">High</string>
+    <string name="fan_speed_unknown">@string/unknown</string>
+
+    <!-- Work Mode -->
+    <string name="work_mode_heating">Heating</string>
+    <string name="work_mode_cooling">Cooling</string>
+    <string name="work_mode_dry">Dry</string>
+    <string name="work_mode_fan_only">Fan Only</string>
+    <string name="work_mode_auto">Auto</string>
+    <string name="work_mode_unknown">@string/unknown</string>
+
+</resources>

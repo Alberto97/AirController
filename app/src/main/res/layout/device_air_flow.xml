@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    app:behavior_peekHeight="0dp">
+
+    <View
+        android:id="@+id/qs_drag_handle_view"
+        android:layout_width="24dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@drawable/qs_footer_drag_handle" />
+
+    <TextView
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Air Flow"/>
+
+    <LinearLayout
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TableLayout
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*">
+
+            <TableRow>
+
+                <!-- Horizontal -->
+                <org.alberto97.hisenseair.ui.ToggleButton
+                    android:layout_gravity="center"
+                    android:id="@+id/horiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:text="Horizontal"
+                    app:icon="@drawable/round_swap_horiz_24"/>
+
+                <!-- Vertical -->
+                <org.alberto97.hisenseair.ui.ToggleButton
+                    android:layout_gravity="center"
+                    android:id="@+id/vert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:text="Vertical"
+                    app:icon="@drawable/round_swap_vert_24"/>
+
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+</LinearLayout>

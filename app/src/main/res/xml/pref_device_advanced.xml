@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:isPreferenceVisible="false"
+        android:key="power"
+        android:title="Power"
+        android:persistent="false" />
+
+    <PreferenceCategory
+        android:title="Air Flow"
+        android:key="airFlow">
+
+        <SwitchPreference
+            android:key="horizontal"
+            android:title="Horizontal"
+            android:icon="@drawable/round_swap_horiz_24"
+            android:persistent="false" />
+
+        <SwitchPreference
+            android:key="vertical"
+            android:title="Vertical"
+            android:icon="@drawable/round_swap_vert_24"
+            android:persistent="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Advanced"
+        android:key="advanced">
+
+        <SwitchPreference
+            android:key="backlight"
+            android:title="Dimmer"
+            android:icon="@drawable/ic_lightbulb_md"
+            android:persistent="false" />
+
+        <SwitchPreference
+            android:key="eco"
+            android:title="Eco"
+            android:icon="@drawable/ic_eco"
+            android:persistent="false" />
+
+        <SwitchPreference
+            android:key="quiet"
+            android:title="Quiet Mode"
+            android:icon="@drawable/ic_sleep"
+            android:persistent="false" />
+
+        <SwitchPreference
+            android:key="boost"
+            android:title="Super"
+            android:icon="@drawable/ic_fan"
+            android:persistent="false" />
+    </PreferenceCategory>
+</PreferenceScreen>
