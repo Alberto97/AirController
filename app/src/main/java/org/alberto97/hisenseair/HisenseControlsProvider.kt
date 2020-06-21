@@ -1,14 +1,16 @@
 package org.alberto97.hisenseair
 
 import android.app.PendingIntent
-import android.content.Intent
 import android.os.Build
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
 import android.service.controls.DeviceTypes
 import android.service.controls.actions.ControlAction
-import android.service.controls.templates.*
+import android.service.controls.templates.ControlTemplate
+import android.service.controls.templates.RangeTemplate
+import android.service.controls.templates.TemperatureControlTemplate
 import androidx.annotation.RequiresApi
+import androidx.navigation.NavDeepLinkBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -17,6 +19,7 @@ import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.features.modeToControl
 import org.alberto97.hisenseair.features.modeToStringMap
+import org.alberto97.hisenseair.fragments.DeviceFragmentArgs
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 import org.koin.android.ext.android.inject
 import java.util.concurrent.Flow
@@ -37,7 +40,7 @@ class HisenseControlsProvider : ControlsProviderService() {
         return flow {
             val devices = device.getDevices()
             devices.forEach {
-                val control = Control.StatelessBuilder(it.dsn, getPendingIntent())
+                val control = Control.StatelessBuilder(it.dsn, getPendingIntent(it.dsn))
                     .setTitle(it.productName)
                     .setDeviceType(DeviceTypes.TYPE_THERMOSTAT)
                     .build()
@@ -54,7 +57,7 @@ class HisenseControlsProvider : ControlsProviderService() {
                 val status = if (device.connectionStatus == "Online") Control.STATUS_OK else Control.STATUS_DISABLED
                 val template = createThermostatTemplate(state.on, state.workMode, state.temp)
                 val statusText = getStatusText(state.on, state.workMode, state.temp)
-                val control = Control.StatefulBuilder(it, getPendingIntent())
+                val control = Control.StatefulBuilder(it, getPendingIntent(it))
                     .setTitle(state.productName)
                     .setSubtitle(getString(R.string.device_ambient_temp, state.roomTemp))
                     .setDeviceType(DeviceTypes.TYPE_THERMOSTAT)
@@ -91,11 +94,12 @@ class HisenseControlsProvider : ControlsProviderService() {
         return TemperatureControlTemplate("template", rt, currentMode, currentActiveMode, supportedModes)
     }
 
-    private fun getPendingIntent(): PendingIntent {
-        val intent = Intent(this, MainActivity::class.java)
-        return PendingIntent.getActivity(
-                baseContext, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+    private fun getPendingIntent(dsn: String): PendingIntent {
+        val args = DeviceFragmentArgs(dsn).toBundle()
+        return NavDeepLinkBuilder(baseContext)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.deviceFragmentNew)
+            .setArguments(args)
+            .createPendingIntent()
     }
 }
