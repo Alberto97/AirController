@@ -10,10 +10,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
-            app:cardElevation="4dp"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:menu="@menu/device_toolbar_menu">
 
             <TextView
                 style="@style/TextAppearance.MaterialComponents.Headline6"
@@ -24,7 +25,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/primary"
                 android:text="Hisense Air" />
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
@@ -41,22 +42,13 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/power"
         android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_add_24"
+        android:layout_gravity="bottom|end"
         app:backgroundTint="?attr/colorSurface"
         app:tint="@color/primary"
-        app:layout_anchor="@id/toolbar" />
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        style="@style/Widget.MaterialComponents.BottomAppBar"
-        android:id="@+id/toolbar"
-        android:layout_gravity="bottom"
-        app:fabAlignmentMode="end"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/device_toolbar_menu" />
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

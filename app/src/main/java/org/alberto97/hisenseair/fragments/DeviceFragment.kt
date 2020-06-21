@@ -48,29 +48,33 @@ class DeviceFragment : Fragment() {
     ): View? {
         binding = FragmentDeviceBinding.inflate(layoutInflater)
 
+        binding.power.hide()
+        setSpinnerVisible(true)
+
         // Device name
         viewModel.deviceName.observe(viewLifecycleOwner, Observer {
-            binding.deviceName.text = it
+            binding.toolbar.title = it
         })
 
         // Ambient temp
         viewModel.roomTemp.observe(viewLifecycleOwner, Observer {
-            binding.ambientTemp.text = getString(R.string.device_ambient_temp, it)
+            binding.tempSection.ambientTemp.text = getString(R.string.device_ambient_temp, it)
+            binding.offLayout.roomTemp.text = getString(R.string.device_room_temp, it)
         })
 
         viewModel.temp.observe(viewLifecycleOwner, Observer {
-            binding.temp.text = getString(R.string.temp, it)
+            binding.tempSection.temp.text = getString(R.string.temp, it)
         })
 
-        binding.tempDown.setOnClickListener {
+        binding.tempSection.tempDown.setOnClickListener {
             viewModel.reduceTemp()
         }
 
-        binding.tempUp.setOnClickListener {
+        binding.tempSection.tempUp.setOnClickListener {
             viewModel.increaseTemp()
         }
 
-        binding.temp.setOnClickListener {
+        binding.tempSection.temp.setOnClickListener {
             val tempType = if (viewModel.useCelsius)
                 TempType.Celsius
             else
@@ -89,9 +93,13 @@ class DeviceFragment : Fragment() {
         // Work mode
         viewModel.workState.observe(viewLifecycleOwner, Observer {
             val resId = modeToStringMap[it] ?: R.string.work_mode_unknown
+            val drawableId = modeToIconMap[it] ?: R.drawable.round_brightness_7_24
+
             binding.workMode.text = getString(resId)
-            binding.workMode.icon = modeToIconMap[it] ?: R.drawable.round_brightness_7_24
+            binding.workMode.icon = drawableId
             binding.workMode.loading = false
+
+            binding.offLayout.offMode.setImageResource(drawableId)
         })
 
         binding.workMode.setOnClickListener {
@@ -179,20 +187,37 @@ class DeviceFragment : Fragment() {
         }
 
         binding.power.setOnClickListener {
-            // TODO: Spinner on
+            setSpinnerVisible(true)
             viewModel.switchPower()
         }
 
         viewModel.isOn.observe(viewLifecycleOwner, Observer {
-            // TODO: Spinner off
-            val res = if (it) R.color.primary else R.color.materialGray600
-            binding.power.imageTintList = ColorStateList.valueOf(getColor(requireContext(), res))
+            setSpinnerVisible(false)
+
+            updateFabColor(it)
+            updateLayoutVisibility(it)
+
+            binding.power.show()
         })
 
         binding.toolbar.setupWithNavController(findNavController())
         binding.toolbar.setOnMenuItemClickListener { handleMenuClick(it) }
 
         return binding.root
+    }
+
+    private fun setSpinnerVisible(visible: Boolean) {
+        binding.spinner.spinner.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun updateLayoutVisibility(isOn: Boolean) {
+        binding.offLayout.offLayout.visibility = if (isOn) View.GONE else View.VISIBLE
+        binding.list.visibility = if (isOn) View.VISIBLE else View.GONE
+    }
+
+    private fun updateFabColor(isOn: Boolean) {
+        val res = if (isOn) R.color.primary else R.color.materialGray600
+        binding.power.imageTintList = ColorStateList.valueOf(getColor(requireContext(), res))
     }
 
     private fun onFanSpeedChange(fanSpeed: FanSpeed) {
