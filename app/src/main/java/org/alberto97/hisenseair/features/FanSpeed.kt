@@ -12,7 +12,12 @@ enum class FanSpeed(val value: Int) {
 
     companion object {
         private val map = values().associateBy(FanSpeed::value)
-        fun from(type: Int) = map[type]
+        fun from(type: Int): FanSpeed? {
+            if (type == 1)
+                return Lower
+
+            return map[type]
+        }
     }
 }
 
