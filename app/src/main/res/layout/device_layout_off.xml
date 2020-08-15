@@ -19,9 +19,9 @@
             android:layout_margin="16dp"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:tint="@color/colorPrimary"
             android:alpha="0.5"
-            android:src="@drawable/ic_weather_windy" />
+            android:src="@drawable/ic_weather_windy"
+            app:tint="@color/colorPrimary" />
 
         <TextView
             style="@style/TextAppearance.MaterialComponents.Headline6"
@@ -37,6 +37,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/device_room_temp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/power"
+            android:layout_margin="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/round_power_settings_new_24"
+            android:layout_gravity="bottom|center"
+            app:backgroundTint="?attr/colorSurface"
+            app:tint="@color/colorPrimary" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

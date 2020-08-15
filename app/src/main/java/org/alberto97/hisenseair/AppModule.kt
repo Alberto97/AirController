@@ -8,10 +8,7 @@ import org.alberto97.hisenseair.repositories.AuthenticationRepository
 import org.alberto97.hisenseair.repositories.DeviceRepository
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
-import org.alberto97.hisenseair.viewmodels.DevicePreferenceViewModel
-import org.alberto97.hisenseair.viewmodels.DeviceViewModel
-import org.alberto97.hisenseair.viewmodels.LoginViewModel
-import org.alberto97.hisenseair.viewmodels.MainViewModel
+import org.alberto97.hisenseair.viewmodels.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -21,7 +18,7 @@ val appModule = module {
     single { getOkHttp(get()) }
     single { getAylaApi(get()) }
     single { getAylaLogin() }
-    viewModel { (dsn: String) -> DeviceViewModel(get(), dsn) }
+    viewModel { DeviceViewModel(get()) }
     viewModel { (dsn: String) -> DevicePreferenceViewModel(get(), dsn) }
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }

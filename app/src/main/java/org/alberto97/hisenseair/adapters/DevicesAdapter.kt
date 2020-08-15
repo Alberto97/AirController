@@ -35,7 +35,7 @@ class DevicesAdapter() : ListAdapter<AppDevice, DevicesAdapter.DeviceViewHolder>
             mode.setImageResource(res)
 
             root.setOnClickListener { view ->
-                val direction = MainFragmentDirections.actionMainFragmentToDeviceFragmentNew(device.dsn)
+                val direction = MainFragmentDirections.actionMainFragmentToDeviceFragment(device.dsn)
                 view.findNavController().navigate(direction)
             }
         }

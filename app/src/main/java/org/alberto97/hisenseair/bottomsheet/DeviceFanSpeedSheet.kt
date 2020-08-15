@@ -3,9 +3,9 @@ package org.alberto97.hisenseair.bottomsheet
 import android.app.Activity
 import android.content.Intent
 import androidx.recyclerview.widget.ListAdapter
+import org.alberto97.hisenseair.BottomSheetFragments
 import org.alberto97.hisenseair.adapters.FanSpeedAdapter
 import org.alberto97.hisenseair.features.FanSpeed
-import org.alberto97.hisenseair.fragments.DEVICE_FRAGMENT_FAN_SHEET
 import org.alberto97.hisenseair.models.FanSpeedItem
 
 class DeviceFanSpeedSheet : ListBottomSheetDialog<FanSpeedItem, FanSpeed>() {
@@ -25,7 +25,7 @@ class DeviceFanSpeedSheet : ListBottomSheetDialog<FanSpeedItem, FanSpeed>() {
     override fun getAdapter(): ListAdapter<FanSpeedItem, *> {
         return FanSpeedAdapter {
             val intent = Intent()
-            intent.putExtra(DEVICE_FRAGMENT_FAN_SHEET, it.id)
+            intent.putExtra(BottomSheetFragments.FAN, it.id)
             targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
 
             dismiss()

@@ -9,9 +9,14 @@ import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
-class DeviceViewModel(private val repo: IDeviceRepository, val dsn: String) : ViewModel() {
+class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
 
+    var dsn: String = ""
     var useCelsius = false
+
+    val isLoading: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
 
     // State
     val workState: MutableLiveData<WorkMode> by lazy {
@@ -67,7 +72,8 @@ class DeviceViewModel(private val repo: IDeviceRepository, val dsn: String) : Vi
         MutableLiveData<String>()
     }
 
-    init {
+    fun load(dsn: String) {
+        this.dsn = dsn
         viewModelScope.launch {
             fetchData()
         }

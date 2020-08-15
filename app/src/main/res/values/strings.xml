@@ -6,6 +6,7 @@
     <string name="device_ambient_temp">Currently at %1$d°</string>
     <string name="device_room_temp">Room temperature currently at %1$d°</string>
     <string name="device_off">Air conditioner is off</string>
+    <string name="device_turn_off">Turn off</string>
 
     <!-- Fan Speed -->
     <string name="fan_speed_auto">Auto</string>

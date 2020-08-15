@@ -11,8 +11,8 @@
         android:label="MainFragment"
         tools:layout="@layout/fragment_main" >
         <action
-            android:id="@+id/action_mainFragment_to_deviceFragmentNew"
-            app:destination="@id/deviceFragmentNew" />
+            android:id="@+id/action_mainFragment_to_deviceFragment"
+            app:destination="@id/deviceFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -42,7 +42,7 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/deviceFragmentNew"
+        android:id="@+id/deviceFragment"
         android:name="org.alberto97.hisenseair.fragments.DeviceFragment"
         tools:layout="@layout/fragment_device">
         <argument
@@ -55,7 +55,7 @@
     <fragment
         android:id="@+id/devicePreferenceFragment"
         android:name="org.alberto97.hisenseair.fragments.DevicePreferenceFragment"
-        android:label="DevicePreferenceFragment" >
+        android:label="@string/device_settings">
         <argument
             android:name="dsn"
             app:argType="string" />

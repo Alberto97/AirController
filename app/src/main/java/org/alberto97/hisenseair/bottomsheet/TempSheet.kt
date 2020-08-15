@@ -8,16 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.alberto97.hisenseair.BottomSheetFragments
 import org.alberto97.hisenseair.ITempUtils
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.databinding.TempBinding
 import org.alberto97.hisenseair.features.TempType
-import org.alberto97.hisenseair.fragments.DEVICE_FRAGMENT_TEMP_SHEET
 import org.koin.android.ext.android.inject
-import java.lang.Exception
 
 class TempSheet :  BottomSheetDialogFragment() {
 
@@ -48,7 +45,7 @@ class TempSheet :  BottomSheetDialogFragment() {
         binding.cancel.setOnClickListener { this.dismiss() }
         binding.ok.setOnClickListener {
             val intent = Intent()
-            intent.putExtra(DEVICE_FRAGMENT_TEMP_SHEET, value)
+            intent.putExtra(BottomSheetFragments.TEMP, value)
             targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
 
             this.dismiss()

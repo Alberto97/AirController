@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import androidx.annotation.ColorRes
 import androidx.recyclerview.widget.ListAdapter
+import org.alberto97.hisenseair.BottomSheetFragments
 import org.alberto97.hisenseair.CompatExtensions.getCompatColor
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.adapters.WorkModeAdapter
 import org.alberto97.hisenseair.features.WorkMode
-import org.alberto97.hisenseair.fragments.DEVICE_FRAGMENT_MODE_SHEET
 import org.alberto97.hisenseair.models.WorkModeItem
 
 class DeviceWorkModeSheet : ListBottomSheetDialog<WorkModeItem, WorkMode>() {
@@ -51,7 +51,7 @@ class DeviceWorkModeSheet : ListBottomSheetDialog<WorkModeItem, WorkMode>() {
     override fun getAdapter(): ListAdapter<WorkModeItem, *> {
         return WorkModeAdapter {
             val intent = Intent()
-            intent.putExtra(DEVICE_FRAGMENT_MODE_SHEET, it.id)
+            intent.putExtra(BottomSheetFragments.MODE, it.id)
             targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
 
             this.dismiss()

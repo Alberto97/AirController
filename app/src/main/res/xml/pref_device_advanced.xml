@@ -2,11 +2,34 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
-        app:isPreferenceVisible="false"
-        android:key="power"
-        android:title="Power"
-        android:persistent="false" />
+    <org.alberto97.hisenseair.ui.TempControlPreference
+        android:key="tempControl"
+        android:selectable="false" />
+
+    <com.android.settingslib.widget.ActionButtonsPreference
+        android:key="buttons"
+        android:selectable="false" />
+
+    <Preference android:key="mode"
+        app:title="Mode"
+        android:summary="Cooling"
+        app:icon="@drawable/ic_weather_windy"
+        app:allowDividerAbove="true"/>
+
+    <Preference android:key="fan"
+        app:title="Fan Speed"
+        android:summary="High"
+        android:icon="@drawable/ic_fan" />
+
+    <Preference android:key="night"
+        app:title="Night mode"
+        android:summary="Off"
+        android:icon="@drawable/ic_nights_stay" />
+
+    <Preference android:key="settings"
+        app:title="Settings"
+        android:summary="Temperature unit, device name and info"
+        android:icon="@drawable/ic_round_settings_24" />
 
     <PreferenceCategory
         android:title="Air Flow"
@@ -43,14 +66,14 @@
 
         <SwitchPreference
             android:key="quiet"
-            android:title="Quiet Mode"
-            android:icon="@drawable/ic_sleep"
+            android:title="Quiet"
+            android:icon="@drawable/outline_hearing_disabled_24"
             android:persistent="false" />
 
         <SwitchPreference
             android:key="boost"
             android:title="Super"
-            android:icon="@drawable/ic_fan"
+            android:icon="@drawable/ic_fan_plus"
             android:persistent="false" />
     </PreferenceCategory>
 </PreferenceScreen>
