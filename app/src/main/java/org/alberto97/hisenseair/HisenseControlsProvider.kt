@@ -8,6 +8,7 @@ import android.service.controls.DeviceTypes
 import android.service.controls.actions.ControlAction
 import android.service.controls.templates.ControlTemplate
 import android.service.controls.templates.RangeTemplate
+import android.service.controls.templates.StatelessTemplate
 import android.service.controls.templates.TemperatureControlTemplate
 import androidx.annotation.RequiresApi
 import androidx.navigation.NavDeepLinkBuilder
@@ -56,7 +57,7 @@ class HisenseControlsProvider : ControlsProviderService() {
                 val device = device.getDevice(it)
                 val status = if (device.connectionStatus == "Online") Control.STATUS_OK else Control.STATUS_DISABLED
                 val template = createThermostatTemplate(state.on, state.workMode, state.temp)
-                val statusText = getStatusText(state.on, state.workMode, state.temp)
+                val statusText = getStatusText(state.on, state.workMode)
                 val control = Control.StatefulBuilder(it, getPendingIntent(it))
                     .setTitle(state.productName)
                     .setSubtitle(getString(R.string.device_ambient_temp, state.roomTemp))
@@ -75,9 +76,8 @@ class HisenseControlsProvider : ControlsProviderService() {
         consumer.accept(ControlAction.RESPONSE_OK)
     }
 
-    private fun getStatusText(isOn: Boolean, mode: WorkMode, temp: Int): String {
-        val strMode = getString(modeToStringMap[mode] ?: error(""))
-        val statusTextOn = "$strMode • ${temp}°"
+    private fun getStatusText(isOn: Boolean, mode: WorkMode): String {
+        val statusTextOn = getString(modeToStringMap[mode] ?: error(""))
         val statusTextOff = "Off"
         return if (isOn) statusTextOn else statusTextOff
     }
@@ -90,15 +90,21 @@ class HisenseControlsProvider : ControlsProviderService() {
                 TemperatureControlTemplate.FLAG_MODE_HEAT_COOL or
                 TemperatureControlTemplate.FLAG_MODE_OFF
 
-        val rt = RangeTemplate("range", min, max, currentTemp.toFloat(), 1.0f, null)
-        return TemperatureControlTemplate("template", rt, currentMode, currentActiveMode, supportedModes)
+        val controlTemplate = when (mode) {
+            WorkMode.Cooling,
+            WorkMode.Heating -> RangeTemplate("range", min, max, currentTemp.toFloat(), 1.0f, "%.1f°")
+            else -> StatelessTemplate("noop")
+        }
+
+
+        return TemperatureControlTemplate("template", controlTemplate, currentMode, currentActiveMode, supportedModes)
     }
 
     private fun getPendingIntent(dsn: String): PendingIntent {
         val args = DeviceFragmentArgs(dsn).toBundle()
         return NavDeepLinkBuilder(baseContext)
             .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.deviceFragmentNew)
+            .setDestination(R.id.deviceFragment)
             .setArguments(args)
             .createPendingIntent()
     }
