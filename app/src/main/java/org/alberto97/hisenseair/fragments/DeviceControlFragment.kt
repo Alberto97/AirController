@@ -61,11 +61,12 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
     }
 
     private fun setupTempControl() {
-        val tempControl = findPreference<TempControlPreference>("tempControl")!!
+        val ambientTemp = findPreference<Preference>(PreferenceConstants.PREFERENCE_AMBIENT_TEMP)!!
+        val tempControl = findPreference<TempControlPreference>(PreferenceConstants.PREFERENCE_TEMP_CONTROL)!!
 
         // Ambient temp
         viewModel.roomTemp.observe(viewLifecycleOwner, Observer {
-            tempControl.setAmbientTemp(it)
+            ambientTemp.summary = getString(R.string.device_ambient_temp, it)
         })
 
         viewModel.temp.observe(viewLifecycleOwner, Observer {

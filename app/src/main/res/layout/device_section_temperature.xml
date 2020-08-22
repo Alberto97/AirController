@@ -18,7 +18,7 @@
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/data"
+        app:layout_constraintEnd_toStartOf="@id/temp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -32,34 +32,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/data"
+    <TextView
+        style="@style/TextAppearance.MaterialComponents.Headline4"
+        android:id="@+id/temp"
+        android:textColor="?android:textColorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="-"
         android:gravity="center"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Headline4"
-            android:id="@+id/temp"
-            android:textColor="?android:textColorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-" />
-
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:id="@+id/ambientTemp"
-            android:textColor="?android:textColorSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Currently at -" />
-    </LinearLayout>
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tempUp"
@@ -69,7 +53,7 @@
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/data"
+        app:layout_constraintStart_toEndOf="@id/temp"
         app:layout_constraintTop_toTopOf="parent" >
         <ImageView
             android:layout_width="wrap_content"

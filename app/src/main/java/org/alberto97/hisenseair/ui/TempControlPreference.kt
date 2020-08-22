@@ -15,13 +15,11 @@ class TempControlPreference @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : Preference(context, attrs, defStyleAttr) {
 
-    private lateinit var ambientTemp: TextView
     private lateinit var temp: TextView
     private lateinit var tempDown: ConstraintLayout
     private lateinit var tempUp: ConstraintLayout
 
     private var tempValue = 0
-    private var ambientTempValue = 0
     private var tempClickListener: (v: View) -> Unit = { }
     private var downClickListener: (v: View) -> Unit = { }
     private var upClickListener: (v: View) -> Unit = { }
@@ -36,12 +34,10 @@ class TempControlPreference @JvmOverloads constructor(
         holder?.isDividerAllowedAbove = true
         holder?.isDividerAllowedBelow = true
 
-        ambientTemp = holder?.findViewById(R.id.ambientTemp) as TextView
-        temp = holder.findViewById(R.id.temp) as TextView
+        temp = holder?.findViewById(R.id.temp) as TextView
         tempDown = holder.findViewById(R.id.tempDown) as ConstraintLayout
         tempUp = holder.findViewById(R.id.tempUp) as ConstraintLayout
 
-        ambientTemp.text = context.getString(R.string.device_ambient_temp, ambientTempValue)
         temp.text = context.getString(R.string.temp, tempValue)
         temp.setOnClickListener(tempClickListener)
         tempDown.setOnClickListener(downClickListener)
@@ -65,13 +61,6 @@ class TempControlPreference @JvmOverloads constructor(
     fun setOnTempUpClickListener(listener: (v: View) -> Unit) {
         if (listener != upClickListener) {
             upClickListener = listener
-            notifyChanged()
-        }
-    }
-
-    fun setAmbientTemp(value: Int) {
-        if (value != ambientTempValue) {
-            ambientTempValue = value
             notifyChanged()
         }
     }

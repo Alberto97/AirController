@@ -6,6 +6,11 @@
         android:key="tempControl"
         android:selectable="false" />
 
+    <Preference android:key="ambientTemp"
+        android:summary="The ambient temperature currently is at 37°"
+        app:icon="@drawable/ic_thermometer_md"
+        android:selectable="false"/>
+
     <com.android.settingslib.widget.ActionButtonsPreference
         android:key="buttons"
         android:selectable="false" />
@@ -14,10 +19,10 @@
         app:title="Mode"
         android:summary="Cooling"
         app:icon="@drawable/ic_weather_windy"
-        app:allowDividerAbove="true"/>
+        app:allowDividerAbove="true" />
 
     <Preference android:key="fan"
-        app:title="Fan Speed"
+        app:title="Fan speed"
         android:summary="High"
         android:icon="@drawable/ic_fan" />
 
