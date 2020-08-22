@@ -15,11 +15,11 @@ object DeviceActivityRequest {
 object PreferenceConstants {
     const val PREFERENCE_AMBIENT_TEMP = "ambientTemp"
     const val PREFERENCE_TEMP_CONTROL = "tempControl"
-    const val PREFERENCE_BUTTONS = "buttons"
     const val PREFERENCE_MODE = "mode"
     const val PREFERENCE_FAN_SPEED = "fan"
     const val PREFERENCE_NIGHT = "night"
     const val PREFERENCE_SETTINGS = "settings"
+    const val PREFERENCE_POWER = "power"
     const val PREFERENCE_CATEGORY_AIRFLOW = "airFlow"
     const val PREFERENCE_AIRFLOW_HORIZONTAL = "horizontal"
     const val PREFERENCE_AIRFLOW_VERTICAL = "vertical"

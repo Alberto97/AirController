@@ -37,19 +37,10 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         view.overScrollMode = View.OVER_SCROLL_NEVER
 
         setupTempControl()
-
-        // Setup buttons
-        findPreference<ActionButtonsPreference>(PreferenceConstants.PREFERENCE_BUTTONS)!!
-            .setButton1Text(R.string.device_turn_off)
-            .setButton1Icon(R.drawable.round_power_settings_new_24)
-            .setButton1OnClickListener {
-                viewModel.isLoading.value = true
-                viewModel.switchPower()
-            }
-
         setupMode()
         setupFanSpeed()
         setupSettings()
+        setupPower()
         setupAirFlow()
 
         // Setup advanced section
@@ -147,6 +138,21 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         settings.setOnPreferenceClickListener {
             val direct = DeviceFragmentDirections.actionDeviceFragmentNewToDevicePreferenceFragment(viewModel.dsn)
             findNavController().navigate(direct)
+            true
+        }
+
+    }
+
+    private fun setupPower() {
+        val settings = findPreference<SwitchPreference>(PreferenceConstants.PREFERENCE_POWER)!!
+
+        viewModel.isOn.observe(viewLifecycleOwner, Observer {
+            settings.isChecked = it
+        })
+
+        settings.setOnPreferenceClickListener {
+            viewModel.isLoading.value = true
+            viewModel.switchPower()
             true
         }
 
