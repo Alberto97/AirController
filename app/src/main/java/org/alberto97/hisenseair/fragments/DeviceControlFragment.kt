@@ -23,7 +23,7 @@ import org.alberto97.hisenseair.ui.TempControlPreference
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-
+@Suppress("unused")
 class DeviceControlFragment : PreferenceFragmentCompat() {
 
     private val viewModel: DeviceViewModel by sharedViewModel()

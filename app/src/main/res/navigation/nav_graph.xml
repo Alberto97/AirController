@@ -54,8 +54,9 @@
     </fragment>
     <fragment
         android:id="@+id/devicePreferenceFragment"
-        android:name="org.alberto97.hisenseair.fragments.DevicePreferenceFragment"
-        android:label="@string/device_settings">
+        android:name="org.alberto97.hisenseair.fragments.DeviceSettings"
+        android:label="@string/device_settings"
+        tools:layout="@layout/fragment_settings">
         <argument
             android:name="dsn"
             app:argType="string" />

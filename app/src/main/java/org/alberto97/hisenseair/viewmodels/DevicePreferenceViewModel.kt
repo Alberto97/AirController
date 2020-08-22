@@ -10,7 +10,9 @@ import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.features.TempTypeMap
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
-class DevicePreferenceViewModel(private val repo: IDeviceRepository, val dsn: String) : ViewModel() {
+class DevicePreferenceViewModel(private val repo: IDeviceRepository) : ViewModel() {
+
+    var dsn: String = ""
 
     val deviceName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -32,7 +34,8 @@ class DevicePreferenceViewModel(private val repo: IDeviceRepository, val dsn: St
         MutableLiveData<String>()
     }
 
-    init  {
+    fun load(dsn: String) {
+        this.dsn = dsn
         viewModelScope.launch {
             updateDeviceProps()
             fetchTempType()

@@ -19,7 +19,7 @@ val appModule = module {
     single { getAylaApi(get()) }
     single { getAylaLogin() }
     viewModel { DeviceViewModel(get()) }
-    viewModel { (dsn: String) -> DevicePreferenceViewModel(get(), dsn) }
+    viewModel { DevicePreferenceViewModel(get()) }
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get()) }
