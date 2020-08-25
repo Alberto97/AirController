@@ -65,17 +65,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         })
 
         tempControl.setOnTempClickListener {
-            val tempType = if (viewModel.useCelsius)
-                TempType.Celsius
-            else
-                TempType.Fahrenheit
-
-            val bundle = Bundle()
-            bundle.putInt("current", viewModel.temp.value!!)
-            bundle.putInt("tempType", tempType.value)
-
             val dialog = TempSheet()
-            dialog.arguments = bundle
             dialog.setTargetFragment(this, DeviceActivityRequest.TEMP)
             dialog.showNow(parentFragmentManager, BottomSheetFragments.TEMP)
         }

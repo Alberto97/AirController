@@ -8,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.alberto97.hisenseair.BottomSheetFragments
-import org.alberto97.hisenseair.ITempUtils
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.databinding.TempBinding
-import org.alberto97.hisenseair.features.TempType
-import org.koin.android.ext.android.inject
+import org.alberto97.hisenseair.viewmodels.DeviceViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class TempSheet :  BottomSheetDialogFragment() {
 
+    private val viewModel: DeviceViewModel by sharedViewModel()
     private lateinit var binding: TempBinding
-    private var value = 32
+    private var selectedTemp = 32
 
 
     override fun onCreateView(
@@ -27,25 +27,22 @@ class TempSheet :  BottomSheetDialogFragment() {
     ): View? {
         binding = TempBinding.inflate(inflater, container, false)
 
-        value = arguments?.getInt("current") ?: value
-        val type = arguments?.getInt("tempType") ?: TempType.Fahrenheit.value
-        val tempType = TempType.from(type)!!
+        selectedTemp = viewModel.temp.value!!
+        binding.slider.valueTo = viewModel.maxTemp.value!!.toFloat()
+        binding.slider.valueFrom = viewModel.minTemp.value!!.toFloat()
+        binding.slider.value = selectedTemp.toFloat()
 
-        val tempUtils: ITempUtils by inject()
-        binding.slider.valueTo = tempUtils.getMax(tempType).toFloat()
-        binding.slider.valueFrom = tempUtils.getMin(tempType).toFloat()
-        binding.slider.value = value.toFloat()
-
-        setTemp(value)
+        updateTempLabel()
 
         binding.slider.addOnChangeListener { _, value, _ ->
-            setTemp(value.toInt())
+            selectedTemp = value.toInt()
+            updateTempLabel()
         }
 
         binding.cancel.setOnClickListener { this.dismiss() }
         binding.ok.setOnClickListener {
             val intent = Intent()
-            intent.putExtra(BottomSheetFragments.TEMP, value)
+            intent.putExtra(BottomSheetFragments.TEMP, selectedTemp)
             targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
 
             this.dismiss()
@@ -54,8 +51,7 @@ class TempSheet :  BottomSheetDialogFragment() {
         return binding.root
     }
 
-    private fun setTemp(value: Int) {
-        this.value = value
-        binding.temp.text = getString(R.string.temp, value)
+    private fun updateTempLabel() {
+        binding.temp.text = getString(R.string.temp, selectedTemp)
     }
 }

@@ -12,7 +12,7 @@ import org.alberto97.hisenseair.repositories.IDeviceRepository
 class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
 
     var dsn: String = ""
-    var useCelsius = false
+    private var useCelsius = false
 
     val isLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
@@ -67,6 +67,14 @@ class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
         MutableLiveData<Int>()
     }
 
+    val maxTemp: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
+    val minTemp: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
     // Info
     val deviceName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -95,6 +103,9 @@ class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
             temp.value = resp.temp
             roomTemp.value = resp.roomTemp
             isOn.value = resp.on
+            maxTemp.value = resp.maxTemp
+            minTemp.value = resp.minTemp
+
             useCelsius = !resp.fahrenheit
         }
     }

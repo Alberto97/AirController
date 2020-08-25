@@ -33,6 +33,8 @@ class DeviceState {
     var roomTemp: Int = 0
     var fahrenheit: Boolean = false
     var on: Boolean = false
+    var maxTemp = 90
+    var minTemp = 61
 }
 
 class DeviceRepository(private val service: AylaService) : IDeviceRepository {
@@ -81,6 +83,11 @@ class DeviceRepository(private val service: AylaService) : IDeviceRepository {
         if (!deviceState.fahrenheit) {
             deviceState.temp = deviceState.temp.toC()
             deviceState.roomTemp = deviceState.roomTemp.toC()
+            deviceState.maxTemp = 32
+            deviceState.minTemp = 16
+        } else {
+            deviceState.maxTemp = 90
+            deviceState.minTemp = 61
         }
 
         return deviceState

@@ -24,7 +24,6 @@ val appModule = module {
     viewModel { MainViewModel(get()) }
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get()) }
     single<IDeviceRepository> { DeviceRepository(get()) }
-    single<ITempUtils> { TempUtils() }
 }
 
 fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {
