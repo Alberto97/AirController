@@ -2,12 +2,10 @@ package org.alberto97.hisenseair.bottomsheet
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.alberto97.hisenseair.BottomSheetFragments
 import org.alberto97.hisenseair.ITempUtils
@@ -29,18 +27,20 @@ class TempSheet :  BottomSheetDialogFragment() {
     ): View? {
         binding = TempBinding.inflate(inflater, container, false)
 
-        setupView()
+        value = arguments?.getInt("current") ?: value
+        val type = arguments?.getInt("tempType") ?: TempType.Fahrenheit.value
+        val tempType = TempType.from(type)!!
 
-        binding.seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        val tempUtils: ITempUtils by inject()
+        binding.slider.valueTo = tempUtils.getMax(tempType).toFloat()
+        binding.slider.valueFrom = tempUtils.getMin(tempType).toFloat()
+        binding.slider.value = value.toFloat()
 
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                setTemp(progress)
-            }
+        setTemp(value)
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) { }
-        })
+        binding.slider.addOnChangeListener { _, value, _ ->
+            setTemp(value.toInt())
+        }
 
         binding.cancel.setOnClickListener { this.dismiss() }
         binding.ok.setOnClickListener {
@@ -52,24 +52,6 @@ class TempSheet :  BottomSheetDialogFragment() {
         }
 
         return binding.root
-    }
-
-    private fun setupView() {
-        value = arguments?.getInt("current") ?: value
-        val type = arguments?.getInt("tempType") ?: TempType.Fahrenheit.value
-        val tempType = TempType.from(type)!!
-
-        val tempUtils: ITempUtils by inject()
-        binding.seek.max = tempUtils.getMax(tempType)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            binding.seek.min = tempUtils.getMin(tempType)
-        } else {
-            throw Exception()
-        }
-
-        binding.seek.progress = value
-        setTemp(value)
     }
 
     private fun setTemp(value: Int) {
