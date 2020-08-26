@@ -1,6 +1,7 @@
 package org.alberto97.hisenseair.repositories
 
 import org.alberto97.hisenseair.AylaService
+import org.alberto97.hisenseair.ayla.AylaPropertyToStateMap
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
 import org.alberto97.hisenseair.features.TemperatureExtensions.toC
@@ -75,23 +76,17 @@ class DeviceControlRepository(private val service: AylaService, private val pref
 
         // Update device state
         props.forEach {
-            val value = mapPropertyValue(it)
-            with(deviceState) {
-                when (it.name) {
-                    BACKLIGHT_PROP -> backlight = value as Boolean
-                    WORK_MODE_PROP -> workMode = WorkMode.from(value as Int)!!
-                    HORIZONTAL_AIR_FLOW_PROP -> horizontalAirFlow = value as Boolean
-                    VERTICAL_AIR_FLOW_PROP -> verticalAirFlow = value as Boolean
-                    QUIET_PROP -> quiet = value as Boolean
-                    ECO_PROP -> eco = value as Boolean
-                    BOOST_PROP -> boost = value as Boolean
-                    SLEEP_MODE_PROP -> sleepMode = value as Int
-                    FAN_SPEED_PROP -> fanSpeed = FanSpeed.from(value as Int)!!
-                    TEMP_PROP -> temp = value as Int
-                    ROOM_TEMP_PROP -> roomTemp = value as Int
-                    TEMP_TYPE_PROP -> tempUnit = TempTypeMap.getValue(value as Boolean)
-                    POWER_PROP -> on = value as Boolean
-                }
+            var value = mapPropertyValue(it)
+
+            when (it.name) {
+                WORK_MODE_PROP -> value = WorkMode.from(value as Int)
+                FAN_SPEED_PROP -> value = FanSpeed.from(value as Int)
+                TEMP_TYPE_PROP -> value = TempTypeMap.getValue(value as Boolean)
+            }
+
+            val prop = AylaPropertyToStateMap[it.name]
+            if (prop != null) {
+                prop.setter.call(deviceState, value)
             }
         }
 

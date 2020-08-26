@@ -11,6 +11,6 @@ enum class TempType(val value: Int) {
 
     companion object {
         private val map = values().associateBy(TempType::value)
-        fun from(type: Int) = map[type]
+        fun from(type: Int) = map.getValue(type)
     }
 }

@@ -14,7 +14,7 @@ enum class WorkMode(val value: Int) {
 
     companion object {
         private val map = values().associateBy(WorkMode::value)
-        fun from(type: Int) = map[type]
+        fun from(type: Int) = map.getValue(type)
     }
 }
 

@@ -20,7 +20,7 @@ class DevicePreferencesRepository(val app: Application) : IDevicePreferencesRepo
     override fun getTempUnit(dsn: String): TempType {
         val prefs = getPreferences(dsn)
         val data = prefs.getInt(DevicePreferences.TEMP_UNIT, TempType.Fahrenheit.value)
-        return TempType.from(data)!!
+        return TempType.from(data)
     }
 
     override fun setTempUnit(dsn: String, unit: TempType) {
