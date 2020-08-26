@@ -87,8 +87,7 @@ class HisenseControlsProvider : ControlsProviderService() {
             consumer.accept(ControlAction.RESPONSE_OK)
             val newTemp = action.newValue.toInt()
             ioScope.launch {
-                // TODO: Handle temp conversion
-                device.setTemp(newTemp, controlId, true)
+                device.setTemp(newTemp, controlId)
             }
         }
     }

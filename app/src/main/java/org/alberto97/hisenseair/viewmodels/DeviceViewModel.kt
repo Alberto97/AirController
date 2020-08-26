@@ -12,7 +12,6 @@ import org.alberto97.hisenseair.repositories.IDeviceRepository
 class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
 
     var dsn: String = ""
-    private var useCelsius = false
 
     val isLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
@@ -105,8 +104,6 @@ class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
             isOn.value = resp.on
             maxTemp.value = resp.maxTemp
             minTemp.value = resp.minTemp
-
-            useCelsius = !resp.fahrenheit
         }
     }
 
@@ -122,7 +119,7 @@ class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
 
     fun setTemp(value: Int) {
         viewModelScope.launch {
-            repo.setTemp(value, dsn, useCelsius)
+            repo.setTemp(value, dsn)
 
             withContext(Dispatchers.IO) {
                 fetchData()

@@ -1,10 +1,12 @@
 package org.alberto97.hisenseair.features
 
 import java.math.RoundingMode
-import java.text.DecimalFormat
-import kotlin.math.roundToInt
 
 object TemperatureExtensions {
+
+    fun TempType.isCelsius(): Boolean {
+        return this == TempType.Celsius
+    }
 
     fun Int.toF(): Int {
         val x = ((this.toDouble() * 9/5) + 32)

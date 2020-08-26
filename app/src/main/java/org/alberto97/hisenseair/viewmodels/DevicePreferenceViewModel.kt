@@ -5,9 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.features.TEMP_TYPE_PROP
 import org.alberto97.hisenseair.features.TempType
-import org.alberto97.hisenseair.features.TempTypeMap
+import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
 class DevicePreferenceViewModel(private val repo: IDeviceRepository) : ViewModel() {
@@ -44,13 +43,13 @@ class DevicePreferenceViewModel(private val repo: IDeviceRepository) : ViewModel
 
     fun switchTempType() {
         val type =
-            if (tempType.value == TempType.Celsius)
+            if (tempType.value!!.isCelsius())
                 TempType.Fahrenheit
             else
                 TempType.Celsius
 
         viewModelScope.launch {
-            repo.setProperty(TEMP_TYPE_PROP, type.value, dsn)
+            repo.setTempUnit(dsn, type)
             fetchTempType()
         }
     }
@@ -63,8 +62,7 @@ class DevicePreferenceViewModel(private val repo: IDeviceRepository) : ViewModel
     }
 
     private suspend fun fetchTempType() {
-        val resp = repo.getBooleanProperty(TEMP_TYPE_PROP, dsn)
-        tempType.value = TempTypeMap[resp]
+        tempType.value = repo.getTempUnit(dsn)
     }
 
     private suspend fun updateDeviceProps() {

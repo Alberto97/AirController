@@ -4,11 +4,9 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.alberto97.hisenseair.interceptors.AuthInterceptor
 import org.alberto97.hisenseair.interceptors.TokenAuthenticator
-import org.alberto97.hisenseair.repositories.AuthenticationRepository
-import org.alberto97.hisenseair.repositories.DeviceRepository
-import org.alberto97.hisenseair.repositories.IAuthenticationRepository
-import org.alberto97.hisenseair.repositories.IDeviceRepository
+import org.alberto97.hisenseair.repositories.*
 import org.alberto97.hisenseair.viewmodels.*
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -23,7 +21,8 @@ val appModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get()) }
-    single<IDeviceRepository> { DeviceRepository(get()) }
+    single<IDeviceRepository> { DeviceRepository(get(), get()) }
+    single<IDevicePreferencesRepository> { DevicePreferencesRepository(androidApplication()) }
 }
 
 fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {

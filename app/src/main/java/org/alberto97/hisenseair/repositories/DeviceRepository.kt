@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import org.alberto97.hisenseair.AylaService
 import org.alberto97.hisenseair.features.*
+import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
 import org.alberto97.hisenseair.features.TemperatureExtensions.toC
 import org.alberto97.hisenseair.features.TemperatureExtensions.toF
 import org.alberto97.hisenseair.models.*
@@ -13,9 +14,10 @@ interface IDeviceRepository {
     suspend fun getDevice(dsn: String): Device
     suspend fun getDeviceState(dsn: String): DeviceState
     suspend fun setDeviceName(name: String, dsn: String)
-    suspend fun getBooleanProperty(property: String, dsn: String): Boolean
     suspend fun setProperty(property: String, value: Int, dsn: String)
-    suspend fun setTemp(value: Int, dsn: String, needsFahrenheitConversion: Boolean = false)
+    suspend fun getTempUnit(dsn: String): TempType
+    suspend fun setTempUnit(dsn: String, unit: TempType)
+    suspend fun setTemp(value: Int, dsn: String)
 }
 
 class DeviceState {
@@ -31,13 +33,13 @@ class DeviceState {
     var fanSpeed: FanSpeed = FanSpeed.Auto
     var temp: Int = 0
     var roomTemp: Int = 0
-    var fahrenheit: Boolean = false
+    var tempUnit: TempType = TempType.Fahrenheit
     var on: Boolean = false
     var maxTemp = 90
     var minTemp = 61
 }
 
-class DeviceRepository(private val service: AylaService) : IDeviceRepository {
+class DeviceRepository(private val service: AylaService, private val prefs: IDevicePreferencesRepository) : IDeviceRepository {
 
     override suspend fun getDevices(): List<Device> {
         val devicesWrapperList = service.getDevices()
@@ -74,13 +76,13 @@ class DeviceRepository(private val service: AylaService) : IDeviceRepository {
                     FAN_SPEED_PROP -> fanSpeed = FanSpeed.from(value as Int)!!
                     TEMP_PROP -> temp = value as Int
                     ROOM_TEMP_PROP -> roomTemp = value as Int
-                    TEMP_TYPE_PROP -> fahrenheit = value as Boolean
+                    TEMP_TYPE_PROP -> tempUnit = TempTypeMap.getValue(value as Boolean)
                     POWER_PROP -> on = value as Boolean
                 }
             }
         }
 
-        if (!deviceState.fahrenheit) {
+        if (deviceState.tempUnit.isCelsius()) {
             deviceState.temp = deviceState.temp.toC()
             deviceState.roomTemp = deviceState.roomTemp.toC()
             deviceState.maxTemp = 32
@@ -89,6 +91,7 @@ class DeviceRepository(private val service: AylaService) : IDeviceRepository {
             deviceState.maxTemp = 90
             deviceState.minTemp = 61
         }
+        prefs.setTempUnit(dsn, deviceState.tempUnit)
 
         return deviceState
     }
@@ -126,13 +129,26 @@ class DeviceRepository(private val service: AylaService) : IDeviceRepository {
         return wrappedValue.property
     }
 
-    override suspend fun getBooleanProperty(property: String, dsn: String): Boolean {
+    private suspend fun getBooleanProperty(property: String, dsn: String): Boolean {
         val value = getProperty(property, dsn)
         return mapPropertyValue(value) as Boolean
     }
 
-    override suspend fun setTemp(value: Int, dsn: String, needsFahrenheitConversion: Boolean) {
-        val temp = if (needsFahrenheitConversion) value.toF() else value
+    override suspend fun getTempUnit(dsn: String): TempType {
+        val value = getBooleanProperty(TEMP_TYPE_PROP, dsn)
+        val unit = TempTypeMap.getValue(value)
+        prefs.setTempUnit(dsn, unit)
+        return unit
+    }
+
+    override suspend fun setTempUnit(dsn: String, unit: TempType) {
+        prefs.setTempUnit(dsn, unit)
+        setProperty(TEMP_TYPE_PROP, unit.value, dsn)
+    }
+
+    override suspend fun setTemp(value: Int, dsn: String) {
+        val unit = prefs.getTempUnit(dsn)
+        val temp = if (unit.isCelsius()) value.toF() else value
         setProperty(TEMP_PROP, temp, dsn)
     }
 }
