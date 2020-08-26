@@ -4,6 +4,7 @@
     <string name="unknown">Unknown</string>
     <string name="temp" translatable="false">\u0020%1$d°</string>
     <string name="device_ambient_temp">The ambient temperature currently is %1$d°</string>
+    <string name="device_current_temp">Currently at %1$d°</string>
     <string name="device_room_temp">Room temperature currently at %1$d°</string>
     <string name="device_off">Air conditioner is off</string>
 

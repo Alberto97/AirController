@@ -6,21 +6,25 @@ import android.service.controls.Control
 import android.service.controls.ControlsProviderService
 import android.service.controls.DeviceTypes
 import android.service.controls.actions.ControlAction
+import android.service.controls.actions.FloatAction
 import android.service.controls.templates.ControlTemplate
 import android.service.controls.templates.RangeTemplate
 import android.service.controls.templates.StatelessTemplate
 import android.service.controls.templates.TemperatureControlTemplate
 import androidx.annotation.RequiresApi
 import androidx.navigation.NavDeepLinkBuilder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.jdk9.asPublisher
-import org.alberto97.hisenseair.features.TempType
+import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.features.modeToControl
 import org.alberto97.hisenseair.features.modeToStringMap
 import org.alberto97.hisenseair.fragments.DeviceFragmentArgs
+import org.alberto97.hisenseair.repositories.DeviceState
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 import org.koin.android.ext.android.inject
 import java.util.concurrent.Flow
@@ -29,13 +33,7 @@ import java.util.function.Consumer
 @RequiresApi(Build.VERSION_CODES.R)
 class HisenseControlsProvider : ControlsProviderService() {
 
-    val device: IDeviceRepository by inject()
-
-    private val max: Float
-        get() = if (TempType.Celsius == TempType.Celsius) 32.0f else 90.0f
-
-    private val min: Float
-        get() = if (TempType.Celsius == TempType.Celsius) 16.0f else 61.0f
+    private val device: IDeviceRepository by inject()
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
         return flow {
@@ -53,27 +51,46 @@ class HisenseControlsProvider : ControlsProviderService() {
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
         return flow {
             controlIds.forEach {
-                val state = device.getDeviceState(it)
-                val device = device.getDevice(it)
-                val status = if (device.connectionStatus == "Online") Control.STATUS_OK else Control.STATUS_DISABLED
-                val template = createThermostatTemplate(state.on, state.workMode, state.temp)
-                val statusText = getStatusText(state.on, state.workMode)
-                val control = Control.StatefulBuilder(it, getPendingIntent(it))
-                    .setTitle(state.productName)
-                    .setSubtitle(getString(R.string.device_ambient_temp, state.roomTemp))
-                    .setDeviceType(DeviceTypes.TYPE_THERMOSTAT)
-                    .setControlTemplate(template)
-                    .setStatus(status)
-                    .setStatusText(statusText)
-                    .build()
+                val status = getDeviceStatus(it)
+                val control = createControlById(it, status)
                 emit(control)
             }
         }.flowOn(Dispatchers.IO).asPublisher()
     }
 
+    private suspend fun createControlById(dsn: String, status: Int): Control {
+        val state = device.getDeviceState(dsn)
+        val template = createThermostatTemplate(state)
+        val statusText = getStatusText(state.on, state.workMode)
+        return Control.StatefulBuilder(dsn, getPendingIntent(dsn))
+            .setTitle(state.productName)
+            .setSubtitle(getString(R.string.device_current_temp, state.roomTemp))
+            .setDeviceType(DeviceTypes.TYPE_THERMOSTAT)
+            .setControlTemplate(template)
+            .setStatus(status)
+            .setStatusText(statusText)
+            .build()
+    }
+
+    private suspend fun getDeviceStatus(dsn: String): Int {
+        val device = device.getDevice(dsn)
+        return if (device.connectionStatus == "Online")
+            Control.STATUS_OK
+        else
+            Control.STATUS_DISABLED
+    }
+
     override fun performControlAction(controlId: String, action: ControlAction, consumer: Consumer<Int>) {
-        //
-        consumer.accept(ControlAction.RESPONSE_OK)
+        val ioScope = CoroutineScope(Dispatchers.IO + Job())
+
+        if (action is FloatAction) {
+            consumer.accept(ControlAction.RESPONSE_OK)
+            val newTemp = action.newValue.toInt()
+            ioScope.launch {
+                // TODO: Handle temp conversion
+                device.setTemp(newTemp, controlId, true)
+            }
+        }
     }
 
     private fun getStatusText(isOn: Boolean, mode: WorkMode): String {
@@ -82,17 +99,21 @@ class HisenseControlsProvider : ControlsProviderService() {
         return if (isOn) statusTextOn else statusTextOff
     }
 
-    private fun createThermostatTemplate(isOn: Boolean, mode: WorkMode, currentTemp: Int): ControlTemplate {
-        val currentMode = modeToControl[mode] ?: TemperatureControlTemplate.MODE_UNKNOWN
-        val currentActiveMode = if (isOn) currentMode else TemperatureControlTemplate.MODE_OFF
+    private fun createThermostatTemplate(state: DeviceState): ControlTemplate {
+        val currentTemp = state.temp.toFloat()
+        val maxTemp = state.maxTemp.toFloat()
+        val minTemp = state.minTemp.toFloat()
+
+        val currentMode = modeToControl[state.workMode] ?: TemperatureControlTemplate.MODE_UNKNOWN
+        val currentActiveMode = if (state.on) currentMode else TemperatureControlTemplate.MODE_OFF
         val supportedModes = TemperatureControlTemplate.FLAG_MODE_COOL or
                 TemperatureControlTemplate.FLAG_MODE_HEAT or
                 TemperatureControlTemplate.FLAG_MODE_HEAT_COOL or
                 TemperatureControlTemplate.FLAG_MODE_OFF
 
-        val controlTemplate = when (mode) {
+        val controlTemplate = when (state.workMode) {
             WorkMode.Cooling,
-            WorkMode.Heating -> RangeTemplate("range", min, max, currentTemp.toFloat(), 1.0f, "%.1f°")
+            WorkMode.Heating -> RangeTemplate("range", minTemp, maxTemp, currentTemp, 1.0f, "%.1f°")
             else -> StatelessTemplate("noop")
         }
 
