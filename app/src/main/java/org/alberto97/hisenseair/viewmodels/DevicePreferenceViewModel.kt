@@ -4,12 +4,17 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
+import org.alberto97.hisenseair.repositories.DeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
-class DevicePreferenceViewModel(private val repo: IDeviceRepository) : ViewModel() {
+class DevicePreferenceViewModel(
+    private val repo: IDeviceRepository,
+    private val deviceControl: DeviceControlRepository) : ViewModel() {
 
     var dsn: String = ""
 
@@ -48,29 +53,34 @@ class DevicePreferenceViewModel(private val repo: IDeviceRepository) : ViewModel
             else
                 TempType.Celsius
 
-        viewModelScope.launch {
-            repo.setTempUnit(dsn, type)
+        viewModelScope.launch(Dispatchers.IO) {
+            deviceControl.setTempUnit(dsn, type)
             fetchTempType()
         }
     }
 
     fun updateDeviceName(name: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.setDeviceName(name, dsn)
             updateDeviceProps()
         }
     }
 
     private suspend fun fetchTempType() {
-        tempType.value = repo.getTempUnit(dsn)
+        val value = deviceControl.getTempUnit(dsn)
+        withContext(Dispatchers.Main) {
+            tempType.value = value
+        }
     }
 
     private suspend fun updateDeviceProps() {
         val dev = repo.getDevice(dsn)
-        deviceName.value = dev.productName
-        ip.value = dev.lanIp
-        mac.value = dev.mac
-        ssid.value = Uri.decode(dev.ssid)
+        withContext(Dispatchers.Main) {
+            deviceName.value = dev.productName
+            ip.value = dev.lanIp
+            mac.value = dev.mac
+            ssid.value = Uri.decode(dev.ssid)
+        }
     }
 
 }

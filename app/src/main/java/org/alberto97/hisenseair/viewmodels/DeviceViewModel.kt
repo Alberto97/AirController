@@ -7,9 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.features.*
-import org.alberto97.hisenseair.repositories.IDeviceRepository
+import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 
-class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
+class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel() {
 
     var dsn: String = ""
 
@@ -107,78 +107,91 @@ class DeviceViewModel(private val repo: IDeviceRepository) : ViewModel() {
         }
     }
 
-    private fun setProperty(property: String, value: Int) {
-        viewModelScope.launch {
-            repo.setProperty(property, value, dsn)
+    private fun setProp(setProperty: suspend () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            setProperty()
+            fetchData()
+        }
+    }
 
-            withContext(Dispatchers.IO) {
-                fetchData()
-            }
+    private fun switchProp(liveData: MutableLiveData<Boolean>,
+                           setProperty: suspend (value: Boolean) -> Unit) {
+        val opposite = !liveData.value!!
+        liveData.value = opposite
+
+        viewModelScope.launch(Dispatchers.IO) {
+            setProperty(opposite)
+            fetchData()
+        }
+    }
+
+    fun setMode(mode: WorkMode) {
+        setProp {
+            repo.setMode(dsn, mode)
+        }
+    }
+
+    fun setSleepMode(mode: Int) {
+        setProp {
+            repo.setSleepMode(dsn, mode)
+        }
+    }
+
+    fun setFanSpeed(speed: FanSpeed) {
+        setProp {
+            repo.setFanSpeed(dsn, speed)
+        }
+    }
+
+    fun switchBacklight() {
+        switchProp(backlight) {
+            repo.setBacklight(dsn, it)
+        }
+    }
+
+    fun switchAirFlowHorizontal() {
+        switchProp(horizontalAirFlow) {
+            repo.setAirFlowHorizontal(dsn, it)
+        }
+    }
+
+    fun switchAirFlowVertical() {
+        switchProp(verticalAirFlow) {
+            repo.setAirFlowVertical(dsn, it)
+        }
+    }
+
+    fun switchQuiet() {
+        switchProp(isQuiet) {
+            repo.setQuiet(dsn, it)
+        }
+    }
+
+    fun switchEco() {
+        switchProp(isEco) {
+            repo.setEco(dsn, it)
+        }
+    }
+
+    fun switchBoost() {
+        switchProp(isBoost) {
+            repo.setBoost(dsn, it)
+        }
+    }
+
+    fun switchPower() {
+        switchProp(isOn) {
+            repo.setPower(dsn, it)
         }
     }
 
     fun setTemp(value: Int) {
-        viewModelScope.launch {
+        setProp {
             repo.setTemp(value, dsn)
-
-            withContext(Dispatchers.IO) {
-                fetchData()
-            }
         }
     }
 
-    private fun switchProp(property: String, liveData: MutableLiveData<Boolean>) {
-        val opposite = !liveData.value!!
-        setProperty(property, if (opposite) 1 else 0)
-        liveData.value = opposite
-    }
+    fun increaseTemp() = setTemp(temp.value!! + 1)
 
-    fun setMode(mode: WorkMode) {
-        setProperty(WORK_MODE_PROP, mode.value)
-    }
-
-    fun setSleepMode(mode: Int) {
-        setProperty(SLEEP_MODE_PROP, mode)
-    }
-
-    fun setFanSpeed(speed: FanSpeed) {
-        setProperty(FAN_SPEED_PROP, speed.value)
-    }
-
-    fun switchBacklight() {
-        switchProp(BACKLIGHT_PROP, backlight)
-    }
-
-    fun switchAirFlowHorizontal() {
-        switchProp(HORIZONTAL_AIR_FLOW_PROP, horizontalAirFlow)
-    }
-
-    fun switchAirFlowVertical() {
-        switchProp(VERTICAL_AIR_FLOW_PROP, verticalAirFlow)
-    }
-
-    fun switchQuiet() {
-        switchProp(QUIET_PROP, isQuiet)
-    }
-
-    fun switchEco() {
-        switchProp(ECO_PROP, isEco)
-    }
-
-    fun switchBoost() {
-        switchProp(BOOST_PROP, isBoost)
-    }
-
-    fun switchPower() {
-        switchProp(POWER_PROP, isOn)
-    }
-
-    private fun increaseTemp(value: Int) {
-        val newTmp = temp.value!! + value
-        setTemp(newTmp)
-    }
-
-    fun increaseTemp() = increaseTemp(+1)
-
-    fun reduceTemp() = increaseTemp(-1)
+    fun reduceTemp() = setTemp(temp.value!! - 1)
 }

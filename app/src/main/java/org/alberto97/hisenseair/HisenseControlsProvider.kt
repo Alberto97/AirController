@@ -24,7 +24,8 @@ import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.features.modeToControl
 import org.alberto97.hisenseair.features.modeToStringMap
 import org.alberto97.hisenseair.fragments.DeviceFragmentArgs
-import org.alberto97.hisenseair.repositories.DeviceState
+import org.alberto97.hisenseair.models.AppDeviceState
+import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 import org.koin.android.ext.android.inject
 import java.util.concurrent.Flow
@@ -34,6 +35,7 @@ import java.util.function.Consumer
 class HisenseControlsProvider : ControlsProviderService() {
 
     private val device: IDeviceRepository by inject()
+    private val deviceControl: IDeviceControlRepository by inject()
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
         return flow {
@@ -59,7 +61,7 @@ class HisenseControlsProvider : ControlsProviderService() {
     }
 
     private suspend fun createControlById(dsn: String, status: Int): Control {
-        val state = device.getDeviceState(dsn)
+        val state = deviceControl.getDeviceState(dsn)
         val template = createThermostatTemplate(state)
         val statusText = getStatusText(state.on, state.workMode)
         return Control.StatefulBuilder(dsn, getPendingIntent(dsn))
@@ -87,7 +89,7 @@ class HisenseControlsProvider : ControlsProviderService() {
             consumer.accept(ControlAction.RESPONSE_OK)
             val newTemp = action.newValue.toInt()
             ioScope.launch {
-                device.setTemp(newTemp, controlId)
+                deviceControl.setTemp(newTemp, controlId)
             }
         }
     }
@@ -98,7 +100,7 @@ class HisenseControlsProvider : ControlsProviderService() {
         return if (isOn) statusTextOn else statusTextOff
     }
 
-    private fun createThermostatTemplate(state: DeviceState): ControlTemplate {
+    private fun createThermostatTemplate(state: AppDeviceState): ControlTemplate {
         val currentTemp = state.temp.toFloat()
         val maxTemp = state.maxTemp.toFloat()
         val minTemp = state.minTemp.toFloat()
