@@ -6,12 +6,31 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.alberto97.hisenseair.features.*
+import org.alberto97.hisenseair.features.FanSpeed
+import org.alberto97.hisenseair.features.WorkMode
+import org.alberto97.hisenseair.features.controllers.*
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel() {
+class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(), KoinComponent {
 
     var dsn: String = ""
+
+    private val airFlowHorizontalController: IAirFlowHorizontalController by inject()
+    private val airFlowVerticalController: IAirFlowVerticalController by inject()
+    private val backlightController: IBacklightController by inject()
+    private val boostController: IBoostController by inject()
+    private val ecoController: IEcoController by inject()
+    private val fanSpeedController: IFanSpeedController by inject()
+    private val maxTempController: IMaxTempController by inject()
+    private val minTempController: IMinTempController by inject()
+    private val modeController: IModeController by inject()
+    private val powerController: IPowerController by inject()
+    private val quietController: IQuietController by inject()
+    private val roomTempController: IRoomTempController by inject()
+    private val sleepModeController: ISleepModeController by inject()
+    private val tempController: ITempControlController by inject()
 
     val isLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
@@ -90,20 +109,20 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel() 
         val resp = repo.getDeviceState(dsn)
         withContext(Dispatchers.Main) {
             deviceName.value = resp.productName
-            backlight.value = resp.backlight
-            workState.value = resp.workMode
-            horizontalAirFlow.value = resp.horizontalAirFlow
-            verticalAirFlow.value = resp.verticalAirFlow
-            isQuiet.value = resp.quiet
-            isEco.value = resp.eco
-            isBoost.value = resp.boost
-            sleepMode.value = resp.sleepMode
-            fanSpeed.value = resp.fanSpeed
-            temp.value = resp.temp
-            roomTemp.value = resp.roomTemp
-            isOn.value = resp.on
-            maxTemp.value = resp.maxTemp
-            minTemp.value = resp.minTemp
+            backlight.value = backlightController.getValue(resp)
+            workState.value = modeController.getValue(resp)
+            horizontalAirFlow.value = airFlowHorizontalController.getValue(resp)
+            verticalAirFlow.value = airFlowVerticalController.getValue(resp)
+            isQuiet.value = quietController.getValue(resp)
+            isEco.value = ecoController.getValue(resp)
+            isBoost.value = boostController.getValue(resp)
+            sleepMode.value = sleepModeController.getValue(resp)
+            fanSpeed.value = fanSpeedController.getValue(resp)
+            temp.value = tempController.getValue(resp)
+            roomTemp.value = roomTempController.getValue(resp)
+            isOn.value = powerController.getValue(resp)
+            maxTemp.value = maxTempController.getValue(resp)
+            minTemp.value = minTempController.getValue(resp)
         }
     }
 
