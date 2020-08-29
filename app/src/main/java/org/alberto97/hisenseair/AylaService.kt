@@ -1,6 +1,6 @@
 package org.alberto97.hisenseair
 
-import org.alberto97.hisenseair.models.*
+import org.alberto97.hisenseair.ayla.models.*
 import retrofit2.http.*
 
 interface AylaService {

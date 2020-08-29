@@ -3,9 +3,9 @@ package org.alberto97.hisenseair.repositories
 import org.alberto97.hisenseair.AylaService
 import org.alberto97.hisenseair.ayla.AylaExtensions.isAvailable
 import org.alberto97.hisenseair.models.AppDevice
-import org.alberto97.hisenseair.models.Device
-import org.alberto97.hisenseair.models.ProductName
-import org.alberto97.hisenseair.models.ProductNameWrapper
+import org.alberto97.hisenseair.ayla.models.Device
+import org.alberto97.hisenseair.ayla.models.ProductName
+import org.alberto97.hisenseair.ayla.models.ProductNameWrapper
 
 interface IDeviceRepository {
     suspend fun getDevices(): List<AppDevice>
@@ -32,6 +32,6 @@ class DeviceRepository(private val service: AylaService) : IDeviceRepository {
     }
 
     private fun mapDeviceData(it: Device): AppDevice {
-        return AppDevice(it.dsn, it.productName, it.isAvailable())
+        return AppDevice(it.dsn, it.productName, it.isAvailable(), it.lanIp, it.mac, it.ssid)
     }
 }

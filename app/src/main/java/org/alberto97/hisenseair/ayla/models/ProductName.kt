@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.models
+package org.alberto97.hisenseair.ayla.models
 
 import com.google.gson.annotations.SerializedName
 

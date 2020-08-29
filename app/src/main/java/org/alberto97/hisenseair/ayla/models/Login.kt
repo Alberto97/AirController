@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package org.alberto97.hisenseair.models
+package org.alberto97.hisenseair.ayla.models
 
 import com.google.gson.annotations.SerializedName
 
@@ -44,4 +44,4 @@ class LoginOutput(
 
     @SerializedName("role_tags")
     val roleTags: List<String>
-) : AylaResponse()
+) : Response()

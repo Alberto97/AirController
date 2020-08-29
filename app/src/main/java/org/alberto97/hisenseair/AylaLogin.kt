@@ -1,8 +1,8 @@
 package org.alberto97.hisenseair
 
-import org.alberto97.hisenseair.models.Login
-import org.alberto97.hisenseair.models.LoginOutput
-import org.alberto97.hisenseair.models.LoginRefresh
+import org.alberto97.hisenseair.ayla.models.Login
+import org.alberto97.hisenseair.ayla.models.LoginOutput
+import org.alberto97.hisenseair.ayla.models.LoginRefresh
 import retrofit2.http.Body
 import retrofit2.http.POST
 

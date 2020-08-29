@@ -3,10 +3,10 @@ package org.alberto97.hisenseair.repositories
 import android.content.Context
 import androidx.preference.PreferenceManager
 import org.alberto97.hisenseair.AylaLogin
-import org.alberto97.hisenseair.models.Login
-import org.alberto97.hisenseair.models.LoginOutput
-import org.alberto97.hisenseair.models.LoginRefresh
-import org.alberto97.hisenseair.models.UserRefresh
+import org.alberto97.hisenseair.ayla.models.Login
+import org.alberto97.hisenseair.ayla.models.LoginOutput
+import org.alberto97.hisenseair.ayla.models.LoginRefresh
+import org.alberto97.hisenseair.ayla.models.UserRefresh
 import retrofit2.HttpException
 
 interface IAuthenticationRepository {

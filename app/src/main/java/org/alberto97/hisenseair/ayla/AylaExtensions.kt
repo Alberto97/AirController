@@ -1,6 +1,6 @@
 package org.alberto97.hisenseair.ayla
 
-import org.alberto97.hisenseair.models.Device
+import org.alberto97.hisenseair.ayla.models.Device
 
 object AylaExtensions {
 

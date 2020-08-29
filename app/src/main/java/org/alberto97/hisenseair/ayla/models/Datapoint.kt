@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package org.alberto97.hisenseair.models
+package org.alberto97.hisenseair.ayla.models
 
 import com.google.gson.annotations.SerializedName
 
@@ -25,4 +25,4 @@ class DatapointOutput(
 
 class DatapointOutputWrapper(
     val datapoint: DatapointOutput
-) : AylaResponse()
+) : Response()

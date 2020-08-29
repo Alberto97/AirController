@@ -7,9 +7,9 @@ import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
 import org.alberto97.hisenseair.features.TemperatureExtensions.toC
 import org.alberto97.hisenseair.features.TemperatureExtensions.toF
 import org.alberto97.hisenseair.models.AppDeviceState
-import org.alberto97.hisenseair.models.Datapoint
-import org.alberto97.hisenseair.models.DatapointWrapper
-import org.alberto97.hisenseair.models.Property
+import org.alberto97.hisenseair.ayla.models.Datapoint
+import org.alberto97.hisenseair.ayla.models.DatapointWrapper
+import org.alberto97.hisenseair.ayla.models.Property
 
 interface IDeviceControlRepository {
     suspend fun getDeviceState(dsn: String): AppDeviceState

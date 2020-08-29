@@ -76,7 +76,7 @@ class DevicePreferenceViewModel(
     private suspend fun updateDeviceProps() {
         val dev = repo.getDevice(dsn)
         withContext(Dispatchers.Main) {
-            deviceName.value = dev.productName
+            deviceName.value = dev.name
             ip.value = dev.lanIp
             mac.value = dev.mac
             ssid.value = Uri.decode(dev.ssid)
