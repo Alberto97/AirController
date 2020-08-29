@@ -1,5 +1,6 @@
-package org.alberto97.hisenseair
+package org.alberto97.hisenseair.ayla.network.api
 
+import org.alberto97.hisenseair.network.Authorized
 import org.alberto97.hisenseair.ayla.models.*
 import retrofit2.http.*
 

@@ -1,26 +1,22 @@
-package org.alberto97.hisenseair.repositories
+package org.alberto97.hisenseair.ayla.repositories
 
 import android.content.Context
 import androidx.preference.PreferenceManager
-import org.alberto97.hisenseair.AylaLogin
 import org.alberto97.hisenseair.ayla.models.Login
 import org.alberto97.hisenseair.ayla.models.LoginOutput
 import org.alberto97.hisenseair.ayla.models.LoginRefresh
 import org.alberto97.hisenseair.ayla.models.UserRefresh
+import org.alberto97.hisenseair.ayla.network.api.AylaLogin
+import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import retrofit2.HttpException
-
-interface IAuthenticationRepository {
-    fun getToken(): String
-    suspend fun login(email: String, password: String): Boolean
-    suspend fun refreshToken(): Boolean
-}
 
 object AuthPrefs {
     const val SHARED_PREF_TOKEN_ACCESS = "access_token"
     const val SHARED_PREF_TOKEN_REFRESH = "refresh_token"
 }
 
-class AuthenticationRepository(private val service: AylaLogin, context: Context) : IAuthenticationRepository {
+class AuthenticationRepository(private val service: AylaLogin, context: Context) :
+    IAuthenticationRepository {
     private val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     private var authToken = preferences.getString(AuthPrefs.SHARED_PREF_TOKEN_ACCESS, "")!!

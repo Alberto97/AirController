@@ -9,12 +9,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
-import org.alberto97.hisenseair.repositories.DeviceControlRepository
+import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
 class DevicePreferenceViewModel(
     private val repo: IDeviceRepository,
-    private val deviceControl: DeviceControlRepository) : ViewModel() {
+    private val deviceControl: IDeviceControlRepository
+) : ViewModel() {
 
     var dsn: String = ""
 

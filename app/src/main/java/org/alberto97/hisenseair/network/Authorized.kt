@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair
+package org.alberto97.hisenseair.network
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

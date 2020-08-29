@@ -1,34 +1,20 @@
-package org.alberto97.hisenseair.repositories
+package org.alberto97.hisenseair.ayla.repositories
 
-import org.alberto97.hisenseair.AylaService
 import org.alberto97.hisenseair.ayla.AylaPropertyToStateMap
+import org.alberto97.hisenseair.ayla.features.*
+import org.alberto97.hisenseair.ayla.models.Datapoint
+import org.alberto97.hisenseair.ayla.models.DatapointWrapper
+import org.alberto97.hisenseair.ayla.models.Property
+import org.alberto97.hisenseair.ayla.network.api.AylaService
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
 import org.alberto97.hisenseair.features.TemperatureExtensions.toC
 import org.alberto97.hisenseair.features.TemperatureExtensions.toF
 import org.alberto97.hisenseair.models.AppDeviceState
-import org.alberto97.hisenseair.ayla.models.Datapoint
-import org.alberto97.hisenseair.ayla.models.DatapointWrapper
-import org.alberto97.hisenseair.ayla.models.Property
+import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 
-interface IDeviceControlRepository {
-    suspend fun getDeviceState(dsn: String): AppDeviceState
-    suspend fun setAirFlowHorizontal(dsn: String, value: Boolean)
-    suspend fun setAirFlowVertical(dsn: String, value: Boolean)
-    suspend fun setBacklight(dsn: String, value: Boolean)
-    suspend fun setBoost(dsn: String, value: Boolean)
-    suspend fun setEco(dsn: String, value: Boolean)
-    suspend fun setFanSpeed(dsn: String, value: FanSpeed)
-    suspend fun setMode(dsn: String, value: WorkMode)
-    suspend fun setPower(dsn: String, value: Boolean)
-    suspend fun setQuiet(dsn: String, value: Boolean)
-    suspend fun setSleepMode(dsn: String, value: Int)
-    suspend fun setTemp(value: Int, dsn: String)
-    suspend fun getTempUnit(dsn: String): TempType
-    suspend fun setTempUnit(dsn: String, unit: TempType)
-}
-
-class DeviceControlRepository(private val service: AylaService, private val prefs: IDevicePreferencesRepository) : IDeviceControlRepository {
+class DeviceControlRepository(private val service: AylaService, private val prefs: IDevicePreferencesRepository) :
+    IDeviceControlRepository {
 
     private suspend fun getProperty(property: String, dsn: String): Property {
         val wrappedValue = service.getDeviceProperty(dsn, property)

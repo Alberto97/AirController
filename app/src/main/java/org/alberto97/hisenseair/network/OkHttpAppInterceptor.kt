@@ -1,10 +1,8 @@
-package org.alberto97.hisenseair.interceptors
+package org.alberto97.hisenseair.network
 
-import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import org.alberto97.hisenseair.Authorized
 import retrofit2.Invocation
 
 interface RequestInterceptor {

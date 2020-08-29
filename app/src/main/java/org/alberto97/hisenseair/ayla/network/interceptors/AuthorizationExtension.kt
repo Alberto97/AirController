@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.interceptors
+package org.alberto97.hisenseair.ayla.network.interceptors
 
 import okhttp3.Request
 

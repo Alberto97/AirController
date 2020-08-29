@@ -1,17 +1,12 @@
-package org.alberto97.hisenseair.repositories
+package org.alberto97.hisenseair.ayla.repositories
 
-import org.alberto97.hisenseair.AylaService
 import org.alberto97.hisenseair.ayla.AylaExtensions.isAvailable
-import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.ayla.models.Device
 import org.alberto97.hisenseair.ayla.models.ProductName
 import org.alberto97.hisenseair.ayla.models.ProductNameWrapper
-
-interface IDeviceRepository {
-    suspend fun getDevices(): List<AppDevice>
-    suspend fun getDevice(dsn: String): AppDevice
-    suspend fun setDeviceName(name: String, dsn: String)
-}
+import org.alberto97.hisenseair.ayla.network.api.AylaService
+import org.alberto97.hisenseair.models.AppDevice
+import org.alberto97.hisenseair.repositories.IDeviceRepository
 
 class DeviceRepository(private val service: AylaService) : IDeviceRepository {
 

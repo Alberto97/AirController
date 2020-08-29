@@ -1,11 +1,11 @@
-package org.alberto97.hisenseair.interceptors
+package org.alberto97.hisenseair.ayla.network.interceptors
 
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import org.alberto97.hisenseair.interceptors.AuthorizationExtension.addAuthorization
+import org.alberto97.hisenseair.ayla.network.interceptors.AuthorizationExtension.addAuthorization
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 
 class TokenAuthenticator(private val repo: IAuthenticationRepository) : Authenticator {

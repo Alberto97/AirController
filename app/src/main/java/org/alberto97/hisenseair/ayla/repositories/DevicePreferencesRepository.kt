@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.repositories
+package org.alberto97.hisenseair.ayla.repositories
 
 import android.app.Application
 import android.content.Context

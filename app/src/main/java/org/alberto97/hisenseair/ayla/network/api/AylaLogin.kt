@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair
+package org.alberto97.hisenseair.ayla.network.api
 
 import org.alberto97.hisenseair.ayla.models.Login
 import org.alberto97.hisenseair.ayla.models.LoginOutput
