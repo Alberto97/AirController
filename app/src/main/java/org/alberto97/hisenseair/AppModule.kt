@@ -19,7 +19,7 @@ val appModule = module {
     viewModel { DeviceViewModel(get()) }
     viewModel { DevicePreferenceViewModel(get(), get()) }
     viewModel { LoginViewModel(get()) }
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel(get()) }
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get()) }
     single<IDeviceRepository> { DeviceRepository(get()) }
     single<IDeviceControlRepository> { DeviceControlRepository(get(), get()) }

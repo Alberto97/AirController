@@ -27,7 +27,7 @@ class DeviceFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDeviceBinding.inflate(layoutInflater)
+        binding = FragmentDeviceBinding.inflate(inflater)
         binding.toolbar.setupWithNavController(findNavController())
         setSpinnerVisible(true)
 

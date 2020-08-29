@@ -27,18 +27,15 @@
                 android:text="Hisense Air" />
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <include
+            layout="@layout/device_layout_spinner"
+            android:id="@+id/spinner" />
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/advanced"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="org.alberto97.hisenseair.fragments.MainFragment" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

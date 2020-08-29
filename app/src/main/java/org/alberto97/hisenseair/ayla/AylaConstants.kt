@@ -3,6 +3,11 @@ package org.alberto97.hisenseair.ayla
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.models.AppDeviceState
 
+object AylaDeviceState {
+    const val ONLINE = "Online"
+    const val OFFLINE = "Offline"
+}
+
 val AylaPropertyToStateMap = mapOf(
     BACKLIGHT_PROP to AppDeviceState::backlight,
     WORK_MODE_PROP to AppDeviceState::workMode,

@@ -41,8 +41,8 @@ class HisenseControlsProvider : ControlsProviderService() {
         return flow {
             val devices = device.getDevices()
             devices.forEach {
-                val control = Control.StatelessBuilder(it.dsn, getPendingIntent(it.dsn))
-                    .setTitle(it.productName)
+                val control = Control.StatelessBuilder(it.id, getPendingIntent(it.id))
+                    .setTitle(it.name)
                     .setDeviceType(DeviceTypes.TYPE_THERMOSTAT)
                     .build()
                 emit(control)
@@ -76,7 +76,7 @@ class HisenseControlsProvider : ControlsProviderService() {
 
     private suspend fun getDeviceStatus(dsn: String): Int {
         val device = device.getDevice(dsn)
-        return if (device.connectionStatus == "Online")
+        return if (device.available)
             Control.STATUS_OK
         else
             Control.STATUS_DISABLED

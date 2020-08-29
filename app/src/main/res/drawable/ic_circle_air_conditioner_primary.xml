@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/ic_circle_background_primary"
+        android:width="30dp"
+        android:height="30dp" />
+
+    <item android:drawable="@drawable/ic_fan_white"
+        android:start="5dp"
+        android:end="5dp"
+        android:top="5dp"
+        android:bottom="5dp"
+        android:width="20dp"
+        android:height="20dp" />
+
+</layer-list>

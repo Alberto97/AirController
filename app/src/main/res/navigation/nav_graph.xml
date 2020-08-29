@@ -7,9 +7,8 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="org.alberto97.hisenseair.fragments.MainFragment"
-        android:label="MainFragment"
-        tools:layout="@layout/fragment_main" >
+        android:name="org.alberto97.hisenseair.fragments.MainFragmentWrapper"
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_deviceFragment"
             app:destination="@id/deviceFragment" />
