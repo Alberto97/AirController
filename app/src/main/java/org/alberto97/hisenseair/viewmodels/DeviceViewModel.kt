@@ -206,7 +206,7 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
 
     fun setTemp(value: Int) {
         setProp {
-            repo.setTemp(value, dsn)
+            repo.setTemp(dsn, value)
         }
     }
 

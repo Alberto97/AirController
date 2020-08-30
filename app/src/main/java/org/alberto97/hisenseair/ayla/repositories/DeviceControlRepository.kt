@@ -141,7 +141,7 @@ class DeviceControlRepository(
         setProperty(dsn, SLEEP_MODE_PROP, datapoint)
     }
 
-    override suspend fun setTemp(value: Int, dsn: String) {
+    override suspend fun setTemp(dsn: String, value: Int) {
         val unit = prefs.getTempUnit(dsn)
         val temp = if (unit.isCelsius()) value.toF() else value
         val datapoint = intConverter.map(temp)

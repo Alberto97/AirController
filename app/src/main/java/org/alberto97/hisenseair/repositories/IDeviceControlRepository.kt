@@ -17,8 +17,8 @@ interface IDeviceControlRepository {
     suspend fun setPower(dsn: String, value: Boolean)
     suspend fun setQuiet(dsn: String, value: Boolean)
     suspend fun setSleepMode(dsn: String, value: Int)
-    suspend fun setTemp(value: Int, dsn: String)
+    suspend fun setTemp(dsn: String, value: Int)
     suspend fun getTempUnit(dsn: String): TempType
-    suspend fun setTempUnit(dsn: String, unit: TempType)
+    suspend fun setTempUnit(dsn: String, value: TempType)
 }
 
