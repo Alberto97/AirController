@@ -100,7 +100,7 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
 
     fun load(dsn: String) {
         this.dsn = dsn
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             fetchData()
         }
     }
