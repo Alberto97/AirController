@@ -2,7 +2,6 @@ package org.alberto97.hisenseair.fragments
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -24,7 +23,7 @@ class MainFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.devices.observe(viewLifecycleOwner, Observer { devices ->
+        viewModel.devices.observe(viewLifecycleOwner, { devices ->
             preferenceScreen.removeAll()
             devices.forEach {
                 val preference = buildPreference(it)

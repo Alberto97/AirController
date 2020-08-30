@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -30,11 +29,11 @@ class MainFragmentWrapper : Fragment() {
 
         viewModel.fetchData()
 
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+        viewModel.isLoading.observe(viewLifecycleOwner, {
             binding.spinner.spinner.setVisible(it)
         })
 
-        viewModel.isLoggedOut.observe(viewLifecycleOwner, Observer {
+        viewModel.isLoggedOut.observe(viewLifecycleOwner, {
             if (it) navigateToLogin()
         })
 

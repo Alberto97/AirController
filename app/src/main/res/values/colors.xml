@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#00A9A7</color>
-    <color name="materialGray600">#757575</color>
     <color name="primary">#00A9A7</color>
-    <color name="secondary">#00A9A7</color>
-    <color name="fade">#66FFFFFF</color>
-    <color name="fade2">#AAFFFFFF</color>
 
-    <array name="progressColor">
-        <item>@color/primary</item>
-    </array>
-    <array name="trackColor">
-        <item>#e0e0e0</item>
-    </array>
 
     <color name="material_orange_500">#ff9800</color>
     <color name="material_blue_500">#2196f3</color>
     <color name="material_cyan_500">#00bcd4</color>
-    <color name="material_indigo_500">#3f51b5</color>
 
     <color name="statusBarColor">@android:color/white</color>
-    <color name="seekCircleInactive">#efefef</color>
 </resources>

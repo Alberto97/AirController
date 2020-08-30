@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
@@ -16,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DeviceSettings : Fragment() {
 
-    lateinit var binding: FragmentSettingsBinding
+    private lateinit var binding: FragmentSettingsBinding
 
     private val args by navArgs<DeviceSettingsArgs>()
     private val viewModel: DevicePreferenceViewModel by sharedViewModel()
@@ -31,7 +30,7 @@ class DeviceSettings : Fragment() {
 
         viewModel.load(args.dsn)
 
-        viewModel.deviceName.observe(viewLifecycleOwner, Observer {
+        viewModel.deviceName.observe(viewLifecycleOwner, {
             binding.spinner.spinner.setVisible(false)
         })
 

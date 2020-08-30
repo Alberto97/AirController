@@ -5,6 +5,7 @@ import org.alberto97.hisenseair.ayla.aylaModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 
 class App : Application() {
 
@@ -13,7 +14,7 @@ class App : Application() {
 
         startKoin {
             if (BuildConfig.DEBUG)
-                androidLogger()
+                androidLogger(Level.ERROR)
 
             // Android context
             androidContext(this@App)

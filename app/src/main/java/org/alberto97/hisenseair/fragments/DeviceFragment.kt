@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
@@ -17,7 +16,7 @@ import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DeviceFragment : Fragment() {
-    lateinit var binding: FragmentDeviceBinding
+    private lateinit var binding: FragmentDeviceBinding
 
     private val args by navArgs<DeviceFragmentArgs>()
     private val viewModel: DeviceViewModel by sharedViewModel()
@@ -33,7 +32,7 @@ class DeviceFragment : Fragment() {
 
         viewModel.load(args.dsn)
 
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+        viewModel.isLoading.observe(viewLifecycleOwner, {
             binding.spinner.spinner.setVisible(it)
         })
 
@@ -42,24 +41,24 @@ class DeviceFragment : Fragment() {
             viewModel.switchPower()
         }
 
-        viewModel.isOn.observe(viewLifecycleOwner, Observer {
+        viewModel.isOn.observe(viewLifecycleOwner, {
             setSpinnerVisible(false)
             updateLayoutVisibility(it)
         })
 
         // Offline ambient temp
-        viewModel.roomTemp.observe(viewLifecycleOwner, Observer {
+        viewModel.roomTemp.observe(viewLifecycleOwner, {
             binding.offLayout.roomTemp.text = getString(R.string.device_room_temp, it)
         })
 
         // Offline work mode
-        viewModel.workState.observe(viewLifecycleOwner, Observer {
+        viewModel.workState.observe(viewLifecycleOwner, {
             val drawableId = modeToIconMap[it] ?: R.drawable.round_brightness_7_24
             binding.offLayout.offMode.setImageResource(drawableId)
         })
 
         // Device name
-        viewModel.deviceName.observe(viewLifecycleOwner, Observer {
+        viewModel.deviceName.observe(viewLifecycleOwner, {
             binding.toolbar.title = it
         })
 

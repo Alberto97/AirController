@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import org.alberto97.hisenseair.databinding.FragmentLoginBinding
@@ -30,7 +29,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.isAuthenticated.observe(viewLifecycleOwner, Observer {
+        viewModel.isAuthenticated.observe(viewLifecycleOwner, {
             if (it) {
                 findNavController().navigate(LoginFragmentDirections.loginToMain())
             } else {

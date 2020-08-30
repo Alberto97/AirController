@@ -1,10 +1,7 @@
 package org.alberto97.hisenseair.bottomsheet
 
-import android.app.Activity
-import android.content.Intent
 import androidx.annotation.ColorRes
 import androidx.recyclerview.widget.ListAdapter
-import org.alberto97.hisenseair.BottomSheetFragments
 import org.alberto97.hisenseair.CompatExtensions.getCompatColor
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.adapters.WorkModeAdapter

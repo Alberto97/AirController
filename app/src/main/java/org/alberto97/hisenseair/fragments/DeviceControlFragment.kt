@@ -2,7 +2,6 @@ package org.alberto97.hisenseair.fragments
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -55,11 +54,11 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         val tempControl = findPreference<TempControlPreference>(PreferenceConstants.PREFERENCE_TEMP_CONTROL)!!
 
         // Ambient temp
-        viewModel.roomTemp.observe(viewLifecycleOwner, Observer {
+        viewModel.roomTemp.observe(viewLifecycleOwner, {
             ambientTemp.summary = getString(R.string.device_ambient_temp, it)
         })
 
-        viewModel.temp.observe(viewLifecycleOwner, Observer {
+        viewModel.temp.observe(viewLifecycleOwner, {
             tempControl.isVisible = it != null
             if (tempControl.isVisible)
                 tempControl.setTemp(it)
@@ -82,7 +81,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         val mode = findPreference<Preference>(PreferenceConstants.PREFERENCE_MODE)!!
 
         // Work mode
-        viewModel.workState.observe(viewLifecycleOwner, Observer {
+        viewModel.workState.observe(viewLifecycleOwner, {
             val resId = modeToStringMap[it] ?: R.string.work_mode_unknown
             val drawableId = modeToIconMap[it] ?: R.drawable.round_brightness_7_24
 
@@ -101,7 +100,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         val fanSpeed = findPreference<Preference>(PreferenceConstants.PREFERENCE_FAN_SPEED)!!
 
         // Air flow
-        viewModel.fanSpeed.observe(viewLifecycleOwner, Observer {
+        viewModel.fanSpeed.observe(viewLifecycleOwner, {
             fanSpeed.isVisible = it != null
             if (fanSpeed.isVisible) {
                 val resId = fanToStringMap.getValue(it)
@@ -129,7 +128,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
     private fun setupPower() {
         val power = findPreference<SwitchPreference>(PreferenceConstants.PREFERENCE_POWER)!!
 
-        viewModel.isOn.observe(viewLifecycleOwner, Observer {
+        viewModel.isOn.observe(viewLifecycleOwner, {
             power.isChecked = it
         })
 
@@ -146,10 +145,10 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         val horizontal = category.findPreference<SwitchPreference>(PreferenceConstants.PREFERENCE_AIRFLOW_HORIZONTAL)!!
         val vertical = category.findPreference<SwitchPreference>(PreferenceConstants.PREFERENCE_AIRFLOW_VERTICAL)!!
 
-        viewModel.horizontalAirFlow.observe(viewLifecycleOwner, Observer {
+        viewModel.horizontalAirFlow.observe(viewLifecycleOwner, {
             horizontal.setCheckedIfVisible(it)
         })
-        viewModel.verticalAirFlow.observe(viewLifecycleOwner, Observer {
+        viewModel.verticalAirFlow.observe(viewLifecycleOwner, {
             vertical.setCheckedIfVisible(it)
         })
 
@@ -166,7 +165,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
     private fun setupBacklight(category: PreferenceCategory) {
         val backlight = category.findPreference<SwitchPreference>(PreferenceConstants.PREFERENCE_ADVANCED_BACKLIGHT)!!
 
-        viewModel.backlight.observe(viewLifecycleOwner, Observer {
+        viewModel.backlight.observe(viewLifecycleOwner, {
             backlight.setCheckedIfVisible(it)
         })
 
@@ -179,7 +178,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
     private fun setupEco(category: PreferenceCategory) {
         val eco = category.findPreference<SwitchPreference>(PreferenceConstants.PREFERENCE_ADVANCED_ECO)!!
 
-        viewModel.isEco.observe(viewLifecycleOwner, Observer {
+        viewModel.isEco.observe(viewLifecycleOwner, {
             eco.setCheckedIfVisible(it)
         })
 
@@ -192,7 +191,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
     private fun setupQuiet(category: PreferenceCategory) {
         val quiet = category.findPreference<SwitchPreference>(PreferenceConstants.PREFERENCE_ADVANCED_QUIET)!!
 
-        viewModel.isQuiet.observe(viewLifecycleOwner, Observer {
+        viewModel.isQuiet.observe(viewLifecycleOwner, {
             quiet.setCheckedIfVisible(it)
         })
 
@@ -205,7 +204,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
     private fun setupBoost(category: PreferenceCategory) {
         val boost = category.findPreference<SwitchPreference>(PreferenceConstants.PREFERENCE_ADVANCED_BOOST)!!
 
-        viewModel.isBoost.observe(viewLifecycleOwner, Observer {
+        viewModel.isBoost.observe(viewLifecycleOwner, {
             boost.setCheckedIfVisible(it)
         })
 

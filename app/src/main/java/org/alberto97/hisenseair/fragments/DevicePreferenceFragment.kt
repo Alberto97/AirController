@@ -2,7 +2,6 @@ package org.alberto97.hisenseair.fragments
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.preference.*
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.features.TempType
@@ -25,7 +24,7 @@ class DevicePreferenceFragment : PreferenceFragmentCompat() {
 
         // Name
         val deviceName = general?.findPreference<EditTextPreference>("deviceName")
-        viewModel.deviceName.observe(viewLifecycleOwner, Observer {
+        viewModel.deviceName.observe(viewLifecycleOwner, {
             deviceName?.summary = it
             deviceName?.text = it
         })
@@ -37,7 +36,7 @@ class DevicePreferenceFragment : PreferenceFragmentCompat() {
 
         // Temp
         val tempType = general?.findPreference<SwitchPreference>("useCelsius")
-        viewModel.tempType.observe(viewLifecycleOwner, Observer {
+        viewModel.tempType.observe(viewLifecycleOwner, {
             tempType?.isChecked = it == TempType.Celsius
         })
         tempType?.setOnPreferenceClickListener {
@@ -49,19 +48,19 @@ class DevicePreferenceFragment : PreferenceFragmentCompat() {
 
         // MAC Address
         val macAddress = info?.findPreference<Preference>("macAddress")
-        viewModel.mac.observe(viewLifecycleOwner, Observer {
+        viewModel.mac.observe(viewLifecycleOwner, {
             macAddress?.summary = it
         })
 
         // IP Address
         val ipAddress = info?.findPreference<Preference>("ipAddress")
-        viewModel.ip.observe(viewLifecycleOwner, Observer {
+        viewModel.ip.observe(viewLifecycleOwner, {
             ipAddress?.summary = it
         })
 
         // SSID
         val ssid = info?.findPreference<Preference>("ssid")
-        viewModel.ssid.observe(viewLifecycleOwner, Observer {
+        viewModel.ssid.observe(viewLifecycleOwner, {
             ssid?.summary = it
         })
     }

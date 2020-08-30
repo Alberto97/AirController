@@ -15,7 +15,6 @@
     <string name="fan_speed_normal">Normal</string>
     <string name="fan_speed_high">Mid-High</string>
     <string name="fan_speed_higher">High</string>
-    <string name="fan_speed_unknown">@string/unknown</string>
 
     <!-- Work Mode -->
     <string name="work_mode_heating">Heating</string>
