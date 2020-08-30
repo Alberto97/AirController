@@ -1,5 +1,6 @@
 package org.alberto97.hisenseair.ayla.repositories
 
+import kotlinx.coroutines.delay
 import org.alberto97.hisenseair.ayla.AylaPropertyToStateMap
 import org.alberto97.hisenseair.ayla.AylaType
 import org.alberto97.hisenseair.ayla.features.*
@@ -36,6 +37,7 @@ class DeviceControlRepository(
     private suspend fun setProperty(dsn: String, property: String, value: Datapoint) {
         val data = DatapointWrapper(value)
         service.setDeviceProperty(dsn, property, data)
+        delay(1000L)
     }
 
     override suspend fun getDeviceState(dsn: String): AppDeviceState {
