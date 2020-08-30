@@ -2,23 +2,13 @@ package org.alberto97.hisenseair.features
 
 import org.alberto97.hisenseair.R
 
-enum class FanSpeed(val value: Int) {
-    Auto(0),
-    Lower(5),
-    Low(6),
-    Normal(7),
-    High(8),
-    Higher(9);
-
-    companion object {
-        private val map = values().associateBy(FanSpeed::value)
-        fun from(type: Int): FanSpeed {
-            if (type == 1)
-                return Lower
-
-            return map.getValue(type)
-        }
-    }
+enum class FanSpeed {
+    Auto,
+    Lower,
+    Low,
+    Normal,
+    High,
+    Higher
 }
 
 val fanToStringMap = mapOf(

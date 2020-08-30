@@ -1,7 +1,5 @@
 package org.alberto97.hisenseair.fragments
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -11,14 +9,15 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import org.alberto97.hisenseair.BottomSheetFragments
-import org.alberto97.hisenseair.DeviceActivityRequest
 import org.alberto97.hisenseair.PreferenceConstants
 import org.alberto97.hisenseair.PreferenceExtensions.setCheckedIfVisible
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.bottomsheet.DeviceFanSpeedSheet
 import org.alberto97.hisenseair.bottomsheet.DeviceWorkModeSheet
 import org.alberto97.hisenseair.bottomsheet.TempSheet
-import org.alberto97.hisenseair.features.*
+import org.alberto97.hisenseair.features.fanToStringMap
+import org.alberto97.hisenseair.features.modeToIconMap
+import org.alberto97.hisenseair.features.modeToStringMap
 import org.alberto97.hisenseair.ui.TempControlPreference
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -68,7 +67,6 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
 
         tempControl.setOnTempClickListener {
             val dialog = TempSheet()
-            dialog.setTargetFragment(this, DeviceActivityRequest.TEMP)
             dialog.showNow(parentFragmentManager, BottomSheetFragments.TEMP)
         }
 
@@ -93,12 +91,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         })
 
         mode.setOnPreferenceClickListener {
-            val bundle = Bundle()
-            bundle.putInt("current", viewModel.workState.value!!.value)
-
             val dialog = DeviceWorkModeSheet()
-            dialog.arguments = bundle
-            dialog.setTargetFragment(this, DeviceActivityRequest.WORK_MODE)
             dialog.showNow(parentFragmentManager, BottomSheetFragments.MODE)
             true
         }
@@ -117,12 +110,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         })
 
         fanSpeed.setOnPreferenceClickListener {
-            val bundle = Bundle()
-            bundle.putInt("current", viewModel.fanSpeed.value!!.value)
-
             val dialog = DeviceFanSpeedSheet()
-            dialog.arguments = bundle
-            dialog.setTargetFragment(this, DeviceActivityRequest.FAN_SPEED)
             dialog.showNow(parentFragmentManager, BottomSheetFragments.FAN)
             true
         }
@@ -224,38 +212,6 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         boost.setOnPreferenceClickListener {
             viewModel.switchBoost()
             true
-        }
-    }
-
-    private fun onFanSpeedChange(fanSpeed: FanSpeed) {
-        viewModel.setFanSpeed(fanSpeed)
-    }
-
-    private fun onWorkModeChange(workMode: WorkMode) {
-        viewModel.setMode(workMode)
-    }
-
-    private fun onTempChange(temp: Int) {
-        viewModel.setTemp(temp)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) return
-        when (requestCode) {
-            DeviceActivityRequest.FAN_SPEED -> {
-                val fanSpeed = data!!.getSerializableExtra(BottomSheetFragments.FAN) as FanSpeed
-                onFanSpeedChange(fanSpeed)
-            }
-            DeviceActivityRequest.WORK_MODE -> {
-                val workMode = data!!.getSerializableExtra(BottomSheetFragments.MODE) as WorkMode
-                onWorkModeChange(workMode)
-            }
-            DeviceActivityRequest.TEMP -> {
-                val temp = data!!.getIntExtra(BottomSheetFragments.TEMP, 0)
-                if (temp > 0)
-                    onTempChange(temp)
-            }
         }
     }
 }

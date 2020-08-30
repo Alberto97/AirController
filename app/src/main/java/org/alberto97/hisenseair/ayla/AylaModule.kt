@@ -3,6 +3,7 @@ package org.alberto97.hisenseair.ayla
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.alberto97.hisenseair.ayla.features.controllers.*
+import org.alberto97.hisenseair.ayla.features.converters.*
 import org.alberto97.hisenseair.ayla.network.api.AylaLogin
 import org.alberto97.hisenseair.ayla.network.api.AylaService
 import org.alberto97.hisenseair.ayla.network.interceptors.AuthInterceptor
@@ -18,10 +19,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val aylaModule = module {
+    // API
     single { getOkHttp(get()) }
     single { getAylaApi(get()) }
     single { getAylaLogin() }
 
+    // Controller
     single<IAirFlowHorizontalController> { AirFlowHorizontalController() }
     single<IAirFlowVerticalController> { AirFlowVerticalController() }
     single<IBacklightController> { BacklightController() }
@@ -37,10 +40,19 @@ val aylaModule = module {
     single<ISleepModeController> { SleepModeController() }
     single<ITempControlController> { TempControlController() }
 
+    // Converter
+    single<IBooleanConverter> { BooleanConverter() }
+    single<IFanSpeedConverter> { FanSpeedConverter() }
+    single<IIntConverter> { IntConverter() }
+    single<IModeConverter> { ModeConverter() }
+    single<IStringConverter> { StringConverter() }
+    single<ITempUnitConverter> { TempUnitConverter() }
+
+    // Repository
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get()) }
     single<IDeviceRepository> { DeviceRepository(get()) }
     single<IDeviceControlRepository> { DeviceControlRepository(get(), get()) }
-    single<IDevicePreferencesRepository> { DevicePreferencesRepository(androidApplication()) }
+    single<IDeviceCacheRepository> { DeviceCacheRepository(androidApplication(), get()) }
 }
 
 fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {

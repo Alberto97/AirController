@@ -10,8 +10,12 @@ import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.adapters.WorkModeAdapter
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.models.WorkModeItem
+import org.alberto97.hisenseair.viewmodels.DeviceViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DeviceWorkModeSheet : ListBottomSheetDialog<WorkModeItem, WorkMode>() {
+
+    val viewModel: DeviceViewModel by sharedViewModel()
 
     override val title = "Mode"
 
@@ -48,20 +52,14 @@ class DeviceWorkModeSheet : ListBottomSheetDialog<WorkModeItem, WorkMode>() {
         )
     }
 
-    override fun getAdapter(): ListAdapter<WorkModeItem, *> {
-        return WorkModeAdapter {
-            val intent = Intent()
-            intent.putExtra(BottomSheetFragments.MODE, it.id)
-            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
+    override fun getAdapter(): ListAdapter<WorkModeItem, *> = WorkModeAdapter { onItemClick(it) }
 
-            this.dismiss()
-        }
+    private fun onItemClick(data: WorkModeItem) {
+        viewModel.setMode(data.id)
+        dismiss()
     }
 
-    override fun getCurrentValue(): WorkMode? {
-        val c = arguments?.getInt("current") ?: return null
-        return WorkMode.from(c)
-    }
+    override fun getCurrentValue() = viewModel.workState.value
 
     private fun getColor(@ColorRes color: Int) = requireContext().getCompatColor(color)
 }

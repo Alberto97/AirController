@@ -6,12 +6,6 @@ object BottomSheetFragments {
     const val TEMP = "TempSheet"
 }
 
-object DeviceActivityRequest {
-    const val WORK_MODE = 10
-    const val FAN_SPEED = 11
-    const val TEMP = 12
-}
-
 object PreferenceConstants {
     const val PREFERENCE_AMBIENT_TEMP = "ambientTemp"
     const val PREFERENCE_TEMP_CONTROL = "tempControl"

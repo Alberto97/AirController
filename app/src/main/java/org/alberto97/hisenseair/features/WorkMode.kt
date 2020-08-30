@@ -5,17 +5,12 @@ import android.service.controls.templates.TemperatureControlTemplate
 import androidx.annotation.RequiresApi
 import org.alberto97.hisenseair.R
 
-enum class WorkMode(val value: Int) {
-    FanOnly(0),
-    Heating(1),
-    Cooling(2),
-    Dry(3),
-    Auto(4);
-
-    companion object {
-        private val map = values().associateBy(WorkMode::value)
-        fun from(type: Int) = map.getValue(type)
-    }
+enum class WorkMode {
+    FanOnly,
+    Heating,
+    Cooling,
+    Dry,
+    Auto
 }
 
 val modeToIconMap = mapOf(

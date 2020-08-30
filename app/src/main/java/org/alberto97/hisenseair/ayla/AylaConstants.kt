@@ -8,6 +8,13 @@ object AylaDeviceState {
     const val OFFLINE = "Offline"
 }
 
+object AylaType {
+    const val BOOLEAN = "boolean"
+    const val DECIMAL = "decimal"
+    const val INTEGER = "integer"
+    const val STRING = "string"
+}
+
 val AylaPropertyToStateMap = mapOf(
     BACKLIGHT_PROP to AppDeviceState::backlight,
     WORK_MODE_PROP to AppDeviceState::workMode,

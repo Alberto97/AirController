@@ -41,11 +41,8 @@ class TempSheet :  BottomSheetDialogFragment() {
 
         binding.cancel.setOnClickListener { this.dismiss() }
         binding.ok.setOnClickListener {
-            val intent = Intent()
-            intent.putExtra(BottomSheetFragments.TEMP, selectedTemp)
-            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
-
-            this.dismiss()
+            viewModel.setTemp(selectedTemp)
+            dismiss()
         }
 
         return binding.root
