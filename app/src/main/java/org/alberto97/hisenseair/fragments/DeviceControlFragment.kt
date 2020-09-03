@@ -13,7 +13,7 @@ import org.alberto97.hisenseair.PreferenceExtensions.setCheckedIfVisible
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.bottomsheet.DeviceFanSpeedSheet
 import org.alberto97.hisenseair.bottomsheet.DeviceWorkModeSheet
-import org.alberto97.hisenseair.bottomsheet.TempSheet
+import org.alberto97.hisenseair.bottomsheet.TemperatureControlSheet
 import org.alberto97.hisenseair.features.fanToStringMap
 import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.features.modeToStringMap
@@ -65,7 +65,7 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
         })
 
         tempControl.setOnTempClickListener {
-            val dialog = TempSheet()
+            val dialog = TemperatureControlSheet()
             dialog.showNow(parentFragmentManager, BottomSheetFragments.TEMP)
         }
 
