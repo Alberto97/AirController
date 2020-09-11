@@ -18,16 +18,26 @@ class DeviceWorkModeSheet : ComposeBottomSheetDialogFragment() {
 
     val viewModel: DeviceViewModel by sharedViewModel()
 
-    private fun getList(): List<BottomSheetListItem<WorkMode>> {
-        val list = listOf(
-            WorkMode.Heating,
-            WorkMode.Cooling,
-            WorkMode.Dry,
-            WorkMode.FanOnly,
-            WorkMode.Auto
-        )
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        return list.map { mapItem(it) }
+        val modes = viewModel.supportedModes.value!!
+        val list = modes.map { mapItem(it) }
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    BottomSheetList(
+                        title = "Mode",
+                        list = list,
+                        onItemClick = { data -> onItemClick(data) }
+                    )
+                }
+            }
+        }
     }
 
     private fun mapItem(data: WorkMode): BottomSheetListItem<WorkMode> {
@@ -40,24 +50,6 @@ class DeviceWorkModeSheet : ComposeBottomSheetDialogFragment() {
             icon,
             data == viewModel.workState.value
         )
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                AppTheme {
-                    BottomSheetList(
-                        title = "Mode",
-                        list = getList(),
-                        onItemClick = { data -> onItemClick(data) }
-                    )
-                }
-            }
-        }
     }
 
     private fun onItemClick(data: WorkMode) {

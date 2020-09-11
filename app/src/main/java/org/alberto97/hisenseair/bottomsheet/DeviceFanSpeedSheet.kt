@@ -18,17 +18,27 @@ class DeviceFanSpeedSheet : ComposeBottomSheetDialogFragment() {
 
     val viewModel: DeviceViewModel by sharedViewModel()
 
-    private fun getList(): List<BottomSheetListItem<FanSpeed>> {
-        val list = listOf(
-            FanSpeed.Lower,
-            FanSpeed.Low,
-            FanSpeed.Normal,
-            FanSpeed.High,
-            FanSpeed.Higher,
-            FanSpeed.Auto,
-        )
 
-        return list.map { mapItem(it) }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val speeds = viewModel.supportedFanSpeeds.value!!
+        val list = speeds.map { mapItem(it) }
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    BottomSheetList(
+                        title = "Fan Speed",
+                        list = list,
+                        onItemClick = { data -> onItemClick(data) }
+                    )
+                }
+            }
+        }
     }
 
     private fun mapItem(data: FanSpeed): BottomSheetListItem<FanSpeed> {
@@ -40,24 +50,6 @@ class DeviceFanSpeedSheet : ComposeBottomSheetDialogFragment() {
             R.drawable.ic_fan,
             data == viewModel.fanSpeed.value
         )
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                AppTheme {
-                    BottomSheetList(
-                        title = "Fan Speed",
-                        list = getList(),
-                        onItemClick = { data -> onItemClick(data) }
-                    )
-                }
-            }
-        }
     }
 
     private fun onItemClick(data: FanSpeed) {

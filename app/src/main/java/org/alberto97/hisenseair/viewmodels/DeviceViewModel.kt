@@ -30,6 +30,8 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
     private val quietController: IQuietController by inject()
     private val roomTempController: IRoomTempController by inject()
     private val sleepModeController: ISleepModeController by inject()
+    private val supportedFanSpeedController: ISupportedFanSpeedController by inject()
+    private val supportedModesController: ISupportedModesController by inject()
     private val tempController: ITempControlController by inject()
 
     val isLoading: MutableLiveData<Boolean> by lazy {
@@ -93,6 +95,14 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
         MutableLiveData<Int>()
     }
 
+    val supportedModes: MutableLiveData<List<WorkMode>> by lazy {
+        MutableLiveData<List<WorkMode>>()
+    }
+
+    val supportedFanSpeeds: MutableLiveData<List<FanSpeed>> by lazy {
+        MutableLiveData<List<FanSpeed>>()
+    }
+
     // Info
     val deviceName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -123,6 +133,8 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
             isOn.value = powerController.getValue(resp)
             maxTemp.value = maxTempController.getValue(resp)
             minTemp.value = minTempController.getValue(resp)
+            supportedFanSpeeds.value = supportedFanSpeedController.getValue(resp)
+            supportedModes.value = supportedModesController.getValue(resp)
         }
     }
 

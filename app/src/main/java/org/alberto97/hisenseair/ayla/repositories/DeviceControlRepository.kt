@@ -65,16 +65,16 @@ class DeviceControlRepository(
                 prop.setter.call(deviceState, value)
         }
 
+        deviceState.supportedModes = getSupportedModes()
+        deviceState.supportedSpeeds = getSupportedFanSpeeds()
+        deviceState.maxTemp = getMaxTemp(deviceState.tempUnit)
+        deviceState.minTemp = getMinTemp(deviceState.tempUnit)
+
+        prefs.setTempUnit(dsn, deviceState.tempUnit)
         if (deviceState.tempUnit.isCelsius()) {
             deviceState.temp = deviceState.temp.toC()
             deviceState.roomTemp = deviceState.roomTemp.toC()
-            deviceState.maxTemp = 32
-            deviceState.minTemp = 16
-        } else {
-            deviceState.maxTemp = 90
-            deviceState.minTemp = 61
         }
-        prefs.setTempUnit(dsn, deviceState.tempUnit)
 
         return deviceState
     }
@@ -89,6 +89,41 @@ class DeviceControlRepository(
             AylaType.STRING -> stringConverter.map(prop)
             else -> throw Exception("Unknown base_type for ${prop.name}")
         }
+    }
+
+    private fun getSupportedModes(): List<WorkMode> {
+        return listOf(
+            WorkMode.Heating,
+            WorkMode.Cooling,
+            WorkMode.Dry,
+            WorkMode.FanOnly,
+            WorkMode.Auto
+        )
+    }
+
+    private fun getSupportedFanSpeeds(): List<FanSpeed> {
+        return listOf(
+            FanSpeed.Lower,
+            FanSpeed.Low,
+            FanSpeed.Normal,
+            FanSpeed.High,
+            FanSpeed.Higher,
+            FanSpeed.Auto,
+        )
+    }
+
+    private fun getMaxTemp(unit: TempType): Int {
+        return if (unit.isCelsius())
+            32
+        else
+            90
+    }
+
+    private fun getMinTemp(unit: TempType): Int {
+        return if (unit.isCelsius())
+            16
+        else
+            61
     }
 
     override suspend fun setAirFlowHorizontal(dsn: String, value: Boolean) {

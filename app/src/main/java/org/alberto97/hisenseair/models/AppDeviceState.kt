@@ -8,6 +8,7 @@ import org.alberto97.hisenseair.features.WorkMode
 class AppDeviceState {
     var productName: String = "Device"
     var backlight: Boolean = false
+    var supportedModes = emptyList<WorkMode>()
     var workMode: WorkMode = WorkMode.Auto
     var horizontalAirFlow: Boolean = false
     var verticalAirFlow: Boolean = false
@@ -15,6 +16,7 @@ class AppDeviceState {
     var eco: Boolean = false
     var boost: Boolean = false
     var sleepMode: Int = 0
+    var supportedSpeeds = emptyList<FanSpeed>()
     var fanSpeed: FanSpeed = FanSpeed.Auto
     var temp: Int = 0
     var roomTemp: Int = 0
