@@ -8,6 +8,8 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import org.alberto97.hisenseair.BottomSheetFragments
+import org.alberto97.hisenseair.CompatExtensions.requireAppActivity
+import org.alberto97.hisenseair.MainActivity
 import org.alberto97.hisenseair.PreferenceConstants
 import org.alberto97.hisenseair.PreferenceExtensions.setCheckedIfVisible
 import org.alberto97.hisenseair.R
@@ -123,6 +125,8 @@ class DeviceControlFragment : PreferenceFragmentCompat() {
             true
         }
 
+        if (requireAppActivity<MainActivity>().displayInPanel)
+            settings.isVisible = false
     }
 
     private fun setupPower() {

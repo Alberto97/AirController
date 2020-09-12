@@ -10,6 +10,8 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 
 object CompatExtensions {
 
@@ -27,5 +29,10 @@ object CompatExtensions {
 
     fun View.setVisible(visible: Boolean) {
         this.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T: FragmentActivity> Fragment.requireAppActivity(): T {
+        return this.requireActivity() as T
     }
 }

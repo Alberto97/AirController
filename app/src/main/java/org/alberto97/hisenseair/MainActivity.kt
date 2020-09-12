@@ -8,8 +8,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private var _displayInPanel = false
+    val displayInPanel get() = _displayInPanel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        _displayInPanel = intent.getBooleanExtra(UIConstants.EXTRA_USE_PANEL, false)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

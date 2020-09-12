@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
+import org.alberto97.hisenseair.CompatExtensions.requireAppActivity
 import org.alberto97.hisenseair.CompatExtensions.setVisible
+import org.alberto97.hisenseair.MainActivity
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.databinding.FragmentDeviceBinding
 import org.alberto97.hisenseair.features.modeToIconMap
@@ -31,6 +33,9 @@ class DeviceFragment : Fragment() {
         setSpinnerVisible(true)
 
         viewModel.load(args.dsn)
+
+        if (requireAppActivity<MainActivity>().displayInPanel)
+            binding.toolbar.setVisible(false)
 
         viewModel.isLoading.observe(viewLifecycleOwner, {
             binding.spinner.spinner.setVisible(it)
