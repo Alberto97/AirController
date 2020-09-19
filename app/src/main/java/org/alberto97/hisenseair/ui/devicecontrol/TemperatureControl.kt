@@ -39,7 +39,7 @@ fun TemperatureControl(
                 Text(
                     text = " ${state.value.toInt()}°",
                     style = MaterialTheme.typography.h3,
-                    modifier = Modifier.gravity(Alignment.CenterHorizontally).padding()
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding()
                 )
                 Slider(
                     value = state.value,
@@ -48,7 +48,7 @@ fun TemperatureControl(
                 )
             }
             Row(
-                Modifier.gravity(Alignment.End)
+                Modifier.align(Alignment.End)
             ) {
                 TextButton({ onCancel() }) {
                     Text(
