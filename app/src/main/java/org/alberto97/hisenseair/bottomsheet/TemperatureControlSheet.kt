@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.ui.devicecontrol.TemperatureControl
+import org.alberto97.hisenseair.ui.devicecontrol.TemperatureControlDialog
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -27,7 +27,7 @@ class TemperatureControlSheet :  BottomSheetDialogFragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 AppTheme {
-                    TemperatureControl(
+                    TemperatureControlDialog(
                         temp = viewModel.temp.value!!.toFloat(),
                         min = viewModel.minTemp.value!!.toFloat(),
                         max = viewModel.maxTemp.value!!.toFloat(),

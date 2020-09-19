@@ -20,7 +20,7 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 import java.util.*
 
 @Composable
-fun TemperatureControl(
+fun TemperatureControlDialog(
     temp: Float,
     min: Float,
     max: Float,
@@ -72,6 +72,6 @@ fun TemperatureControl(
 @Composable
 private fun preview() {
     AppTheme {
-        TemperatureControl(30f, 16f, 60f, {}, {})
+        TemperatureControlDialog(30f, 16f, 60f, {}, {})
     }
 }
