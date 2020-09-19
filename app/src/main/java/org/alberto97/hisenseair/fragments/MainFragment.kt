@@ -1,52 +1,50 @@
 package org.alberto97.hisenseair.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.navigation.findNavController
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import org.alberto97.hisenseair.CompatExtensions.getCompatDrawable
+import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.models.AppDevice
+import org.alberto97.hisenseair.databinding.FragmentMainBinding
+import org.alberto97.hisenseair.ui.devices.DevicesScreen
 import org.alberto97.hisenseair.viewmodels.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@Suppress("unused")
-class MainFragment : PreferenceFragmentCompat() {
+class MainFragment : Fragment() {
 
-    private val viewModel: MainViewModel by sharedViewModel()
+    private val viewModel: MainViewModel by viewModel()
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.pref_devices)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = FragmentMainBinding.inflate(inflater)
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.splashFragment, R.id.loginFragment, R.id.mainFragment))
+        binding.toolbar.setupWithNavController(findNavController(), appBarConfiguration)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        binding.content.setContent {
+            val loggedOut by viewModel.isLoggedOut.observeAsState(false)
+            if (loggedOut)
+                findNavController().navigate(R.id.loginFragment)
 
-        viewModel.devices.observe(viewLifecycleOwner, { devices ->
-            preferenceScreen.removeAll()
-            devices.forEach {
-                val preference = buildPreference(it)
-                preferenceScreen.addPreference(preference)
-            }
-        })
-    }
-
-    private fun buildPreference(device: AppDevice): Preference {
-        val text = if (device.available) "Available" else "Offline"
-        return Preference(requireContext()).apply {
-            title = device.name
-            summary = text
-            icon = requireContext().getCompatDrawable(R.drawable.ic_circle_air_conditioner_primary)
-            setOnPreferenceClickListener {
-                if (device.available) {
-                    val direction = MainFragmentWrapperDirections.actionMainFragmentToDeviceFragment(device.id)
-                    requireView().findNavController().navigate(direction)
-                    true
-                } else {
-                    false
-                }
-            }
+            DevicesScreen(
+                viewModel = viewModel,
+                onDeviceClick = { device -> onDeviceClick(device) }
+            )
         }
+
+        return binding.root
+    }
+
+    private fun onDeviceClick(id: String) {
+        val direction = MainFragmentDirections.actionMainFragmentToDeviceFragment(id)
+        findNavController().navigate(direction)
     }
 }

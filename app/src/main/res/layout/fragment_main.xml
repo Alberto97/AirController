@@ -1,51 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:menu="@menu/device_toolbar_menu">
-
-            <TextView
-                style="@style/TextAppearance.MaterialComponents.Headline6"
-                android:id="@+id/deviceName"
-                android:layout_margin="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/primary"
-                android:text="Hisense Air" />
-        </com.google.android.material.appbar.MaterialToolbar>
-
-        <include
-            layout="@layout/device_layout_spinner"
-            android:id="@+id/spinner" />
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/advanced"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="org.alberto97.hisenseair.fragments.MainFragment" />
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_margin="16dp"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_add_24"
-        android:layout_gravity="bottom|end"
-        app:backgroundTint="?attr/colorSurface"
-        app:tint="@color/primary"
-        android:visibility="gone" />
+        app:menu="@menu/device_toolbar_menu">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:id="@+id/deviceName"
+            android:layout_margin="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/primary"
+            android:text="Hisense Air" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

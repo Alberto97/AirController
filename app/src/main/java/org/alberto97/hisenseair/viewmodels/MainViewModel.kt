@@ -25,7 +25,11 @@ class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
         MutableLiveData<Boolean>()
     }
 
-    fun fetchData() {
+    init {
+        fetchData()
+    }
+
+    private fun fetchData() {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
