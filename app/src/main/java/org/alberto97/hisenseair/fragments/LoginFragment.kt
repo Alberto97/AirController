@@ -33,7 +33,7 @@ class LoginFragment : Fragment() {
             if (it) {
                 findNavController().navigate(LoginFragmentDirections.loginToMain())
             } else {
-                Snackbar.make(binding.coordinator, "Login failed", Snackbar.LENGTH_SHORT)
+                Snackbar.make(binding.coordinator, "Login failed", Snackbar.LENGTH_SHORT).show()
             }
         })
 

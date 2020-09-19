@@ -3,14 +3,12 @@ package org.alberto97.hisenseair.ui
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
@@ -56,7 +54,7 @@ private fun doneIcon(show: Boolean) {
 private fun preview() {
     AppTheme(darkTheme = true) {
         Surface {
-            BottomSheetListItem(WorkMode.Auto, "Prova", R.drawable.round_done_24, true, {})
+            BottomSheetListItem(WorkMode.Auto, "Test", R.drawable.round_done_24, true, {})
         }
     }
 }

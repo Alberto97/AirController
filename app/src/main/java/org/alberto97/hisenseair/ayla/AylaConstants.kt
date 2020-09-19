@@ -3,6 +3,7 @@ package org.alberto97.hisenseair.ayla
 import org.alberto97.hisenseair.ayla.features.*
 import org.alberto97.hisenseair.models.AppDeviceState
 
+@Suppress("unused")
 object AylaDeviceState {
     const val ONLINE = "Online"
     const val OFFLINE = "Offline"
