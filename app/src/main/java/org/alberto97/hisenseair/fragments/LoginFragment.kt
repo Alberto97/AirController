@@ -4,16 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
-import org.alberto97.hisenseair.databinding.FragmentLoginBinding
+import kotlinx.coroutines.launch
+import org.alberto97.hisenseair.ui.login.LoginScreen
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LoginFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoginBinding
+@ExperimentalMaterialApi
+class LoginFragment : Fragment() {
 
     private val viewModel: LoginViewModel by viewModel()
 
@@ -22,26 +29,29 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLoginBinding.inflate(inflater)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                build()
+            }
+        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    @Composable
+    private fun build() {
+        val scaffoldState =  rememberScaffoldState()
+        val snackScope = rememberCoroutineScope()
 
-        viewModel.isAuthenticated.observe(viewLifecycleOwner, {
-            if (it) {
-                findNavController().navigate(LoginFragmentDirections.loginToMain())
-            } else {
-                Snackbar.make(binding.coordinator, "Login failed", Snackbar.LENGTH_SHORT).show()
+        val isAuthenticated by viewModel.isAuthenticated.observeAsState()
+        when (isAuthenticated) {
+            false -> snackScope.launch {
+                scaffoldState.snackbarHostState.showSnackbar("Login failed")
             }
-        })
-
-        binding.login.setOnClickListener {
-            val email = binding.inputEmail.text.toString()
-            val password = binding.inputPassword.text.toString()
-
-            viewModel.login(email, password)
+            true -> findNavController().navigate(LoginFragmentDirections.loginToMain())
         }
+
+        LoginScreen(
+            scaffoldState = scaffoldState,
+            onLogin = { email, password -> viewModel.login(email, password) }
+        )
     }
 }

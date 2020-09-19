@@ -16,8 +16,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="org.alberto97.hisenseair.fragments.LoginFragment"
-        android:label="LoginFragment"
-        tools:layout="@layout/fragment_login">
+        android:label="LoginFragment">
         <action
             android:id="@+id/loginToMain"
             app:destination="@id/mainFragment"
