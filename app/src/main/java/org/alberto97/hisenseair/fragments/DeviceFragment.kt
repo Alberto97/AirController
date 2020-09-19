@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.res.vectorResource
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -14,6 +18,8 @@ import org.alberto97.hisenseair.MainActivity
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.databinding.FragmentDeviceBinding
 import org.alberto97.hisenseair.features.modeToIconMap
+import org.alberto97.hisenseair.ui.devicecontrol.DeviceOff
+import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -41,25 +47,9 @@ class DeviceFragment : Fragment() {
             binding.spinner.spinner.setVisible(it)
         })
 
-        binding.offLayout.power.setOnClickListener {
-            setSpinnerVisible(true)
-            viewModel.switchPower()
-        }
-
         viewModel.isOn.observe(viewLifecycleOwner, {
             setSpinnerVisible(false)
             updateLayoutVisibility(it)
-        })
-
-        // Offline ambient temp
-        viewModel.roomTemp.observe(viewLifecycleOwner, {
-            binding.offLayout.roomTemp.text = getString(R.string.device_room_temp, it)
-        })
-
-        // Offline work mode
-        viewModel.workState.observe(viewLifecycleOwner, {
-            val drawableId = modeToIconMap[it] ?: R.drawable.round_brightness_7_24
-            binding.offLayout.offMode.setImageResource(drawableId)
         })
 
         // Device name
@@ -67,11 +57,31 @@ class DeviceFragment : Fragment() {
             binding.toolbar.title = it
         })
 
+        binding.offLayout.setContent {
+            val currentTemp by viewModel.roomTemp.observeAsState(-1)
+            val currentMode by viewModel.workState.observeAsState()
+            val drawableId = modeToIconMap[currentMode] ?: R.drawable.round_brightness_7_24
+
+            AppTheme {
+                Surface {
+                    DeviceOff(
+                        modeAsset = vectorResource(drawableId),
+                        currentTemp = currentTemp,
+                        onPower = { onPowerClick() }
+                    )
+                }
+            }
+        }
         return binding.root
     }
 
+    private fun onPowerClick() {
+        setSpinnerVisible(true)
+        viewModel.switchPower()
+    }
+
     private fun updateLayoutVisibility(isOn: Boolean) {
-        binding.offLayout.offLayout.setVisible(!isOn)
+        binding.offLayout.setVisible(!isOn)
         binding.advanced.setVisible(isOn)
     }
 

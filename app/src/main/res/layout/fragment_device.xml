@@ -18,9 +18,10 @@
             layout="@layout/device_layout_spinner"
             android:id="@+id/spinner" />
 
-        <include
-            layout="@layout/device_layout_off"
-            android:id="@+id/offLayout" />
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/offLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/advanced"
