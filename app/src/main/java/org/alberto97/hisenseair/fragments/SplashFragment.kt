@@ -7,8 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.alberto97.hisenseair.databinding.FragmentSplashBinding
+import org.alberto97.hisenseair.viewmodels.SplashViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : Fragment() {
+
+    private val viewModel: SplashViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,11 +26,11 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val direction =
-//            if (Singleton.authToken.isEmpty()) {
-//                SplashFragmentDirections.splashToLogin()
-//            } else {
+            if (viewModel.isLoggedIn()) {
+                SplashFragmentDirections.splashToLogin()
+            } else {
                 SplashFragmentDirections.splashToMain()
-//            }
+            }
 
         findNavController().navigate(direction)
     }
