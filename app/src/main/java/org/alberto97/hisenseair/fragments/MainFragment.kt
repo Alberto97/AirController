@@ -44,7 +44,7 @@ class MainFragment : Fragment() {
     }
 
     private fun onDeviceClick(id: String) {
-        val direction = MainFragmentDirections.actionMainFragmentToDeviceFragment(id)
+        val direction = MainFragmentDirections.mainToDeviceControl(id)
         findNavController().navigate(direction)
     }
 }

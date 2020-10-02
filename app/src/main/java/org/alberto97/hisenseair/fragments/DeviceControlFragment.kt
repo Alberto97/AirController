@@ -24,7 +24,7 @@ import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.bottomsheet.DeviceFanSpeedSheet
 import org.alberto97.hisenseair.bottomsheet.DeviceWorkModeSheet
 import org.alberto97.hisenseair.bottomsheet.TemperatureControlSheet
-import org.alberto97.hisenseair.databinding.FragmentDeviceComposeBinding
+import org.alberto97.hisenseair.databinding.FragmentDeviceBinding
 import org.alberto97.hisenseair.features.fanToStringMap
 import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.features.modeToStringMap
@@ -39,10 +39,10 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DeviceControlComposeFragment : Fragment() {
-    private lateinit var binding: FragmentDeviceComposeBinding
+class DeviceControlFragment : Fragment() {
+    private lateinit var binding: FragmentDeviceBinding
 
-    private val args by navArgs<DeviceControlComposeFragmentArgs>()
+    private val args by navArgs<DeviceControlFragmentArgs>()
     private val viewModel: DeviceViewModel by sharedViewModel()
 
     override fun onCreateView(
@@ -50,7 +50,7 @@ class DeviceControlComposeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDeviceComposeBinding.inflate(inflater)
+        binding = FragmentDeviceBinding.inflate(inflater)
         binding.toolbar.setupWithNavController(findNavController())
 
         viewModel.load(args.dsn)
@@ -194,8 +194,8 @@ class DeviceControlComposeFragment : Fragment() {
                 summary = "Temperature unit, device name and info",
                 icon = vectorResource(R.drawable.ic_round_settings_24),
                 onClick = {
-                    /*val direct = DeviceControlComposeFragmentDirections.actionDeviceControlComposeFragmentToDevicePreferenceFragment(viewModel.dsn)
-                    findNavController().navigate(direct)*/
+                    val direct = DeviceControlFragmentDirections.deviceControlToDeviceSettings(viewModel.dsn)
+                    findNavController().navigate(direct)
                 }
             )
     }

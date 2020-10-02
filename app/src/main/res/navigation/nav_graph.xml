@@ -10,8 +10,8 @@
         android:name="org.alberto97.hisenseair.fragments.MainFragment"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_mainFragment_to_deviceFragment"
-            app:destination="@id/deviceFragment" />
+            android:id="@+id/mainToDeviceControl"
+            app:destination="@id/deviceControlFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -40,14 +40,14 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/deviceFragment"
-        android:name="org.alberto97.hisenseair.fragments.DeviceFragment"
+        android:id="@+id/deviceControlFragment"
+        android:name="org.alberto97.hisenseair.fragments.DeviceControlFragment"
         tools:layout="@layout/fragment_device">
         <argument
             android:name="dsn"
             app:argType="string" />
         <action
-            android:id="@+id/action_deviceFragmentNew_to_devicePreferenceFragment"
+            android:id="@+id/deviceControlToDeviceSettings"
             app:destination="@id/devicePreferenceFragment" />
     </fragment>
     <fragment
@@ -55,14 +55,6 @@
         android:name="org.alberto97.hisenseair.fragments.DeviceSettings"
         android:label="@string/device_settings"
         tools:layout="@layout/fragment_settings">
-        <argument
-            android:name="dsn"
-            app:argType="string" />
-    </fragment>
-    <fragment
-        android:id="@+id/deviceControlComposeFragment"
-        android:name="org.alberto97.hisenseair.fragments.DeviceControlComposeFragment"
-        tools:layout="@layout/fragment_device_compose">
         <argument
             android:name="dsn"
             app:argType="string" />

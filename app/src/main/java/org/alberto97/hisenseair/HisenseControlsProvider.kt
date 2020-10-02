@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.features.modeToControl
 import org.alberto97.hisenseair.features.modeToStringMap
-import org.alberto97.hisenseair.fragments.DeviceFragmentArgs
+import org.alberto97.hisenseair.fragments.DeviceControlFragmentArgs
 import org.alberto97.hisenseair.models.AppDeviceState
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
@@ -123,10 +123,10 @@ class HisenseControlsProvider : ControlsProviderService() {
     }
 
     private fun getPendingIntent(dsn: String): PendingIntent {
-        val args = DeviceFragmentArgs(dsn).toBundle()
+        val args = DeviceControlFragmentArgs(dsn).toBundle()
         return NavDeepLinkBuilder(baseContext)
             .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.deviceFragment)
+            .setDestination(R.id.deviceControlFragment)
             .setArguments(args)
             .createPendingIntent()
     }
