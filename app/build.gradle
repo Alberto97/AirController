@@ -32,7 +32,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.0.0-alpha02"
+        kotlinCompilerExtensionVersion "1.0.0-alpha04"
     }
 
     kotlinOptions {
@@ -60,7 +60,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
 
     // Compose
-    def compose_version = '1.0.0-alpha03'
+    def compose_version = '1.0.0-alpha04'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
