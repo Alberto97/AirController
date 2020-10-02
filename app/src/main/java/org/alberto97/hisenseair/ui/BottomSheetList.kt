@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.models.BottomSheetListItem
 
@@ -25,7 +26,7 @@ fun <T: Enum<*>> BottomSheetList(
             LazyColumnFor(list) {
                 BottomSheetListItem(
                     id = it.id,
-                    text = it.name,
+                    text = stringResource(it.name),
                     icon = it.icon,
                     selected = it.current,
                     onClick = { data -> onItemClick(data) }

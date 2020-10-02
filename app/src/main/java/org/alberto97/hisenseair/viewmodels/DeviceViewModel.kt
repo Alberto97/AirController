@@ -6,9 +6,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.alberto97.hisenseair.features.FanSpeed
-import org.alberto97.hisenseair.features.WorkMode
+import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.controllers.*
+import org.alberto97.hisenseair.models.BottomSheetListItem
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -241,4 +242,26 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
     fun increaseTemp() = setTemp(temp.value!! + 1)
 
     fun reduceTemp() = setTemp(temp.value!! - 1)
+
+    fun getSupportedModes(): List<BottomSheetListItem<WorkMode>> {
+        val modes = supportedModes.value ?: return listOf()
+
+        return modes.map {
+            val text = modeToStringMap.getValue(it)
+            val icon = modeToIconMap.getValue(it)
+            val selected = it == workState.value
+            BottomSheetListItem(it, text, icon, selected)
+        }
+    }
+
+    fun getSupportedFanSpeed(): List<BottomSheetListItem<FanSpeed>> {
+        val modes = supportedFanSpeeds.value ?: return listOf()
+
+        return modes.map {
+            val text = fanToStringMap.getValue(it)
+            val icon = R.drawable.ic_fan
+            val selected = it == fanSpeed.value
+            BottomSheetListItem(it, text, icon, selected)
+        }
+    }
 }
