@@ -67,20 +67,25 @@ class DeviceControlFragment : Fragment() {
             AppTheme {
                 Scaffold {
                     val isLoading = viewModel.isLoading.observeAsState(true).value
-                    if (isLoading) {
+                    if (isLoading)
                         FullscreenLoading()
-                    } else {
-                        val isOn = viewModel.isOn.observeAsState(true)
-                        when (isOn.value) {
-                            false -> offScreen()
-                            true -> onScreen()
-                        }
-                    }
+                    else
+                        screenByState()
                 }
             }
         }
 
         return binding.root
+    }
+
+    @Composable
+    fun screenByState() {
+        val isOn = viewModel.isOn.observeAsState(null)
+        when (isOn.value) {
+            false -> offScreen()
+            true -> onScreen()
+            else -> FullscreenLoading()
+        }
     }
 
     @Composable
