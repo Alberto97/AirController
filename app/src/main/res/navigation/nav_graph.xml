@@ -59,4 +59,12 @@
             android:name="dsn"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/deviceControlComposeFragment"
+        android:name="org.alberto97.hisenseair.fragments.DeviceControlComposeFragment"
+        tools:layout="@layout/fragment_device_compose">
+        <argument
+            android:name="dsn"
+            app:argType="string" />
+    </fragment>
 </navigation>
