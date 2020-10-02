@@ -110,8 +110,12 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
 
     fun load(dsn: String) {
         this.dsn = dsn
+        isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             fetchData()
+            withContext(Dispatchers.Main) {
+                isLoading.value = false
+            }
         }
     }
 
@@ -146,6 +150,7 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
     }
 
     private fun switchProp(liveData: MutableLiveData<Boolean>,
+                           postFetch: (suspend () -> Unit)? = null,
                            setProperty: suspend (value: Boolean) -> Unit) {
         val opposite = !liveData.value!!
         liveData.value = opposite
@@ -153,6 +158,8 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
         viewModelScope.launch(Dispatchers.IO) {
             setProperty(opposite)
             fetchData()
+            if (postFetch != null)
+                postFetch()
         }
     }
 
@@ -211,9 +218,18 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
     }
 
     fun switchPower() {
-        switchProp(isOn) {
-            repo.setPower(dsn, it)
-        }
+        isLoading.value = true
+        switchProp(
+            isOn,
+            setProperty = {
+                repo.setPower(dsn, it)
+            },
+            postFetch = {
+                withContext(Dispatchers.Main) {
+                    isLoading.value = false
+                }
+            }
+        )
     }
 
     fun setTemp(value: Int) {

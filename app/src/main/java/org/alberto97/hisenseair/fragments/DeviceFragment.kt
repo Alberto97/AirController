@@ -36,7 +36,6 @@ class DeviceFragment : Fragment() {
     ): View? {
         binding = FragmentDeviceBinding.inflate(inflater)
         binding.toolbar.setupWithNavController(findNavController())
-        setSpinnerVisible(true)
 
         viewModel.load(args.dsn)
 
@@ -48,7 +47,6 @@ class DeviceFragment : Fragment() {
         })
 
         viewModel.isOn.observe(viewLifecycleOwner, {
-            setSpinnerVisible(false)
             updateLayoutVisibility(it)
         })
 
@@ -76,16 +74,11 @@ class DeviceFragment : Fragment() {
     }
 
     private fun onPowerClick() {
-        setSpinnerVisible(true)
         viewModel.switchPower()
     }
 
     private fun updateLayoutVisibility(isOn: Boolean) {
         binding.offLayout.setVisible(!isOn)
         binding.advanced.setVisible(isOn)
-    }
-
-    private fun setSpinnerVisible(visible: Boolean) {
-        viewModel.isLoading.value = visible
     }
 }
