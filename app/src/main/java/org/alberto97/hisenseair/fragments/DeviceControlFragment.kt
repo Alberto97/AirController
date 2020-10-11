@@ -30,6 +30,7 @@ import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.features.modeToStringMap
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.devicecontrol.DeviceOff
+import org.alberto97.hisenseair.ui.devicecontrol.PanelUnsupported
 import org.alberto97.hisenseair.ui.devicecontrol.TemperatureControlStep
 import org.alberto97.hisenseair.ui.preferences.Preference
 import org.alberto97.hisenseair.ui.preferences.PreferenceCategory
@@ -66,16 +67,30 @@ class DeviceControlFragment : Fragment() {
         binding.content.setContent {
             AppTheme {
                 Scaffold {
-                    val isLoading = viewModel.isLoading.observeAsState(true).value
-                    if (isLoading)
-                        FullscreenLoading()
-                    else
-                        screenByState()
+                    screenInPanel()
                 }
             }
         }
 
         return binding.root
+    }
+
+    @Composable
+    fun screenInPanel() {
+        val inPanel = remember { requireAppActivity<MainActivity>().displayInPanel }
+        if (inPanel)
+            PanelUnsupported()
+        else
+            screenWithLoading()
+    }
+
+    @Composable
+    fun screenWithLoading() {
+        val isLoading = viewModel.isLoading.observeAsState(true).value
+        if (isLoading)
+            FullscreenLoading()
+        else
+            screenByState()
     }
 
     @Composable

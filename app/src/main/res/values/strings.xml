@@ -7,6 +7,8 @@
     <string name="device_current_temp">Currently at %1$d°</string>
     <string name="device_room_temp">Room temperature currently at %1$d°</string>
     <string name="device_off">Air conditioner is off</string>
+    <string name="display_in_panel_unsupported">Device controls in panel are currently not supported</string>
+    <string name="display_in_panel_extend">Use the top right icon to adjust the device in-app</string>
 
     <!-- Fan Speed -->
     <string name="fan_speed_auto">Auto</string>
