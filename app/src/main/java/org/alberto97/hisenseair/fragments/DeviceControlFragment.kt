@@ -28,6 +28,7 @@ import org.alberto97.hisenseair.databinding.FragmentDeviceBinding
 import org.alberto97.hisenseair.features.fanToStringMap
 import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.features.modeToStringMap
+import org.alberto97.hisenseair.features.sleepToStringMap
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.devicecontrol.DeviceOff
 import org.alberto97.hisenseair.ui.devicecontrol.PanelUnsupported
@@ -123,7 +124,7 @@ class DeviceControlFragment : Fragment() {
             buildAmbientTemp()
             buildMode()
             buildFanSpeed()
-            buildNightMode()
+            buildSleepMode()
             buildSettings()
             buildPower()
 
@@ -197,12 +198,16 @@ class DeviceControlFragment : Fragment() {
     }
 
     @Composable
-    private fun buildNightMode() {
-        Preference(
-            title = "Night mode",
-            summary = "Off",
-            icon = vectorResource(R.drawable.ic_nights_stay)
-        )
+    private fun buildSleepMode() {
+        val mode = viewModel.sleepMode.observeAsState().value
+        if (mode != null) {
+            val resId = sleepToStringMap.getValue(mode)
+            Preference(
+                title = "Sleep mode",
+                summary = stringResource(resId),
+                icon = vectorResource(R.drawable.ic_nights_stay)
+            )
+        }
     }
 
     @Composable

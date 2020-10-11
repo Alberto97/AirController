@@ -18,6 +18,13 @@
     <string name="fan_speed_high">Mid-High</string>
     <string name="fan_speed_higher">High</string>
 
+    <!-- Sleep Mode -->
+    <string name="sleep_mode_off">Off</string>
+    <string name="sleep_mode_mode1">Mode 1</string>
+    <string name="sleep_mode_mode2">Mode 2</string>
+    <string name="sleep_mode_mode3">Mode 3</string>
+    <string name="sleep_mode_mode4">Mode 4</string>
+
     <!-- Work Mode -->
     <string name="work_mode_heating">Heating</string>
     <string name="work_mode_cooling">Cooling</string>
