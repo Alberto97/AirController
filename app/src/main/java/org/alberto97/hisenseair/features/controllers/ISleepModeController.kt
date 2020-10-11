@@ -1,4 +1,6 @@
 package org.alberto97.hisenseair.features.controllers
 
-interface ISleepModeController : Controller<Int>
+import org.alberto97.hisenseair.features.SleepMode
+
+interface ISleepModeController : Controller<SleepMode>
 

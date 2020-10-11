@@ -47,6 +47,7 @@ val aylaModule = module {
     single<IFanSpeedConverter> { FanSpeedConverter() }
     single<IIntConverter> { IntConverter() }
     single<IModeConverter> { ModeConverter() }
+    single<ISleepModeConverter> { SleepModeConverter() }
     single<IStringConverter> { StringConverter() }
     single<ITempUnitConverter> { TempUnitConverter() }
 

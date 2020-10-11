@@ -44,8 +44,8 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
         MutableLiveData<WorkMode>()
     }
 
-    val sleepMode: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
+    val sleepMode: MutableLiveData<SleepMode> by lazy {
+        MutableLiveData<SleepMode>()
     }
 
     val fanSpeed: MutableLiveData<FanSpeed> by lazy {
@@ -170,7 +170,7 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
         }
     }
 
-    fun setSleepMode(mode: Int) {
+    fun setSleepMode(mode: SleepMode) {
         setProp {
             repo.setSleepMode(dsn, mode)
         }

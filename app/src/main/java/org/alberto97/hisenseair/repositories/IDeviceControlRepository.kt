@@ -1,8 +1,6 @@
 package org.alberto97.hisenseair.repositories
 
-import org.alberto97.hisenseair.features.FanSpeed
-import org.alberto97.hisenseair.features.TempType
-import org.alberto97.hisenseair.features.WorkMode
+import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.models.AppDeviceState
 
 interface IDeviceControlRepository {
@@ -16,7 +14,8 @@ interface IDeviceControlRepository {
     suspend fun setMode(dsn: String, value: WorkMode)
     suspend fun setPower(dsn: String, value: Boolean)
     suspend fun setQuiet(dsn: String, value: Boolean)
-    suspend fun setSleepMode(dsn: String, value: Int)
+    suspend fun getSupportedSleepModes(dsn: String): List<SleepModeData>
+    suspend fun setSleepMode(dsn: String, value: SleepMode)
     suspend fun setTemp(dsn: String, value: Int)
     suspend fun getTempUnit(dsn: String): TempType
     suspend fun setTempUnit(dsn: String, value: TempType)
