@@ -9,12 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @Composable
@@ -40,7 +41,7 @@ fun TemperatureControlStep(
                 }
         ) {
             Icon(
-                asset = vectorResource(R.drawable.ic_round_chevron_left_24),
+                Icons.Filled.ChevronLeft,
                 tint = MaterialTheme.colors.primary
             )
         }
@@ -66,7 +67,7 @@ fun TemperatureControlStep(
                 }
         ) {
             Icon(
-                asset = vectorResource(R.drawable.ic_round_chevron_right_24),
+                Icons.Filled.ChevronRight,
                 tint = MaterialTheme.colors.primary
             )
         }

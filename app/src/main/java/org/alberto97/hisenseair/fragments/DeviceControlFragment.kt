@@ -11,6 +11,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -89,7 +91,7 @@ class DeviceControlFragment : Fragment() {
                     title = { Text(deviceName) },
                     actions = {
                         IconButton({ navigateToSettings() }) {
-                            Icon(vectorResource(id = R.drawable.ic_round_settings_24))
+                            Icon(Icons.Rounded.Settings)
                         }
                     }
                 )

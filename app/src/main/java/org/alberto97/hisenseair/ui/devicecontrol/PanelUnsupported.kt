@@ -5,12 +5,13 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BrowserNotSupported
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
@@ -28,7 +29,7 @@ fun PanelUnsupported() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                asset = vectorResource(R.drawable.ic_baseline_browser_not_supported_24),
+                Icons.Filled.BrowserNotSupported,
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                 alpha = 0.5f,
                 modifier = Modifier.padding(all = 8.dp).width(56.dp).height(56.dp)
