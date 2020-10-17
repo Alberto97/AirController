@@ -3,12 +3,13 @@ package org.alberto97.hisenseair.ui.devicecontrol
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.ConstraintLayout
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -28,9 +29,9 @@ fun TemperatureControlStep(
     ) {
         val (buttonLeft, buttonRight, text) = createRefs()
 
-        Box(
-            modifier = Modifier.size(40.dp)
-                .clickable(onClick = onTempDown)
+        IconButton(
+            onClick = { onTempDown() },
+            modifier = Modifier
                 .constrainAs(buttonLeft) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
@@ -40,8 +41,7 @@ fun TemperatureControlStep(
         ) {
             Icon(
                 asset = vectorResource(R.drawable.ic_round_chevron_left_24),
-                tint = MaterialTheme.colors.primary,
-                modifier = Modifier.align(Alignment.Center)
+                tint = MaterialTheme.colors.primary
             )
         }
         Text(
@@ -55,9 +55,9 @@ fun TemperatureControlStep(
                     end.linkTo(parent.end)
                 }
         )
-        Box(
-            modifier =  Modifier.size(40.dp)
-                .clickable(onClick = onTempUp)
+        IconButton(
+            onClick = { onTempUp() },
+            modifier =  Modifier
                 .constrainAs(buttonRight) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
@@ -67,8 +67,7 @@ fun TemperatureControlStep(
         ) {
             Icon(
                 asset = vectorResource(R.drawable.ic_round_chevron_right_24),
-                tint = MaterialTheme.colors.primary,
-                modifier = Modifier.align(Alignment.Center)
+                tint = MaterialTheme.colors.primary
             )
         }
     }
