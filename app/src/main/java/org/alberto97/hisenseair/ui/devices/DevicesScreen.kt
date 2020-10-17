@@ -1,7 +1,9 @@
 package org.alberto97.hisenseair.ui.devices
 
+import androidx.compose.foundation.Text
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -14,7 +16,11 @@ import org.alberto97.hisenseair.viewmodels.MainViewModel
 @Composable
 fun DevicesScreen(viewModel: MainViewModel, onDeviceClick: (id: String) -> Unit) {
     AppTheme {
-        Scaffold {
+        Scaffold(
+            topBar = {
+                TopAppBar({ Text("HisenseAir") })
+            },
+        ) {
             val isLoading by viewModel.isLoading.observeAsState(true)
             if (isLoading) {
                 FullscreenLoading()

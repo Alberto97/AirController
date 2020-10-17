@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.databinding.FragmentMainBinding
 import org.alberto97.hisenseair.ui.devices.DevicesScreen
 import org.alberto97.hisenseair.viewmodels.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,22 +23,19 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentMainBinding.inflate(inflater)
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.splashFragment, R.id.loginFragment, R.id.mainFragment))
-        binding.toolbar.setupWithNavController(findNavController(), appBarConfiguration)
 
-        binding.content.setContent {
-            val loggedOut by viewModel.isLoggedOut.observeAsState(false)
-            if (loggedOut)
-                findNavController().navigate(R.id.loginFragment)
+        return ComposeView(requireContext()).apply {
+            setContent {
+                val loggedOut by viewModel.isLoggedOut.observeAsState(false)
+                if (loggedOut)
+                    findNavController().navigate(R.id.loginFragment)
 
-            DevicesScreen(
-                viewModel = viewModel,
-                onDeviceClick = { device -> onDeviceClick(device) }
-            )
+                DevicesScreen(
+                    viewModel = viewModel,
+                    onDeviceClick = { device -> onDeviceClick(device) }
+                )
+            }
         }
-
-        return binding.root
     }
 
     private fun onDeviceClick(id: String) {
