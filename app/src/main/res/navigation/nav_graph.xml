@@ -41,8 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/deviceControlFragment"
-        android:name="org.alberto97.hisenseair.fragments.DeviceControlFragment"
-        tools:layout="@layout/fragment_device">
+        android:name="org.alberto97.hisenseair.fragments.DeviceControlFragment">
         <argument
             android:name="dsn"
             app:argType="string" />

@@ -4,23 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.Text
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import org.alberto97.hisenseair.CompatExtensions.requireAppActivity
-import org.alberto97.hisenseair.CompatExtensions.setVisible
 import org.alberto97.hisenseair.MainActivity
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.databinding.FragmentDeviceBinding
 import org.alberto97.hisenseair.features.fanToStringMap
 import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.features.modeToStringMap
@@ -38,8 +41,6 @@ import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DeviceControlFragment : Fragment() {
-    private lateinit var binding: FragmentDeviceBinding
-
     private val args by navArgs<DeviceControlFragmentArgs>()
     private val viewModel: DeviceViewModel by sharedViewModel()
 
@@ -48,37 +49,54 @@ class DeviceControlFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDeviceBinding.inflate(inflater)
-        binding.toolbar.setupWithNavController(findNavController())
-
         viewModel.load(args.dsn)
 
-        // Device name
-        viewModel.deviceName.observe(viewLifecycleOwner, {
-            binding.toolbar.title = it
-        })
-
-        if (requireAppActivity<MainActivity>().displayInPanel)
-            binding.toolbar.setVisible(false)
-
-        binding.content.setContent {
-            AppTheme {
-                Scaffold {
-                    screenInPanel()
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    Scaffold {
+                        screenInPanel()
+                    }
                 }
             }
         }
+    }
 
-        return binding.root
+    private fun navigateToSettings() {
+        val direct =
+            DeviceControlFragmentDirections.deviceControlToDeviceSettings(viewModel.dsn)
+        findNavController().navigate(direct)
     }
 
     @Composable
     fun screenInPanel() {
         val inPanel = remember { requireAppActivity<MainActivity>().displayInPanel }
         if (inPanel)
-            PanelUnsupported()
+            Surface {
+                PanelUnsupported()
+            }
         else
+            scaffold()
+    }
+
+    @Composable
+    fun scaffold() {
+        val deviceName = viewModel.deviceName.observeAsState().value ?: ""
+
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(deviceName) },
+                    actions = {
+                        IconButton({ navigateToSettings() }) {
+                            Icon(vectorResource(id = R.drawable.ic_round_settings_24))
+                        }
+                    }
+                )
+            }
+        ) {
             screenWithLoading()
+        }
     }
 
     @Composable
@@ -121,7 +139,6 @@ class DeviceControlFragment : Fragment() {
             buildMode()
             buildFanSpeed()
             buildSleepMode()
-            buildSettings()
             buildPower()
 
             buildAirFlow()
@@ -204,21 +221,6 @@ class DeviceControlFragment : Fragment() {
                 icon = vectorResource(R.drawable.ic_nights_stay)
             )
         }
-    }
-
-    @Composable
-    private fun buildSettings() {
-        val visible = remember { !requireAppActivity<MainActivity>().displayInPanel }
-        if (visible)
-            Preference(
-                title = "Settings",
-                summary = "Temperature unit, device name and info",
-                icon = vectorResource(R.drawable.ic_round_settings_24),
-                onClick = {
-                    val direct = DeviceControlFragmentDirections.deviceControlToDeviceSettings(viewModel.dsn)
-                    findNavController().navigate(direct)
-                }
-            )
     }
 
     @Composable
