@@ -16,14 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
-import org.alberto97.hisenseair.BottomSheetFragments
 import org.alberto97.hisenseair.CompatExtensions.requireAppActivity
 import org.alberto97.hisenseair.CompatExtensions.setVisible
 import org.alberto97.hisenseair.MainActivity
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.bottomsheet.DeviceFanSpeedSheet
-import org.alberto97.hisenseair.bottomsheet.DeviceWorkModeSheet
-import org.alberto97.hisenseair.bottomsheet.TemperatureControlSheet
 import org.alberto97.hisenseair.databinding.FragmentDeviceBinding
 import org.alberto97.hisenseair.features.fanToStringMap
 import org.alberto97.hisenseair.features.modeToIconMap
@@ -147,8 +143,8 @@ class DeviceControlFragment : Fragment() {
                 onTempDown = { viewModel.reduceTemp() },
                 onTempUp = { viewModel.increaseTemp() },
                 onTempClick = {
-                    val dialog = TemperatureControlSheet()
-                    dialog.showNow(parentFragmentManager, BottomSheetFragments.TEMP)
+                    val direction = DeviceControlFragmentDirections.actionDeviceControlTemp()
+                    findNavController().navigate(direction)
                 }
             )
     }
@@ -174,8 +170,8 @@ class DeviceControlFragment : Fragment() {
             summary = stringResource(resId),
             icon = vectorResource(drawableId),
             onClick = {
-                val dialog = DeviceWorkModeSheet()
-                dialog.showNow(parentFragmentManager, BottomSheetFragments.MODE)
+                val direction = DeviceControlFragmentDirections.actionDeviceControlMode()
+                findNavController().navigate(direction)
             }
         )
     }
@@ -190,8 +186,8 @@ class DeviceControlFragment : Fragment() {
                 summary = stringResource(resId),
                 icon = vectorResource(R.drawable.ic_fan),
                 onClick = {
-                    val dialog = DeviceFanSpeedSheet()
-                    dialog.showNow(parentFragmentManager, BottomSheetFragments.FAN)
+                    val direction = DeviceControlFragmentDirections.actionDeviceControlFanSpeed()
+                    findNavController().navigate(direction)
                 }
             )
         }

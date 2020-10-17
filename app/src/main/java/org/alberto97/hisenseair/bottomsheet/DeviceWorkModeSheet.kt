@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.ui.BottomSheetList
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DeviceWorkModeSheet : ComposeBottomSheetDialogFragment() {
+class DeviceWorkModeSheet : BottomSheetDialogFragment() {
 
     val viewModel: DeviceViewModel by sharedViewModel()
 
@@ -35,6 +37,6 @@ class DeviceWorkModeSheet : ComposeBottomSheetDialogFragment() {
 
     private fun onItemClick(data: WorkMode) {
         viewModel.setMode(data)
-        dismiss()
+        findNavController().popBackStack()
     }
 }

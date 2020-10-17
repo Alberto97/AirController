@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.alberto97.hisenseair.features.FanSpeed
 import org.alberto97.hisenseair.ui.BottomSheetList
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DeviceFanSpeedSheet : ComposeBottomSheetDialogFragment() {
+class DeviceFanSpeedSheet : BottomSheetDialogFragment() {
 
     val viewModel: DeviceViewModel by sharedViewModel()
 
@@ -35,6 +37,6 @@ class DeviceFanSpeedSheet : ComposeBottomSheetDialogFragment() {
 
     private fun onItemClick(data: FanSpeed) {
         viewModel.setFanSpeed(data)
-        dismiss()
+        findNavController().popBackStack()
     }
 }

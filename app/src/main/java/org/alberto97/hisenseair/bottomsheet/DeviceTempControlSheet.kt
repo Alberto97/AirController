@@ -5,16 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.ui.devicecontrol.TemperatureControlDialog
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class TemperatureControlSheet :  BottomSheetDialogFragment() {
+class DeviceTempControlSheet :  BottomSheetDialogFragment() {
 
     private val viewModel: DeviceViewModel by sharedViewModel()
 
@@ -42,17 +40,10 @@ class TemperatureControlSheet :  BottomSheetDialogFragment() {
     private fun onOkClick(value: Float) {
         val temp = value.toInt()
         viewModel.setTemp(temp)
-        dismiss()
+        findNavController().popBackStack()
     }
 
     private fun onCancelClick() {
-        dismiss()
-    }
-
-    override fun dismiss() {
-        lifecycleScope.launch {
-            delay(500L)
-            super.dismiss()
-        }
+        findNavController().popBackStack()
     }
 }
