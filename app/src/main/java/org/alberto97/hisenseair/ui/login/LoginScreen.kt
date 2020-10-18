@@ -5,25 +5,48 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import kotlinx.coroutines.launch
+import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
+import org.alberto97.hisenseair.viewmodels.LoginViewModel
 
+@ExperimentalMaterialApi
 @Composable
 fun LoginScreen(
+    viewModel: LoginViewModel,
+    onAuthenticated: () -> Unit
+) {
+    val scaffoldState =  rememberScaffoldState()
+    val snackScope = rememberCoroutineScope()
+
+    val isAuthenticated by viewModel.isAuthenticated.observeAsState()
+    when (isAuthenticated) {
+        false -> snackScope.launch {
+            scaffoldState.snackbarHostState.showSnackbar("Login failed")
+        }
+        true -> onAuthenticated()
+    }
+
+    LoginContent(
+        onLogin = { email, password -> viewModel.login(email, password) },
+        scaffoldState = scaffoldState
+    )
+}
+
+@Composable
+private fun LoginContent(
     onLogin: (email: String, password: String) -> Unit,
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
@@ -33,7 +56,7 @@ fun LoginScreen(
     AppTheme {
         Scaffold(
             topBar = {
-                TopAppBar({ Text("HisenseAir") })
+                TopAppBar({ Text(stringResource(R.string.app_name)) })
             },
             scaffoldState = scaffoldState
         ) {
@@ -62,8 +85,9 @@ fun LoginScreen(
     }
 }
 
+@ExperimentalMaterialApi
 @Preview
 @Composable
 private fun screenPreview() {
-    LoginScreen(onLogin = { _, _ -> })
+    LoginContent(onLogin = { _, _ -> })
 }
