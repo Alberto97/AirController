@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
 
@@ -39,20 +40,20 @@ fun LoginScreen(
         true -> onAuthenticated()
     }
 
-    LoginContent(
-        onLogin = { email, password -> viewModel.login(email, password) },
-        scaffoldState = scaffoldState
-    )
+    LoginScaffold(scaffoldState = scaffoldState) {
+        val isLoading by viewModel.isLoading.observeAsState(false)
+        LoginContent(
+            isLoading = isLoading,
+            onLogin = { email, password -> viewModel.login(email, password) }
+        )
+    }
 }
 
 @Composable
-private fun LoginContent(
-    onLogin: (email: String, password: String) -> Unit,
-    scaffoldState: ScaffoldState = rememberScaffoldState()
+private fun LoginScaffold(
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    content: @Composable () -> Unit
 ) {
-    val (password, setPassword) = remember { mutableStateOf("") }
-    val (email, setEmail) = remember { mutableStateOf("") }
-
     AppTheme {
         Scaffold(
             topBar = {
@@ -60,34 +61,50 @@ private fun LoginContent(
             },
             scaffoldState = scaffoldState
         ) {
-            Column(
-                Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-            ) {
-                LoginTextField(
-                    value = email,
-                    onValueChange = setEmail,
-                    keyboardType = KeyboardType.Email,
-                    leadingIcon = { Icon(Icons.Outlined.Email) }
-                )
-                LoginTextField(
-                    value = password,
-                    onValueChange = setPassword,
-                    keyboardType = KeyboardType.Password,
-                    visualTransformation = PasswordVisualTransformation(),
-                    leadingIcon = { Icon(Icons.Outlined.Lock) }
-                )
-                LoginButton(
-                    enabled = email.isNotEmpty() && password.isNotEmpty(),
-                    onClick = { onLogin(email, password) }
-                )
-            }
+            content()
         }
     }
+}
+
+@Composable
+private fun LoginContent(
+    onLogin: (email: String, password: String) -> Unit,
+    isLoading: Boolean
+) {
+    val (password, setPassword) = remember { mutableStateOf("") }
+    val (email, setEmail) = remember { mutableStateOf("") }
+
+    if (isLoading)
+        FullscreenLoading()
+    else
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+        ) {
+            LoginTextField(
+                value = email,
+                onValueChange = setEmail,
+                keyboardType = KeyboardType.Email,
+                leadingIcon = { Icon(Icons.Outlined.Email) }
+            )
+            LoginTextField(
+                value = password,
+                onValueChange = setPassword,
+                keyboardType = KeyboardType.Password,
+                visualTransformation = PasswordVisualTransformation(),
+                leadingIcon = { Icon(Icons.Outlined.Lock) }
+            )
+            LoginButton(
+                enabled = email.isNotEmpty() && password.isNotEmpty(),
+                onClick = { onLogin(email, password) }
+            )
+        }
 }
 
 @ExperimentalMaterialApi
 @Preview
 @Composable
 private fun screenPreview() {
-    LoginContent(onLogin = { _, _ -> })
+    LoginScaffold {
+        LoginContent(isLoading = false, onLogin = { _, _ -> })
+    }
 }
