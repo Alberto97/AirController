@@ -3,10 +3,7 @@ package org.alberto97.hisenseair.ui.devicecontrol
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
@@ -106,6 +103,8 @@ private fun onScreen(
     ScrollableColumn {
         buildTempControl(viewModel, onShowTempControlPanel)
         buildAmbientTemp(viewModel)
+        Divider()
+
         buildMode(viewModel, onShowModePanel)
         buildFanSpeed(viewModel, onShowFanSpeedPanel)
         buildSleepMode(viewModel)
