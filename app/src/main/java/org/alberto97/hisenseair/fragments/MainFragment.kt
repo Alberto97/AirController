@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,19 +21,19 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return ComposeView(requireContext()).apply {
             setContent {
-                val loggedOut by viewModel.isLoggedOut.observeAsState(false)
-                if (loggedOut)
-                    findNavController().navigate(R.id.loginFragment)
-
                 DevicesScreen(
                     viewModel = viewModel,
+                    onUnauthorized = { onUnauthorized() },
                     onDeviceClick = { device -> onDeviceClick(device) }
                 )
             }
         }
+    }
+
+    private fun onUnauthorized() {
+        findNavController().navigate(R.id.loginFragment)
     }
 
     private fun onDeviceClick(id: String) {

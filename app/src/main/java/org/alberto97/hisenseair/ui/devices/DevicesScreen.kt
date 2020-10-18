@@ -7,20 +7,30 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.res.stringResource
 import androidx.ui.tooling.preview.Preview
+import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.MainViewModel
 
 @Composable
-fun DevicesScreen(viewModel: MainViewModel, onDeviceClick: (id: String) -> Unit) {
+fun DevicesScreen(
+    viewModel: MainViewModel,
+    onUnauthorized: () -> Unit,
+    onDeviceClick: (id: String) -> Unit
+) {
     AppTheme {
         Scaffold(
             topBar = {
-                TopAppBar({ Text("HisenseAir") })
+                TopAppBar({ Text(stringResource(R.string.app_name)) })
             },
         ) {
+            val loggedOut by viewModel.isLoggedOut.observeAsState(false)
+            if (loggedOut)
+                onUnauthorized()
+
             val isLoading by viewModel.isLoading.observeAsState(true)
             if (isLoading) {
                 FullscreenLoading()
