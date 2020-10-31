@@ -1,6 +1,5 @@
 package org.alberto97.hisenseair.ui.devicecontrol
 
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ConstraintLayout
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight

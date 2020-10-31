@@ -1,6 +1,5 @@
 package org.alberto97.hisenseair.ui.login
 
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

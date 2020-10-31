@@ -1,11 +1,11 @@
 package org.alberto97.hisenseair.ui
 
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.runtime.Composable
