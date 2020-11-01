@@ -5,7 +5,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    viewModel { DeviceViewModel(get()) }
+    viewModel {(dsn: String) -> DeviceViewModel(dsn, get()) }
     viewModel { DevicePreferenceViewModel(get(), get()) }
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }

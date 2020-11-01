@@ -14,9 +14,7 @@ import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(), KoinComponent {
-
-    var dsn: String = ""
+class DeviceViewModel(private val dsn: String, private val repo: IDeviceControlRepository) : ViewModel(), KoinComponent {
 
     private val airFlowHorizontalController: IAirFlowHorizontalController by inject()
     private val airFlowVerticalController: IAirFlowVerticalController by inject()
@@ -109,8 +107,7 @@ class DeviceViewModel(private val repo: IDeviceControlRepository) : ViewModel(),
         MutableLiveData<String>()
     }
 
-    fun load(dsn: String) {
-        this.dsn = dsn
+    init {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             fetchData()
