@@ -47,15 +47,6 @@
         <action
             android:id="@+id/deviceControlToDeviceSettings"
             app:destination="@id/devicePreferenceFragment" />
-        <action
-            android:id="@+id/actionDeviceControlFanSpeed"
-            app:destination="@id/deviceFanSpeedSheet" />
-        <action
-            android:id="@+id/actionDeviceControlMode"
-            app:destination="@id/deviceWorkModeSheet" />
-        <action
-            android:id="@+id/actionDeviceControlTemp"
-            app:destination="@id/deviceTempControlSheet" />
     </fragment>
     <fragment
         android:id="@+id/devicePreferenceFragment"
@@ -66,16 +57,4 @@
             android:name="dsn"
             app:argType="string" />
     </fragment>
-    <dialog
-        android:id="@+id/deviceFanSpeedSheet"
-        android:name="org.alberto97.hisenseair.bottomsheet.DeviceFanSpeedSheet"
-        android:label="DeviceFanSpeedSheet" />
-    <dialog
-        android:id="@+id/deviceWorkModeSheet"
-        android:name="org.alberto97.hisenseair.bottomsheet.DeviceWorkModeSheet"
-        android:label="DeviceWorkModeSheet" />
-    <dialog
-        android:id="@+id/deviceTempControlSheet"
-        android:name="org.alberto97.hisenseair.bottomsheet.DeviceTempControlSheet"
-        android:label="DeviceTempControlSheet" />
 </navigation>
