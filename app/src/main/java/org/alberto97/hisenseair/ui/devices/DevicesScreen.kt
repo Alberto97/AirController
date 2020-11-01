@@ -8,8 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.navigate
 import androidx.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.ui.Routes
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
@@ -18,9 +21,8 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun DevicesScreen(
-    viewModel: MainViewModel = getViewModel(),
-    onUnauthorized: () -> Unit,
-    onDeviceClick: (id: String) -> Unit
+    navController: NavController,
+    viewModel: MainViewModel = getViewModel()
 ) {
     AppTheme {
         Scaffold(
@@ -30,14 +32,16 @@ fun DevicesScreen(
         ) {
             val loggedOut by viewModel.isLoggedOut.observeAsState(false)
             if (loggedOut)
-                onUnauthorized()
+                navController.navigate(Routes.Login)
 
             val isLoading by viewModel.isLoading.observeAsState(true)
             if (isLoading) {
                 FullscreenLoading()
             } else {
                 val devices by viewModel.devices.observeAsState(listOf())
-                devices(devices, onDeviceClick)
+                devices(devices, onDeviceClick = { dsn ->
+                    navController.navigate("${Routes.DeviceControl}/$dsn")
+                })
             }
         }
     }

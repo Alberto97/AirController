@@ -15,9 +15,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.navigate
 import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.ui.Routes
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
@@ -26,8 +29,8 @@ import org.koin.androidx.compose.getViewModel
 @ExperimentalMaterialApi
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = getViewModel(),
-    onAuthenticated: () -> Unit
+    navController: NavController,
+    viewModel: LoginViewModel = getViewModel()
 ) {
     val scaffoldState =  rememberScaffoldState()
     val snackScope = rememberCoroutineScope()
@@ -37,7 +40,7 @@ fun LoginScreen(
         false -> snackScope.launch {
             scaffoldState.snackbarHostState.showSnackbar("Login failed")
         }
-        true -> onAuthenticated()
+        true -> navController.navigate(Routes.Main)
     }
 
     LoginScaffold(scaffoldState = scaffoldState) {

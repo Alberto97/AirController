@@ -1,6 +1,7 @@
 package org.alberto97.hisenseair
 
 import android.app.PendingIntent
+import android.content.Intent
 import android.os.Build
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
@@ -12,7 +13,8 @@ import android.service.controls.templates.RangeTemplate
 import android.service.controls.templates.StatelessTemplate
 import android.service.controls.templates.TemperatureControlTemplate
 import androidx.annotation.RequiresApi
-import androidx.navigation.NavDeepLinkBuilder
+import androidx.core.app.TaskStackBuilder
+import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,10 +25,10 @@ import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.features.modeToControl
 import org.alberto97.hisenseair.features.modeToStringMap
-import org.alberto97.hisenseair.fragments.DeviceControlFragmentArgs
 import org.alberto97.hisenseair.models.AppDeviceState
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
+import org.alberto97.hisenseair.ui.MainActivity
 import org.koin.android.ext.android.inject
 import java.util.concurrent.Flow
 import java.util.function.Consumer
@@ -123,11 +125,18 @@ class HisenseControlsProvider : ControlsProviderService() {
     }
 
     private fun getPendingIntent(dsn: String): PendingIntent {
-        val args = DeviceControlFragmentArgs(dsn).toBundle()
-        return NavDeepLinkBuilder(baseContext)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.deviceControlFragment)
-            .setArguments(args)
-            .createPendingIntent()
+        val deepLinkIntent = Intent(
+            Intent.ACTION_VIEW,
+            "${UriConstants.DEVICE_CONTROL}/$dsn".toUri(),
+            baseContext,
+            MainActivity::class.java
+        )
+
+        val deepLinkPendingIntent: PendingIntent? = TaskStackBuilder.create(baseContext).run {
+            addNextIntentWithParentStack(deepLinkIntent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        return deepLinkPendingIntent!!
     }
 }

@@ -1,5 +1,9 @@
 package org.alberto97.hisenseair
 
+object UriConstants {
+    const val DEVICE_CONTROL = "hisenseair://deviceControl"
+}
+
 object UIConstants {
     /*
      * https://github.com/aosp-mirror/platform_frameworks_base/blob/android11-release/packages/SystemUI/src/com/android/systemui/controls/ui/DetailDialog.kt#L49

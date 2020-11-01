@@ -37,9 +37,9 @@ enum class DeviceControlSheet {
 @Composable
 fun DeviceControlScreen(
     dsn: String,
-    viewModel: DeviceViewModel = getViewModel { parametersOf(dsn) },
     displayInPanel: Boolean,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    viewModel: DeviceViewModel = getViewModel { parametersOf(dsn) }
 ) {
 
     if (displayInPanel)
