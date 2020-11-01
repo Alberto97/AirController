@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ class DeviceControlFragment : Fragment() {
     private val args by navArgs<DeviceControlFragmentArgs>()
     private val viewModel: DeviceViewModel by sharedViewModel()
 
+    @ExperimentalMaterialApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,30 +36,12 @@ class DeviceControlFragment : Fragment() {
                         DeviceControlScreen(
                             viewModel = viewModel,
                             displayInPanel = requireAppActivity<MainActivity>().displayInPanel,
-                            onSettingsClick = { navigateToSettings() },
-                            onShowTempControlPanel = { onShowTempControlPanel() },
-                            onShowModePanel = { onShowModePanel() },
-                            onShowFanSpeedPanel = { onShowFanSpeedPanel() }
+                            onSettingsClick = { navigateToSettings() }
                         )
                     }
                 }
             }
         }
-    }
-
-    private fun onShowTempControlPanel() {
-        val direction = DeviceControlFragmentDirections.actionDeviceControlTemp()
-        findNavController().navigate(direction)
-    }
-
-    private fun onShowModePanel() {
-        val direction = DeviceControlFragmentDirections.actionDeviceControlMode()
-        findNavController().navigate(direction)
-    }
-
-    private fun onShowFanSpeedPanel() {
-        val direction = DeviceControlFragmentDirections.actionDeviceControlFanSpeed()
-        findNavController().navigate(direction)
     }
 
     private fun navigateToSettings() {
