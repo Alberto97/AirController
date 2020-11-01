@@ -54,7 +54,9 @@ val aylaModule = module {
     // Repository
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get()) }
     single<IDeviceRepository> { DeviceRepository(get()) }
-    single<IDeviceControlRepository> { DeviceControlRepository(get(), get()) }
+    single<IDeviceControlRepository> {
+        DeviceControlRepository(get(), get(), get(), get(), get(), get(), get(), get(), get())
+    }
     single<IDeviceCacheRepository> { DeviceCacheRepository(androidApplication(), get()) }
 }
 

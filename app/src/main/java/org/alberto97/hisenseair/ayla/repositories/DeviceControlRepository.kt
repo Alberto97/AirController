@@ -15,20 +15,19 @@ import org.alberto97.hisenseair.features.TemperatureExtensions.toC
 import org.alberto97.hisenseair.features.TemperatureExtensions.toF
 import org.alberto97.hisenseair.models.AppDeviceState
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 class DeviceControlRepository(
     private val service: AylaService,
-    private val prefs: IDeviceCacheRepository) : IDeviceControlRepository, KoinComponent {
+    private val prefs: IDeviceCacheRepository,
+    private val boolConverter: IBooleanConverter,
+    private val intConverter: IIntConverter,
+    private val stringConverter: IStringConverter,
+    private val fanSpeedConverter: IFanSpeedConverter,
+    private val modeConverter: IModeConverter,
+    private val tempUnitConverter: ITempUnitConverter,
+    private val sleepModeConverter: ISleepModeConverter
+) : IDeviceControlRepository {
 
-    private val boolConverter: IBooleanConverter by inject()
-    private val intConverter: IIntConverter by inject()
-    private val stringConverter: IStringConverter by inject()
-    private val fanSpeedConverter: IFanSpeedConverter by inject()
-    private val modeConverter: IModeConverter by inject()
-    private val tempUnitConverter: ITempUnitConverter by inject()
-    private val sleepModeConverter: ISleepModeConverter by inject()
 
     private suspend fun getProperty(property: String, dsn: String): Property {
         val wrappedValue = service.getDeviceProperty(dsn, property)

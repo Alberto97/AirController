@@ -11,27 +11,27 @@ import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.controllers.*
 import org.alberto97.hisenseair.models.BottomSheetListItem
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-class DeviceViewModel(private val dsn: String, private val repo: IDeviceControlRepository) : ViewModel(), KoinComponent {
-
-    private val airFlowHorizontalController: IAirFlowHorizontalController by inject()
-    private val airFlowVerticalController: IAirFlowVerticalController by inject()
-    private val backlightController: IBacklightController by inject()
-    private val boostController: IBoostController by inject()
-    private val ecoController: IEcoController by inject()
-    private val fanSpeedController: IFanSpeedController by inject()
-    private val maxTempController: IMaxTempController by inject()
-    private val minTempController: IMinTempController by inject()
-    private val modeController: IModeController by inject()
-    private val powerController: IPowerController by inject()
-    private val quietController: IQuietController by inject()
-    private val roomTempController: IRoomTempController by inject()
-    private val sleepModeController: ISleepModeController by inject()
-    private val supportedFanSpeedController: ISupportedFanSpeedController by inject()
-    private val supportedModesController: ISupportedModesController by inject()
-    private val tempController: ITempControlController by inject()
+class DeviceViewModel(
+    private val dsn: String,
+    private val repo: IDeviceControlRepository,
+    private val airFlowHorizontalController: IAirFlowHorizontalController,
+    private val airFlowVerticalController: IAirFlowVerticalController,
+    private val backlightController: IBacklightController,
+    private val boostController: IBoostController,
+    private val ecoController: IEcoController,
+    private val fanSpeedController: IFanSpeedController,
+    private val maxTempController: IMaxTempController,
+    private val minTempController: IMinTempController,
+    private val modeController: IModeController,
+    private val powerController: IPowerController,
+    private val quietController: IQuietController,
+    private val roomTempController: IRoomTempController,
+    private val sleepModeController: ISleepModeController,
+    private val supportedFanSpeedController: ISupportedFanSpeedController,
+    private val supportedModesController: ISupportedModesController,
+    private val tempController: ITempControlController
+) : ViewModel() {
 
     val isLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()

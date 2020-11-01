@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import org.alberto97.hisenseair.ayla.features.converters.ITempUnitConverter
 import org.alberto97.hisenseair.features.TempType
-import org.koin.core.KoinComponent
 
 interface IDeviceCacheRepository {
     fun getTempUnit(dsn: String): TempType
@@ -19,7 +18,8 @@ object DevicePreferences {
 
 class DeviceCacheRepository(
     private val app: Application,
-    private val converter: ITempUnitConverter) : IDeviceCacheRepository, KoinComponent {
+    private val converter: ITempUnitConverter
+) : IDeviceCacheRepository {
 
     override fun getTempUnit(dsn: String): TempType {
         val prefs = getPreferences(dsn)
