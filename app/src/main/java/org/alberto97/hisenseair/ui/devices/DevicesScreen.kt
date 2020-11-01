@@ -14,10 +14,11 @@ import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.MainViewModel
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun DevicesScreen(
-    viewModel: MainViewModel,
+    viewModel: MainViewModel = getViewModel(),
     onUnauthorized: () -> Unit,
     onDeviceClick: (id: String) -> Unit
 ) {

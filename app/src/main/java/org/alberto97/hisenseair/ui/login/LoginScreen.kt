@@ -21,11 +21,12 @@ import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
+import org.koin.androidx.compose.getViewModel
 
 @ExperimentalMaterialApi
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel,
+    viewModel: LoginViewModel = getViewModel(),
     onAuthenticated: () -> Unit
 ) {
     val scaffoldState =  rememberScaffoldState()

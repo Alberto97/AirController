@@ -23,6 +23,8 @@ import org.alberto97.hisenseair.ui.preferences.PreferenceCategory
 import org.alberto97.hisenseair.ui.preferences.PreferenceDescription
 import org.alberto97.hisenseair.ui.preferences.SwitchPreference
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 enum class DeviceControlSheet {
     None,
@@ -34,7 +36,8 @@ enum class DeviceControlSheet {
 @ExperimentalMaterialApi
 @Composable
 fun DeviceControlScreen(
-    viewModel: DeviceViewModel,
+    dsn: String,
+    viewModel: DeviceViewModel = getViewModel { parametersOf(dsn) },
     displayInPanel: Boolean,
     onSettingsClick: () -> Unit
 ) {

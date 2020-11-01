@@ -9,12 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.devices.DevicesScreen
-import org.alberto97.hisenseair.viewmodels.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
-
-    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,7 +20,6 @@ class MainFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 DevicesScreen(
-                    viewModel = viewModel,
                     onUnauthorized = { onUnauthorized() },
                     onDeviceClick = { device -> onDeviceClick(device) }
                 )

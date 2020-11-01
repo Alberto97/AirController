@@ -9,13 +9,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.alberto97.hisenseair.ui.login.LoginScreen
-import org.alberto97.hisenseair.viewmodels.LoginViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalMaterialApi
 class LoginFragment : Fragment() {
-
-    private val viewModel: LoginViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,8 +21,9 @@ class LoginFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 LoginScreen(
-                    viewModel = viewModel,
-                    onAuthenticated = { findNavController().navigate(LoginFragmentDirections.loginToMain()) }
+                    onAuthenticated = {
+                        findNavController().navigate(LoginFragmentDirections.loginToMain())
+                    }
                 )
             }
         }

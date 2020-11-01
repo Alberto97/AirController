@@ -14,13 +14,9 @@ import org.alberto97.hisenseair.CompatExtensions.requireAppActivity
 import org.alberto97.hisenseair.MainActivity
 import org.alberto97.hisenseair.ui.devicecontrol.DeviceControlScreen
 import org.alberto97.hisenseair.ui.theme.AppTheme
-import org.alberto97.hisenseair.viewmodels.DeviceViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class DeviceControlFragment : Fragment() {
     private val args by navArgs<DeviceControlFragmentArgs>()
-    private val viewModel: DeviceViewModel by viewModel { parametersOf(args.dsn) }
 
     @ExperimentalMaterialApi
     override fun onCreateView(
@@ -34,7 +30,7 @@ class DeviceControlFragment : Fragment() {
                 AppTheme {
                     Scaffold {
                         DeviceControlScreen(
-                            viewModel = viewModel,
+                            dsn = args.dsn,
                             displayInPanel = requireAppActivity<MainActivity>().displayInPanel,
                             onSettingsClick = { navigateToSettings() }
                         )
