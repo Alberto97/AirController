@@ -1,8 +1,8 @@
 package org.alberto97.hisenseair.ui.devices
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

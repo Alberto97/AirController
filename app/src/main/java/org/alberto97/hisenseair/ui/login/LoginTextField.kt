@@ -1,9 +1,10 @@
 package org.alberto97.hisenseair.ui.login
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,7 +34,7 @@ fun LoginTextField(
         onValueChange = onValueChange,
         label = { if (label != null) Text(label) },
         leadingIcon = leadingIcon,
-        keyboardType = keyboardType,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         visualTransformation = visualTransformation,
         modifier = modifier.fillMaxWidth().padding(vertical = 12.dp)
     )
