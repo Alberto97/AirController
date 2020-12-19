@@ -50,7 +50,7 @@ fun PanelUnsupported() {
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme {
         Surface {
             PanelUnsupported()

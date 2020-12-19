@@ -19,7 +19,7 @@ fun PreferenceDescription(
     text: String
 ) {
     OneLinePreference(
-        icon = { renderIcon(icon) },
+        icon = { RenderIcon(icon) },
         modifier = Modifier.preferredHeightIn(min = MinHeightWithIcon)
     ) {
         Text(
@@ -31,7 +31,7 @@ fun PreferenceDescription(
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme {
         Surface {
             PreferenceDescription(vectorResource(id = R.drawable.ic_thermometer), "Test")

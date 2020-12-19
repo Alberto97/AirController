@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                     composable(Routes.Main) { DevicesScreen(navController) }
                     composable(Routes.DeviceControl,
                         deepLinks = listOf(navDeepLink { uriPattern = "${UriConstants.DEVICE_CONTROL}/{dsn}" })
-                    ) { backStackEntry -> buildDeviceControl(backStackEntry, displayInPanel)}
+                    ) { backStackEntry -> BuildDeviceControl(backStackEntry, displayInPanel)}
                 }
             }
         }
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     @ExperimentalMaterialApi
     @Composable
-    private fun buildDeviceControl(backStackEntry: NavBackStackEntry, displayInPanel: Boolean) {
+    private fun BuildDeviceControl(backStackEntry: NavBackStackEntry, displayInPanel: Boolean) {
         val dsn = backStackEntry.arguments?.getString(DeviceControlParams.dsn)!!
             .replace("{dsn}/", "") // AAC Navigation bug?
 

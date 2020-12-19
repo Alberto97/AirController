@@ -55,7 +55,7 @@ fun DeviceOff(modeAsset: VectorAsset, currentTemp: Int, onPower: () -> Unit) {
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme {
         Surface {
             DeviceOff(vectorResource(R.drawable.ic_weather_windy), 16, {})

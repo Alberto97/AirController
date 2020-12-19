@@ -37,7 +37,7 @@ fun DeviceItem(id: String, name: String, state: String, onClick: (id: String) ->
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme {
         Surface {
             DeviceItem("", "Device name", "subtitle") {}

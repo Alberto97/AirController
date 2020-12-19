@@ -66,7 +66,7 @@ fun TemperatureControlDialog(
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme {
         TemperatureControlDialog(30f, 16f, 60f, {}, {})
     }

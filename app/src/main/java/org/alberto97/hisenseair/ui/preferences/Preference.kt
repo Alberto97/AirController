@@ -37,21 +37,21 @@ fun Preference(
             text = { Text(title) },
             secondaryText = { Text(summary) },
             trailing = trailing,
-            icon = { renderIcon(icon) },
+            icon = { RenderIcon(icon) },
             modifier = clickModifier
         )
     } else {
         ListItem(
             text = { Text(title) },
             trailing = trailing,
-            icon = { renderIcon(icon) },
+            icon = { RenderIcon(icon) },
             modifier = clickModifier
         )
     }
 }
 
 @Composable
-fun renderIcon(icon: VectorAsset?) {
+fun RenderIcon(icon: VectorAsset?) {
     if (icon != null)
         Icon(
             icon,
@@ -62,7 +62,7 @@ fun renderIcon(icon: VectorAsset?) {
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme {
         Surface {
             Column {

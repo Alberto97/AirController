@@ -16,7 +16,7 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 @Composable
 fun <T> BottomSheetListItem(id: T, text: String, icon: Int, selected: Boolean, onClick: (data: T) -> Unit) {
     ListItem (
-        icon = { leadingIcon(icon) },
+        icon = { LeadingIcon(icon) },
         text = {
             Text(
                 text,
@@ -24,13 +24,13 @@ fun <T> BottomSheetListItem(id: T, text: String, icon: Int, selected: Boolean, o
                 maxLines = 1
             )
         },
-        trailing = { doneIcon(selected) },
+        trailing = { DoneIcon(selected) },
         modifier = Modifier.clickable(onClick = { onClick(id) })
     )
 }
 
 @Composable
-private fun leadingIcon(icon: Int?) {
+private fun LeadingIcon(icon: Int?) {
     if (icon != null)
         Icon(
             asset = vectorResource(icon),
@@ -39,7 +39,7 @@ private fun leadingIcon(icon: Int?) {
 }
 
 @Composable
-private fun doneIcon(show: Boolean) {
+private fun DoneIcon(show: Boolean) {
     if (show)
         Icon(
             Icons.Rounded.Done,
@@ -49,7 +49,7 @@ private fun doneIcon(show: Boolean) {
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme(darkTheme = true) {
         Surface {
             BottomSheetListItem(WorkMode.Auto, "Test", R.drawable.ic_fan, true, {})

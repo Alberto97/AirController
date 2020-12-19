@@ -23,7 +23,7 @@ fun FullscreenLoading() {
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme {
         FullscreenLoading()
     }

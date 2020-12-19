@@ -53,7 +53,7 @@ fun DeviceControlScreen(
         ModalBottomSheetLayout(
             sheetState = state,
             sheetContent = {
-                sheetContent(
+                SheetContent(
                     viewModel = viewModel,
                     currentSheet = sheetType,
                     close = { state.hide() }
@@ -62,7 +62,7 @@ fun DeviceControlScreen(
         ){
             Scaffold(
                 topBar = {
-                    topAppBar(
+                    TopAppBar(
                         viewModel = viewModel,
                         navigateToSettings = onSettingsClick
                     )
@@ -74,8 +74,8 @@ fun DeviceControlScreen(
                 } else {
                     val isOn = viewModel.isOn.observeAsState(null)
                     when (isOn.value) {
-                        false -> offScreen(viewModel)
-                        true -> onScreen(
+                        false -> OffScreen(viewModel)
+                        true -> OnScreen(
                             viewModel,
                             showSheet = {
                                 setSheetType(it)
@@ -95,7 +95,7 @@ fun DeviceControlScreen(
 }
 
 @Composable
-private fun topAppBar(
+private fun TopAppBar(
     viewModel: DeviceViewModel,
     navigateToSettings: () -> Unit
 ) {
@@ -112,7 +112,7 @@ private fun topAppBar(
 }
 
 @Composable
-private fun offScreen(viewModel: DeviceViewModel) {
+private fun OffScreen(viewModel: DeviceViewModel) {
     val currentTemp by viewModel.roomTemp.observeAsState(-1)
     val currentMode by viewModel.workState.observeAsState()
     val drawableId = modeToIconMap[currentMode] ?: R.drawable.round_brightness_7_24
@@ -125,7 +125,7 @@ private fun offScreen(viewModel: DeviceViewModel) {
 }
 
 @Composable
-private fun fanSpeedSheet(
+private fun FanSpeedSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
@@ -140,7 +140,7 @@ private fun fanSpeedSheet(
 }
 
 @Composable
-private fun tempControlSheet(
+private fun TempControlSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
@@ -160,7 +160,7 @@ private fun tempControlSheet(
 }
 
 @Composable
-private fun modeSheet(
+private fun ModeSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
@@ -175,47 +175,47 @@ private fun modeSheet(
 }
 
 @Composable
-private fun sheetContent(
+private fun SheetContent(
     viewModel: DeviceViewModel,
     currentSheet: DeviceControlSheet,
     close: () -> Unit
 ) {
     when (currentSheet) {
-        DeviceControlSheet.FanSpeed -> fanSpeedSheet(viewModel, close)
-        DeviceControlSheet.TempControl -> tempControlSheet(viewModel, close)
-        DeviceControlSheet.Mode -> modeSheet(viewModel, close)
+        DeviceControlSheet.FanSpeed -> FanSpeedSheet(viewModel, close)
+        DeviceControlSheet.TempControl -> TempControlSheet(viewModel, close)
+        DeviceControlSheet.Mode -> ModeSheet(viewModel, close)
         else -> FullscreenLoading()
     }
 }
 
 @ExperimentalMaterialApi
 @Composable
-private fun onScreen(
+private fun OnScreen(
     viewModel: DeviceViewModel,
     showSheet: (data: DeviceControlSheet) -> Unit
 ) {
     ScrollableColumn {
-        buildTempControl(viewModel, showSheet)
-        buildAmbientTemp(viewModel)
+        BuildTempControl(viewModel, showSheet)
+        BuildAmbientTemp(viewModel)
         Divider()
 
-        buildMode(viewModel, showSheet)
-        buildFanSpeed(viewModel, showSheet)
-        buildSleepMode(viewModel)
-        buildPower(viewModel)
+        BuildMode(viewModel, showSheet)
+        BuildFanSpeed(viewModel, showSheet)
+        BuildSleepMode(viewModel)
+        BuildPower(viewModel)
 
-        buildAirFlow(viewModel)
+        BuildAirFlow(viewModel)
 
         PreferenceCategory("Advanced")
-        buildBacklight(viewModel)
-        buildEco(viewModel)
-        buildQuiet(viewModel)
-        buildBoost(viewModel)
+        BuildBacklight(viewModel)
+        BuildEco(viewModel)
+        BuildQuiet(viewModel)
+        BuildBoost(viewModel)
     }
 }
 
 @Composable
-private fun buildTempControl(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
+private fun BuildTempControl(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
     val temp = viewModel.temp.observeAsState().value
     if (temp != null)
         TemperatureControlStep(
@@ -227,7 +227,7 @@ private fun buildTempControl(viewModel: DeviceViewModel, onClick: (value: Device
 }
 
 @Composable
-private fun buildAmbientTemp(viewModel: DeviceViewModel) {
+private fun BuildAmbientTemp(viewModel: DeviceViewModel) {
     val temp = viewModel.roomTemp.observeAsState()
 
     PreferenceDescription(
@@ -237,7 +237,7 @@ private fun buildAmbientTemp(viewModel: DeviceViewModel) {
 }
 
 @Composable
-private fun buildMode(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
+private fun BuildMode(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
     val mode = viewModel.workState.observeAsState().value
     val resId = modeToStringMap[mode] ?: R.string.work_mode_unknown
     val drawableId = modeToIconMap[mode] ?: R.drawable.round_brightness_7_24
@@ -251,7 +251,7 @@ private fun buildMode(viewModel: DeviceViewModel, onClick: (value: DeviceControl
 }
 
 @Composable
-private fun buildFanSpeed(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
+private fun BuildFanSpeed(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
     val fanSpeed = viewModel.fanSpeed.observeAsState().value
     if (fanSpeed != null) {
         val resId = fanToStringMap.getValue(fanSpeed)
@@ -265,7 +265,7 @@ private fun buildFanSpeed(viewModel: DeviceViewModel, onClick: (value: DeviceCon
 }
 
 @Composable
-private fun buildSleepMode(viewModel: DeviceViewModel) {
+private fun BuildSleepMode(viewModel: DeviceViewModel) {
     val mode = viewModel.sleepMode.observeAsState().value
     if (mode != null) {
         val resId = sleepToStringMap.getValue(mode)
@@ -278,7 +278,7 @@ private fun buildSleepMode(viewModel: DeviceViewModel) {
 }
 
 @Composable
-private fun buildPower(viewModel: DeviceViewModel) {
+private fun BuildPower(viewModel: DeviceViewModel) {
     SwitchPreference(
         title = "Power",
         summary = "Turn off the device",
@@ -289,7 +289,7 @@ private fun buildPower(viewModel: DeviceViewModel) {
 }
 
 @Composable
-private fun buildAirFlow(viewModel: DeviceViewModel) {
+private fun BuildAirFlow(viewModel: DeviceViewModel) {
     val horizontal = viewModel.horizontalAirFlow.observeAsState().value
     val vertical = viewModel.verticalAirFlow.observeAsState().value
 
@@ -314,7 +314,7 @@ private fun buildAirFlow(viewModel: DeviceViewModel) {
 }
 
 @Composable
-private fun buildBacklight(viewModel: DeviceViewModel) {
+private fun BuildBacklight(viewModel: DeviceViewModel) {
     val backlight = viewModel.backlight.observeAsState().value
     if (backlight != null)
         SwitchPreference(
@@ -326,7 +326,7 @@ private fun buildBacklight(viewModel: DeviceViewModel) {
 }
 
 @Composable
-private fun buildEco(viewModel: DeviceViewModel) {
+private fun BuildEco(viewModel: DeviceViewModel) {
     val eco = viewModel.isEco.observeAsState().value
     if (eco != null)
         SwitchPreference(
@@ -338,7 +338,7 @@ private fun buildEco(viewModel: DeviceViewModel) {
 }
 
 @Composable
-private fun buildQuiet(viewModel: DeviceViewModel) {
+private fun BuildQuiet(viewModel: DeviceViewModel) {
     val quiet = viewModel.isQuiet.observeAsState().value
     if (quiet != null)
         SwitchPreference(
@@ -350,7 +350,7 @@ private fun buildQuiet(viewModel: DeviceViewModel) {
 }
 
 @Composable
-private fun buildBoost(viewModel: DeviceViewModel) {
+private fun BuildBoost(viewModel: DeviceViewModel) {
     val boost = viewModel.isBoost.observeAsState().value
     if (boost != null)
         SwitchPreference(

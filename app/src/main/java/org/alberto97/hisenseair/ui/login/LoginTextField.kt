@@ -42,7 +42,7 @@ fun LoginTextField(
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     AppTheme {
         LoginTextField(value = "Test", onValueChange = {})
     }

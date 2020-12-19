@@ -105,7 +105,7 @@ private fun LoginContent(
 @ExperimentalMaterialApi
 @Preview
 @Composable
-private fun screenPreview() {
+private fun ScreenPreview() {
     LoginScaffold {
         LoginContent(isLoading = false, onLogin = { _, _ -> })
     }

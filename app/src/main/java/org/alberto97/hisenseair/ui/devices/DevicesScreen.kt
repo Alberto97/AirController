@@ -39,7 +39,7 @@ fun DevicesScreen(
                 FullscreenLoading()
             } else {
                 val devices by viewModel.devices.observeAsState(listOf())
-                devices(devices, onDeviceClick = { dsn ->
+                Devices(devices, onDeviceClick = { dsn ->
                     navController.navigate("${Routes.DeviceControl}/$dsn")
                 })
             }
@@ -48,7 +48,7 @@ fun DevicesScreen(
 }
 
 @Composable
-private fun devices(devices: List<AppDevice>, onDeviceClick: (id: String) -> Unit) {
+private fun Devices(devices: List<AppDevice>, onDeviceClick: (id: String) -> Unit) {
     LazyColumnFor(devices) { device ->
         DeviceItem(
             id = device.id,
@@ -61,14 +61,14 @@ private fun devices(devices: List<AppDevice>, onDeviceClick: (id: String) -> Uni
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     val devices = listOf(
         AppDevice("1", "test1", true, "", "", ""),
         AppDevice("2", "test2", true, "", "", ""),
     )
     AppTheme {
         Scaffold {
-            devices(devices = devices, onDeviceClick = {})
+            Devices(devices = devices, onDeviceClick = {})
         }
     }
 }
