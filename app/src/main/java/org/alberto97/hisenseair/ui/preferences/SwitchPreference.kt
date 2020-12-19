@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Surface
 import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
@@ -16,7 +16,7 @@ fun SwitchPreference(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     summary: String? = null,
-    icon: VectorAsset? = null,
+    icon: ImageVector? = null,
 ) {
     Preference(
         title = title,

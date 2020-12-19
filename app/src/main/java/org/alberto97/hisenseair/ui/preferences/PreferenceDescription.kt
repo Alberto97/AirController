@@ -7,15 +7,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @Composable
 fun PreferenceDescription(
-    icon: VectorAsset? = null,
+    icon: ImageVector? = null,
     text: String
 ) {
     OneLinePreference(

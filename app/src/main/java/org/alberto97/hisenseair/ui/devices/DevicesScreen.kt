@@ -8,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
-import androidx.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.Routes
 import org.alberto97.hisenseair.models.AppDevice

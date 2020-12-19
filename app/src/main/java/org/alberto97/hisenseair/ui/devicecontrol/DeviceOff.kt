@@ -7,16 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @Composable
-fun DeviceOff(modeAsset: VectorAsset, currentTemp: Int, onPower: () -> Unit) {
+fun DeviceOff(modeAsset: ImageVector, currentTemp: Int, onPower: () -> Unit) {
     Row(
         Modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
@@ -26,7 +26,7 @@ fun DeviceOff(modeAsset: VectorAsset, currentTemp: Int, onPower: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                asset = modeAsset,
+                modeAsset,
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                 alpha = 0.5f,
                 modifier = Modifier.padding(all = 16.dp).width(56.dp).height(56.dp)
@@ -45,7 +45,7 @@ fun DeviceOff(modeAsset: VectorAsset, currentTemp: Int, onPower: () -> Unit) {
                 backgroundColor = MaterialTheme.colors.surface
             ) {
                 Icon(
-                    asset = vectorResource(R.drawable.round_power_settings_new_24),
+                    vectorResource(R.drawable.round_power_settings_new_24),
                     tint = MaterialTheme.colors.primary
                 )
             }

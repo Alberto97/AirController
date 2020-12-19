@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
@@ -26,7 +26,7 @@ fun DeviceItem(id: String, name: String, state: String, onClick: (id: String) ->
                 color = MaterialTheme.colors.primary
             ) {
                 Icon(
-                    asset = vectorResource(R.drawable.ic_fan),
+                    vectorResource(R.drawable.ic_fan),
                     tint = Color.White,
                     modifier = Modifier.padding(all = 4.dp).size(30.dp)
                 )

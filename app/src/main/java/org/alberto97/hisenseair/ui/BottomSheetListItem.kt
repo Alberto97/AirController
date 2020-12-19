@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
-import androidx.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.ui.theme.AppTheme
@@ -33,7 +33,7 @@ fun <T> BottomSheetListItem(id: T, text: String, icon: Int, selected: Boolean, o
 private fun LeadingIcon(icon: Int?) {
     if (icon != null)
         Icon(
-            asset = vectorResource(icon),
+            vectorResource(icon),
             tint = Color.Gray
         )
 }

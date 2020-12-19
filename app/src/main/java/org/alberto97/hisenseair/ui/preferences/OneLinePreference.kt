@@ -40,7 +40,7 @@ fun OneLinePreference(
                     top = IconVerticalPadding,
                     bottom = IconVerticalPadding
                 ),
-            alignment = Alignment.CenterStart
+            contentAlignment = Alignment.CenterStart
         ) {
             if (icon != null)
                 icon()
@@ -49,7 +49,7 @@ fun OneLinePreference(
             Modifier.weight(1f)
                 .align(Alignment.CenterVertically)
                 .padding(start = ContentLeftPadding, end = ContentRightPadding),
-            alignment = Alignment.CenterStart
+            contentAlignment = Alignment.CenterStart
         ) {
             text()
         }
