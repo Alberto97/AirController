@@ -80,7 +80,7 @@ dependencies {
 
 
     // Koin
-    def koin_version = '2.2.1'
+    def koin_version = '2.2.2'
     implementation "org.koin:koin-androidx-compose:$koin_version"
     implementation "org.koin:koin-androidx-scope:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
