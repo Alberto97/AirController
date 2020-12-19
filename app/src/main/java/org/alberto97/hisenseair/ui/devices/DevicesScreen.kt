@@ -1,6 +1,6 @@
 package org.alberto97.hisenseair.ui.devices
 
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -49,13 +49,15 @@ fun DevicesScreen(
 
 @Composable
 private fun Devices(devices: List<AppDevice>, onDeviceClick: (id: String) -> Unit) {
-    LazyColumnFor(devices) { device ->
-        DeviceItem(
-            id = device.id,
-            name = device.name,
-            state = if (device.available) "Available" else "Offline",
-            onClick = { onDeviceClick(it) }
-        )
+    LazyColumn {
+        items(devices) { device ->
+            DeviceItem(
+                id = device.id,
+                name = device.name,
+                state = if (device.available) "Available" else "Offline",
+                onClick = { onDeviceClick(it) }
+            )
+        }
     }
 }
 

@@ -2,11 +2,11 @@ package org.alberto97.hisenseair.ui
 
 //import androidx.compose.foundation.Text
 //import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.runtime.Composable
 //import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 //import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import org.alberto97.hisenseair.models.BottomSheetListItem
 
 @Composable
@@ -19,13 +19,15 @@ fun <T: Enum<*>> BottomSheetList(
         title,
         modifier = Modifier.padding(16.dp)
     )*/
-    LazyColumnFor(list) {
-        BottomSheetListItem(
-            id = it.id,
-            text = stringResource(it.name),
-            icon = it.icon,
-            selected = it.current,
-            onClick = { data -> onItemClick(data) }
-        )
+    LazyColumn {
+        items(list) {
+            BottomSheetListItem(
+                id = it.id,
+                text = stringResource(it.name),
+                icon = it.icon,
+                selected = it.current,
+                onClick = { data -> onItemClick(data) }
+            )
+        }
     }
 }
