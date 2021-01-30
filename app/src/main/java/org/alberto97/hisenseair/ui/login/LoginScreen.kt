@@ -25,7 +25,6 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
 import org.koin.androidx.compose.getViewModel
 
-@ExperimentalMaterialApi
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -86,14 +85,24 @@ private fun LoginContent(
                 value = email,
                 onValueChange = setEmail,
                 keyboardType = KeyboardType.Email,
-                leadingIcon = { Icon(Icons.Outlined.Email) }
+                leadingIcon = {
+                    Icon(
+                        Icons.Outlined.Email,
+                        contentDescription = null
+                    )
+                }
             )
             LoginTextField(
                 value = password,
                 onValueChange = setPassword,
                 keyboardType = KeyboardType.Password,
                 visualTransformation = PasswordVisualTransformation(),
-                leadingIcon = { Icon(Icons.Outlined.Lock) }
+                leadingIcon = {
+                    Icon(
+                        Icons.Outlined.Lock,
+                        contentDescription = null
+                    )
+                }
             )
             LoginButton(
                 enabled = email.isNotEmpty() && password.isNotEmpty(),
@@ -102,7 +111,6 @@ private fun LoginContent(
         }
 }
 
-@ExperimentalMaterialApi
 @Preview
 @Composable
 private fun ScreenPreview() {

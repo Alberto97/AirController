@@ -30,6 +30,7 @@ fun PanelUnsupported() {
         ) {
             Image(
                 Icons.Filled.BrowserNotSupported,
+                contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                 alpha = 0.5f,
                 modifier = Modifier.padding(all = 8.dp).width(56.dp).height(56.dp)

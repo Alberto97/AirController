@@ -27,6 +27,7 @@ fun DeviceOff(modeAsset: ImageVector, currentTemp: Int, onPower: () -> Unit) {
         ) {
             Image(
                 modeAsset,
+                contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                 alpha = 0.5f,
                 modifier = Modifier.padding(all = 16.dp).width(56.dp).height(56.dp)
@@ -46,6 +47,7 @@ fun DeviceOff(modeAsset: ImageVector, currentTemp: Int, onPower: () -> Unit) {
             ) {
                 Icon(
                     vectorResource(R.drawable.round_power_settings_new_24),
+                    contentDescription = null,
                     tint = MaterialTheme.colors.primary
                 )
             }
@@ -58,7 +60,7 @@ fun DeviceOff(modeAsset: ImageVector, currentTemp: Int, onPower: () -> Unit) {
 private fun Preview() {
     AppTheme {
         Surface {
-            DeviceOff(vectorResource(R.drawable.ic_weather_windy), 16, {})
+            DeviceOff(vectorResource(R.drawable.ic_weather_windy), 16) {}
         }
     }
 }

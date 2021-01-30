@@ -56,6 +56,7 @@ fun RenderIcon(icon: ImageVector?) {
     if (icon != null)
         Icon(
             icon,
+            contentDescription = null,
             modifier = Modifier.size(40.dp),
             tint = Color(0xFF757575)
         )

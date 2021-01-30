@@ -34,6 +34,7 @@ private fun LeadingIcon(icon: Int?) {
     if (icon != null)
         Icon(
             vectorResource(icon),
+            contentDescription = null,
             tint = Color.Gray
         )
 }
@@ -43,6 +44,7 @@ private fun DoneIcon(show: Boolean) {
     if (show)
         Icon(
             Icons.Rounded.Done,
+            contentDescription = null,
             tint = MaterialTheme.colors.primary
         )
 }

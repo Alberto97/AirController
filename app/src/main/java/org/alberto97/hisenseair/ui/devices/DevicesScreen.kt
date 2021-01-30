@@ -1,5 +1,6 @@
 package org.alberto97.hisenseair.ui.devices
 
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text

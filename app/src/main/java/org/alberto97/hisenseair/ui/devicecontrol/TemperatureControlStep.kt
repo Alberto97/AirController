@@ -38,6 +38,7 @@ fun TemperatureControlStep(
         ) {
             Icon(
                 Icons.Filled.ChevronLeft,
+                contentDescription = null,
                 tint = MaterialTheme.colors.primary
             )
         }
@@ -64,6 +65,7 @@ fun TemperatureControlStep(
         ) {
             Icon(
                 Icons.Filled.ChevronRight,
+                contentDescription = null,
                 tint = MaterialTheme.colors.primary
             )
         }

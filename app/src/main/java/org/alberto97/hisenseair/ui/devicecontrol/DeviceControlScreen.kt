@@ -1,11 +1,14 @@
 package org.alberto97.hisenseair.ui.devicecontrol
 
-import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import kotlinx.coroutines.delay
@@ -105,7 +108,10 @@ private fun TopAppBar(
         title = { Text(deviceName) },
         actions = {
             IconButton({ navigateToSettings() }) {
-                Icon(Icons.Rounded.Settings)
+                Icon(
+                    Icons.Rounded.Settings,
+                    contentDescription = null
+                )
             }
         }
     )
@@ -194,7 +200,7 @@ private fun OnScreen(
     viewModel: DeviceViewModel,
     showSheet: (data: DeviceControlSheet) -> Unit
 ) {
-    ScrollableColumn {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         BuildTempControl(viewModel, showSheet)
         BuildAmbientTemp(viewModel)
         Divider()

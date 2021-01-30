@@ -27,6 +27,7 @@ fun DeviceItem(id: String, name: String, state: String, onClick: (id: String) ->
             ) {
                 Icon(
                     vectorResource(R.drawable.ic_fan),
+                    contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.padding(all = 4.dp).size(30.dp)
                 )
