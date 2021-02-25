@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.R
@@ -18,6 +18,7 @@ import org.alberto97.hisenseair.features.fanToStringMap
 import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.features.modeToStringMap
 import org.alberto97.hisenseair.features.sleepToStringMap
+import org.alberto97.hisenseair.getViewModel
 import org.alberto97.hisenseair.ui.BottomSheetList
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.preferences.Preference
@@ -25,7 +26,6 @@ import org.alberto97.hisenseair.ui.preferences.PreferenceCategory
 import org.alberto97.hisenseair.ui.preferences.PreferenceDescription
 import org.alberto97.hisenseair.ui.preferences.SwitchPreference
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
-import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
 enum class DeviceControlSheet {
@@ -124,12 +124,13 @@ private fun OffScreen(viewModel: DeviceViewModel) {
     val drawableId = modeToIconMap[currentMode] ?: R.drawable.round_brightness_7_24
 
     DeviceOff(
-        modeAsset = vectorResource(drawableId),
+        modeAsset = painterResource(drawableId),
         currentTemp = currentTemp,
         onPower = { viewModel.switchPower() }
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun FanSpeedSheet(
     viewModel: DeviceViewModel,
@@ -165,6 +166,7 @@ private fun TempControlSheet(
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun ModeSheet(
     viewModel: DeviceViewModel,
@@ -180,6 +182,7 @@ private fun ModeSheet(
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun SheetContent(
     viewModel: DeviceViewModel,
@@ -238,10 +241,11 @@ private fun BuildAmbientTemp(viewModel: DeviceViewModel) {
 
     PreferenceDescription(
         text = stringResource(R.string.device_ambient_temp, temp.value ?: 0),
-        icon = vectorResource(id = R.drawable.ic_thermometer),
+        icon = painterResource(id = R.drawable.ic_thermometer),
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildMode(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
     val mode = viewModel.workState.observeAsState().value
@@ -251,11 +255,12 @@ private fun BuildMode(viewModel: DeviceViewModel, onClick: (value: DeviceControl
     Preference(
         title = "Mode",
         summary = stringResource(resId),
-        icon = vectorResource(drawableId),
+        icon = painterResource(drawableId),
         onClick = { onClick(DeviceControlSheet.Mode) }
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildFanSpeed(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
     val fanSpeed = viewModel.fanSpeed.observeAsState().value
@@ -264,12 +269,13 @@ private fun BuildFanSpeed(viewModel: DeviceViewModel, onClick: (value: DeviceCon
         Preference(
             title = "Fan speed",
             summary = stringResource(resId),
-            icon = vectorResource(R.drawable.ic_fan),
+            icon = painterResource(R.drawable.ic_fan),
             onClick = { onClick(DeviceControlSheet.FanSpeed) }
         )
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildSleepMode(viewModel: DeviceViewModel) {
     val mode = viewModel.sleepMode.observeAsState().value
@@ -278,22 +284,24 @@ private fun BuildSleepMode(viewModel: DeviceViewModel) {
         Preference(
             title = "Sleep mode",
             summary = stringResource(resId),
-            icon = vectorResource(R.drawable.ic_nights_stay)
+            icon = painterResource(R.drawable.ic_nights_stay)
         )
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildPower(viewModel: DeviceViewModel) {
     SwitchPreference(
         title = "Power",
         summary = "Turn off the device",
         checked = true,
-        icon = vectorResource(R.drawable.round_power_settings_new_24),
+        icon = painterResource(R.drawable.round_power_settings_new_24),
         onCheckedChange = { viewModel.switchPower() }
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildAirFlow(viewModel: DeviceViewModel) {
     val horizontal = viewModel.horizontalAirFlow.observeAsState().value
@@ -307,7 +315,7 @@ private fun BuildAirFlow(viewModel: DeviceViewModel) {
             title = "Horizontal",
             checked = horizontal,
             onCheckedChange = { viewModel.switchAirFlowHorizontal() },
-            icon = vectorResource(R.drawable.round_swap_horiz_24)
+            icon = painterResource(R.drawable.round_swap_horiz_24)
         )
 
     if (vertical != null)
@@ -315,10 +323,11 @@ private fun BuildAirFlow(viewModel: DeviceViewModel) {
             title = "Vertical",
             checked = vertical,
             onCheckedChange = { viewModel.switchAirFlowVertical() },
-            icon = vectorResource(R.drawable.round_swap_vert_24)
+            icon = painterResource(R.drawable.round_swap_vert_24)
         )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildBacklight(viewModel: DeviceViewModel) {
     val backlight = viewModel.backlight.observeAsState().value
@@ -327,10 +336,11 @@ private fun BuildBacklight(viewModel: DeviceViewModel) {
             title = "Dimmer",
             checked = backlight,
             onCheckedChange = { viewModel.switchBacklight() },
-            icon = vectorResource(R.drawable.ic_lightbulb_md)
+            icon = painterResource(R.drawable.ic_lightbulb_md)
         )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildEco(viewModel: DeviceViewModel) {
     val eco = viewModel.isEco.observeAsState().value
@@ -339,10 +349,11 @@ private fun BuildEco(viewModel: DeviceViewModel) {
             title = "Eco",
             checked = eco,
             onCheckedChange = { viewModel.switchEco() },
-            icon = vectorResource(R.drawable.ic_eco)
+            icon = painterResource(R.drawable.ic_eco)
         )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildQuiet(viewModel: DeviceViewModel) {
     val quiet = viewModel.isQuiet.observeAsState().value
@@ -351,10 +362,11 @@ private fun BuildQuiet(viewModel: DeviceViewModel) {
             title = "Quiet",
             checked = quiet,
             onCheckedChange = { viewModel.switchQuiet() },
-            icon = vectorResource(R.drawable.outline_hearing_disabled_24)
+            icon = painterResource(R.drawable.outline_hearing_disabled_24)
         )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun BuildBoost(viewModel: DeviceViewModel) {
     val boost = viewModel.isBoost.observeAsState().value
@@ -363,6 +375,6 @@ private fun BuildBoost(viewModel: DeviceViewModel) {
             title = "Super",
             checked = boost,
             onCheckedChange = { viewModel.switchBoost() },
-            icon = vectorResource(R.drawable.ic_fan_plus)
+            icon = painterResource(R.drawable.ic_fan_plus)
         )
 }

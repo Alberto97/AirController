@@ -7,15 +7,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @Composable
 fun PreferenceDescription(
-    icon: ImageVector? = null,
+    icon: Painter? = null,
     text: String
 ) {
     OneLinePreference(
@@ -34,7 +34,7 @@ fun PreferenceDescription(
 private fun Preview() {
     AppTheme {
         Surface {
-            PreferenceDescription(vectorResource(id = R.drawable.ic_thermometer), "Test")
+            PreferenceDescription(painterResource(id = R.drawable.ic_thermometer), "Test")
         }
     }
 }

@@ -6,10 +6,12 @@ package org.alberto97.hisenseair.ui
 //import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import org.alberto97.hisenseair.models.BottomSheetListItem
 
+@ExperimentalMaterialApi
 @Composable
 fun <T: Enum<*>> BottomSheetList(
     title: String,

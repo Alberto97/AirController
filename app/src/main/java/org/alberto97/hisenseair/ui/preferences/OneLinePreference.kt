@@ -13,13 +13,13 @@ import androidx.compose.ui.unit.dp
 // https://github.com/androidx/androidx/blob/androidx-master-dev/compose/material/material/src/commonMain/kotlin/androidx/compose/material/ListItem.kt
 
 // List item related constants.
-val MinHeight = 48.dp
-val MinHeightWithIcon = 56.dp
+val MinHeight = 64.dp
+val MinHeightWithIcon = 72.dp
 
 // Icon related constants.
 private val IconMinPaddedWidth = 40.dp
 private val IconLeftPadding = 16.dp
-private val IconVerticalPadding = 8.dp
+private val IconVerticalPadding = 16.dp
 
 // Content related constants.
 private val ContentLeftPadding = 16.dp

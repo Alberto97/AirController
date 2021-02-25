@@ -2,6 +2,7 @@ package org.alberto97.hisenseair.ui.devices
 
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -13,13 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.getViewModel
 import org.alberto97.hisenseair.ui.Routes
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.MainViewModel
-import org.koin.androidx.compose.getViewModel
 
+@ExperimentalMaterialApi
 @Composable
 fun DevicesScreen(
     navController: NavController,
@@ -48,6 +50,7 @@ fun DevicesScreen(
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun Devices(devices: List<AppDevice>, onDeviceClick: (id: String) -> Unit) {
     LazyColumn {
@@ -62,6 +65,7 @@ private fun Devices(devices: List<AppDevice>, onDeviceClick: (id: String) -> Uni
     }
 }
 
+@ExperimentalMaterialApi
 @Preview
 @Composable
 private fun Preview() {

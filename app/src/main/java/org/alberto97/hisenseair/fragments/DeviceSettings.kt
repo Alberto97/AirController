@@ -24,7 +24,7 @@ class DeviceSettings : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
         binding.toolbar.setupWithNavController(findNavController())
 

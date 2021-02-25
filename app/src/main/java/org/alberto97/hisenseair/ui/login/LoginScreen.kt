@@ -19,11 +19,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.getViewModel
 import org.alberto97.hisenseair.ui.Routes
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
-import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun LoginScreen(

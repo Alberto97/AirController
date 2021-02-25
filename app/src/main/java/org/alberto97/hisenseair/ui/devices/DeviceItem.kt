@@ -8,12 +8,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
+@ExperimentalMaterialApi
 @Composable
 fun DeviceItem(id: String, name: String, state: String, onClick: (id: String) -> Unit) {
     ListItem(
@@ -26,7 +27,7 @@ fun DeviceItem(id: String, name: String, state: String, onClick: (id: String) ->
                 color = MaterialTheme.colors.primary
             ) {
                 Icon(
-                    vectorResource(R.drawable.ic_fan),
+                    painterResource(R.drawable.ic_fan),
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.padding(all = 4.dp).size(30.dp)
@@ -36,6 +37,7 @@ fun DeviceItem(id: String, name: String, state: String, onClick: (id: String) ->
     )
 }
 
+@ExperimentalMaterialApi
 @Preview
 @Composable
 private fun Preview() {

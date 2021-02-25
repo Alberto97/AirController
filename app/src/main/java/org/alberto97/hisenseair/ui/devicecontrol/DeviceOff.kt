@@ -7,16 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @Composable
-fun DeviceOff(modeAsset: ImageVector, currentTemp: Int, onPower: () -> Unit) {
+fun DeviceOff(modeAsset: Painter, currentTemp: Int, onPower: () -> Unit) {
     Row(
         Modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
@@ -46,7 +46,7 @@ fun DeviceOff(modeAsset: ImageVector, currentTemp: Int, onPower: () -> Unit) {
                 backgroundColor = MaterialTheme.colors.surface
             ) {
                 Icon(
-                    vectorResource(R.drawable.round_power_settings_new_24),
+                    painterResource(R.drawable.round_power_settings_new_24),
                     contentDescription = null,
                     tint = MaterialTheme.colors.primary
                 )
@@ -60,7 +60,7 @@ fun DeviceOff(modeAsset: ImageVector, currentTemp: Int, onPower: () -> Unit) {
 private fun Preview() {
     AppTheme {
         Surface {
-            DeviceOff(vectorResource(R.drawable.ic_weather_windy), 16) {}
+            DeviceOff(painterResource(R.drawable.ic_weather_windy), 16) {}
         }
     }
 }

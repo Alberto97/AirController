@@ -7,12 +7,13 @@ import androidx.compose.material.icons.rounded.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
+@ExperimentalMaterialApi
 @Composable
 fun <T> BottomSheetListItem(id: T, text: String, icon: Int, selected: Boolean, onClick: (data: T) -> Unit) {
     ListItem (
@@ -33,7 +34,7 @@ fun <T> BottomSheetListItem(id: T, text: String, icon: Int, selected: Boolean, o
 private fun LeadingIcon(icon: Int?) {
     if (icon != null)
         Icon(
-            vectorResource(icon),
+            painterResource(icon),
             contentDescription = null,
             tint = Color.Gray
         )
@@ -49,6 +50,7 @@ private fun DoneIcon(show: Boolean) {
         )
 }
 
+@ExperimentalMaterialApi
 @Preview
 @Composable
 private fun Preview() {
