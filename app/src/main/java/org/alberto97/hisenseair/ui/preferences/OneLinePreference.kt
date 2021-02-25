@@ -1,9 +1,6 @@
 package org.alberto97.hisenseair.ui.preferences
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredWidthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +31,7 @@ fun OneLinePreference(
     Row(modifier) {
         Box(
             Modifier.align(Alignment.CenterVertically)
-                .preferredWidthIn(min = IconLeftPadding + IconMinPaddedWidth)
+                .widthIn(min = IconLeftPadding + IconMinPaddedWidth)
                 .padding(
                     start = IconLeftPadding,
                     top = IconVerticalPadding,

@@ -14,7 +14,7 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 fun PreferenceCategory(title: String) {
     OneLinePreference(
         icon = {},
-        modifier = Modifier.preferredHeightIn(min = MinHeight).padding(top = 16.dp)
+        modifier = Modifier.widthIn(min = MinHeight).padding(top = 16.dp)
     ) {
         Text(
             text = title,

@@ -1,6 +1,6 @@
 package org.alberto97.hisenseair.ui.preferences
 
-import androidx.compose.foundation.layout.preferredHeightIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -20,7 +20,7 @@ fun PreferenceDescription(
 ) {
     OneLinePreference(
         icon = { RenderIcon(icon) },
-        modifier = Modifier.preferredHeightIn(min = MinHeightWithIcon)
+        modifier = Modifier.widthIn(min = MinHeightWithIcon)
     ) {
         Text(
             text,

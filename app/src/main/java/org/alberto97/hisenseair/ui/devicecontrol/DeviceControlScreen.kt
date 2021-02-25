@@ -59,7 +59,11 @@ fun DeviceControlScreen(
                 SheetContent(
                     viewModel = viewModel,
                     currentSheet = sheetType,
-                    close = { state.hide() }
+                    close = {
+                        sheetScope.launch {
+                            state.hide()
+                        }
+                    }
                 )
             }
         ){
