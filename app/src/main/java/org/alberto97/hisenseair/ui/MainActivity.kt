@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 object Routes {
     const val Login = "login"
     const val Main = "main"
-    const val DeviceControl = "deviceControl/{dsn}"
+    const val DeviceControl = "deviceControl"
 }
 
 object DeviceControlParams {
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 NavHost(navController, startDestination = startDestination) {
                     composable(Routes.Login) { LoginScreen(navController) }
                     composable(Routes.Main) { DevicesScreen(navController) }
-                    composable(Routes.DeviceControl,
+                    composable("${Routes.DeviceControl}/{dsn}",
                         deepLinks = listOf(navDeepLink { uriPattern = "${UriConstants.DEVICE_CONTROL}/{dsn}" })
                     ) { backStackEntry -> BuildDeviceControl(backStackEntry, displayInPanel)}
                 }
