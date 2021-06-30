@@ -48,15 +48,13 @@ fun TemperatureControlDialog(
             ) {
                 TextButton({ onCancel() }) {
                     Text(
-                        text = stringResource(android.R.string.cancel)
-                            .toUpperCase(Locale.getDefault())
+                        text = stringResource(android.R.string.cancel).uppercase()
                     )
                 }
 
                 TextButton({ onOk(state.value) }) {
                     Text(
-                        text = stringResource(android.R.string.ok)
-                            .toUpperCase(Locale.getDefault())
+                        text = stringResource(android.R.string.ok).uppercase()
                     )
                 }
             }
