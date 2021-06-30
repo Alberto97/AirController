@@ -81,10 +81,9 @@ dependencies {
 
 
     // Koin
-    def koin_version = '2.2.2'
+    def koin_version = '3.0.1'
+    implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
-    implementation "io.insert-koin:koin-androidx-scope:$koin_version"
-    implementation "io.insert-koin:koin-androidx-viewmodel:$koin_version"
 
     testImplementation 'junit:junit:4.12'
 }

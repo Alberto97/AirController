@@ -14,12 +14,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.getViewModel
 import org.alberto97.hisenseair.ui.Routes
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.MainViewModel
+import org.koin.androidx.compose.getViewModel
 
 @ExperimentalMaterialApi
 @Composable

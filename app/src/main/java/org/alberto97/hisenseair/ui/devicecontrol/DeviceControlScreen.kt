@@ -18,7 +18,6 @@ import org.alberto97.hisenseair.features.fanToStringMap
 import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.features.modeToStringMap
 import org.alberto97.hisenseair.features.sleepToStringMap
-import org.alberto97.hisenseair.getViewModel
 import org.alberto97.hisenseair.ui.BottomSheetList
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.preferences.Preference
@@ -26,6 +25,7 @@ import org.alberto97.hisenseair.ui.preferences.PreferenceCategory
 import org.alberto97.hisenseair.ui.preferences.PreferenceDescription
 import org.alberto97.hisenseair.ui.preferences.SwitchPreference
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
+import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
 enum class DeviceControlSheet {

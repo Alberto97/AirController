@@ -6,9 +6,9 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel {(dsn: String) ->
+    viewModel { parameters ->
         DeviceViewModel(
-            dsn, get(), get(), get(), get(), get(), get(), get(), get(),
+            parameters.get(), get(), get(), get(), get(), get(), get(), get(), get(),
             get(), get(), get(), get(), get(), get(), get(), get(), get()
         )
     }
