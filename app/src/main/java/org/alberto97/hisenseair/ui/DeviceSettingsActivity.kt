@@ -1,12 +1,12 @@
 package org.alberto97.hisenseair.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.databinding.ActivityDeviceSettingsBinding
 
-class DeviceSettingsActivity : AppCompatActivity() {
+class DeviceSettingsActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

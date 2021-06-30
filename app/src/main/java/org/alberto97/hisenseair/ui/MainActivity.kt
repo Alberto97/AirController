@@ -2,8 +2,8 @@ package org.alberto97.hisenseair.ui
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
@@ -31,7 +31,7 @@ object DeviceControlParams {
     const val dsn = "dsn"
 }
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     private val viewModel: SplashViewModel by viewModel()
 
