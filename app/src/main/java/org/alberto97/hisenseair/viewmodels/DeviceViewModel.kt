@@ -1,5 +1,11 @@
 package org.alberto97.hisenseair.viewmodels
 
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,14 +13,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.UriConstants
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.controllers.*
+import org.alberto97.hisenseair.models.AppDeviceState
 import org.alberto97.hisenseair.models.BottomSheetListItem
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
+import org.alberto97.hisenseair.ui.MainActivity
 
 class DeviceViewModel(
     private val dsn: String,
     private val repo: IDeviceControlRepository,
+    private val context: Context,
     private val airFlowHorizontalController: IAirFlowHorizontalController,
     private val airFlowVerticalController: IAirFlowVerticalController,
     private val backlightController: IBacklightController,
@@ -137,7 +147,28 @@ class DeviceViewModel(
             minTemp.value = minTempController.getValue(resp)
             supportedFanSpeeds.value = supportedFanSpeedController.getValue(resp)
             supportedModes.value = supportedModesController.getValue(resp)
+            createShortcut(resp)
         }
+    }
+
+
+    private fun createShortcut(device: AppDeviceState) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "${UriConstants.DEVICE_CONTROL}/$dsn".toUri(),
+            context,
+            MainActivity::class.java
+        )
+
+        val shortcut = ShortcutInfoCompat.Builder(context, dsn)
+            .setShortLabel(device.productName)
+            .setLongLabel(device.productName)
+            .setRank(0)
+            .setIcon(IconCompat.createWithResource(context, R.drawable.ic_fan_primary))
+            .setIntent(intent)
+            .build()
+
+        ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
     }
 
     private fun setProp(setProperty: suspend () -> Unit) {
