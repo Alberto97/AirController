@@ -6,12 +6,15 @@ import androidx.preference.*
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.viewmodels.DevicePreferenceViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedStateViewModel
 
 @Suppress("unused")
 class DevicePreferenceFragment : PreferenceFragmentCompat() {
 
-    private val viewModel: DevicePreferenceViewModel by sharedViewModel()
+    // Fragment arguments containing navigation parameters are unavailable here
+    // but that does not matter because the vm has already been instantiated
+    // and it is bounded to the activity lifecycle.
+    private val viewModel: DevicePreferenceViewModel by sharedStateViewModel()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_device_settings)

@@ -6,19 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import org.alberto97.hisenseair.CompatExtensions.setVisible
 import org.alberto97.hisenseair.databinding.FragmentSettingsBinding
 import org.alberto97.hisenseair.viewmodels.DevicePreferenceViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedStateViewModel
 
 class DeviceSettings : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
 
-    private val args by navArgs<DeviceSettingsArgs>()
-    private val viewModel: DevicePreferenceViewModel by sharedViewModel()
+    // Pass arguments to SavedStateHandle to provide access to navigation parameters in the ViewModel
+    private val viewModel: DevicePreferenceViewModel by sharedStateViewModel(state = { requireArguments() })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,8 +26,6 @@ class DeviceSettings : Fragment() {
     ): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
         binding.toolbar.setupWithNavController(findNavController())
-
-        viewModel.load(args.dsn)
 
         viewModel.deviceName.observe(viewLifecycleOwner, {
             binding.spinner.spinner.setVisible(false)

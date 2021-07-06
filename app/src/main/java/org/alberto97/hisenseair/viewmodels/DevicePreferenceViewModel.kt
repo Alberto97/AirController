@@ -2,6 +2,7 @@ package org.alberto97.hisenseair.viewmodels
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -9,15 +10,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
+import org.alberto97.hisenseair.fragments.DeviceSettingsArgs
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
 class DevicePreferenceViewModel(
+    savedStateHandle: SavedStateHandle,
     private val repo: IDeviceRepository,
     private val deviceControl: IDeviceControlRepository
 ) : ViewModel() {
 
-    var dsn: String = ""
+    private val args = DeviceSettingsArgs.fromSavedStateHandle(savedStateHandle)
+    private val dsn get() = args.dsn
 
     val deviceName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -39,8 +43,7 @@ class DevicePreferenceViewModel(
         MutableLiveData<String>()
     }
 
-    fun load(dsn: String) {
-        this.dsn = dsn
+    init {
         viewModelScope.launch {
             updateDeviceProps()
             fetchTempType()
