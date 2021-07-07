@@ -68,6 +68,7 @@ class DeviceControlRepository(
 
         deviceState.supportedModes = getSupportedModes()
         deviceState.supportedSpeeds = getSupportedFanSpeeds()
+        deviceState.supportedSleepModes = getSupportedSleepModes(deviceState.workMode)
         deviceState.maxTemp = getMaxTemp(deviceState.tempUnit)
         deviceState.minTemp = getMinTemp(deviceState.tempUnit)
 
@@ -127,10 +128,11 @@ class DeviceControlRepository(
             61
     }
 
-    override suspend fun getSupportedSleepModes(dsn: String): List<SleepModeData> {
-        val data = service.getDeviceProperty(dsn, WORK_MODE_PROP)
-        val mode = modeConverter.map(data.property)
+    private fun getSupportedSleepModes(mode: WorkMode): List<SleepModeData> {
+        //val data = service.getDeviceProperty(dsn, WORK_MODE_PROP)
+        //val mode = modeConverter.map(data.property)
         val heating = mode == WorkMode.Heating
+        val off = SleepModeData(SleepMode.OFF, listOf(), listOf())
 
         // SLEEP 1: 2h -> +2/-2
         // SLEEP 2: 2h -> +2/-2, 6h -> +1/-1, 7h -> +1/-1
@@ -147,7 +149,7 @@ class DeviceControlRepository(
             sleep3 = SleepModeData(SleepMode.MODE3, listOf(1, 2, 6, 7), listOf(+2, +2, +2, +2))
         }
 
-        return listOf(sleep1, sleep2, sleep3, sleep4)
+        return listOf(off, sleep1, sleep2, sleep3, sleep4)
     }
 
     override suspend fun setAirFlowHorizontal(dsn: String, value: Boolean) {

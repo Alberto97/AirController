@@ -14,7 +14,6 @@ interface IDeviceControlRepository {
     suspend fun setMode(dsn: String, value: WorkMode)
     suspend fun setPower(dsn: String, value: Boolean)
     suspend fun setQuiet(dsn: String, value: Boolean)
-    suspend fun getSupportedSleepModes(dsn: String): List<SleepModeData>
     suspend fun setSleepMode(dsn: String, value: SleepMode)
     suspend fun setTemp(dsn: String, value: Int)
     suspend fun getTempUnit(dsn: String): TempType

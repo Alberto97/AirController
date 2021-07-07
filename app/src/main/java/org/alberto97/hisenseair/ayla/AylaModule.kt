@@ -40,6 +40,7 @@ val aylaModule = module {
     single<ISleepModeController> { SleepModeController() }
     single<ISupportedFanSpeedController> { SupportedFanSpeedController() }
     single<ISupportedModesController> { SupportedModesController() }
+    single<ISupportedSleepModesController> { SupportedSleepModesController() }
     single<ITempControlController> { TempControlController() }
 
     // Converter

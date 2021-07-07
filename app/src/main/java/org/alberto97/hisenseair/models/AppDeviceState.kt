@@ -1,9 +1,6 @@
 package org.alberto97.hisenseair.models
 
-import org.alberto97.hisenseair.features.FanSpeed
-import org.alberto97.hisenseair.features.SleepMode
-import org.alberto97.hisenseair.features.TempType
-import org.alberto97.hisenseair.features.WorkMode
+import org.alberto97.hisenseair.features.*
 
 
 class AppDeviceState {
@@ -17,6 +14,7 @@ class AppDeviceState {
     var eco: Boolean = false
     var boost: Boolean = false
     var sleepMode: SleepMode = SleepMode.OFF
+    var supportedSleepModes = emptyList<SleepModeData>()
     var supportedSpeeds = emptyList<FanSpeed>()
     var fanSpeed: FanSpeed = FanSpeed.Auto
     var temp: Int = 0

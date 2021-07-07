@@ -32,7 +32,8 @@ enum class DeviceControlSheet {
     None,
     FanSpeed,
     Mode,
-    TempControl
+    TempControl,
+    Sleep
 }
 
 @ExperimentalMaterialApi
@@ -188,6 +189,22 @@ private fun ModeSheet(
 
 @ExperimentalMaterialApi
 @Composable
+private fun SleepSheet(
+    viewModel: DeviceViewModel,
+    close: () -> Unit
+) {
+    BottomSheetList(
+        title = "Sleep Mode",
+        list = viewModel.getSupportedSleepModes(),
+        onItemClick = { data ->
+            viewModel.setSleepMode(data)
+            close()
+        }
+    )
+}
+
+@ExperimentalMaterialApi
+@Composable
 private fun SheetContent(
     viewModel: DeviceViewModel,
     currentSheet: DeviceControlSheet,
@@ -197,6 +214,7 @@ private fun SheetContent(
         DeviceControlSheet.FanSpeed -> FanSpeedSheet(viewModel, close)
         DeviceControlSheet.TempControl -> TempControlSheet(viewModel, close)
         DeviceControlSheet.Mode -> ModeSheet(viewModel, close)
+        DeviceControlSheet.Sleep -> SleepSheet(viewModel, close)
         else -> FullscreenLoading()
     }
 }
@@ -214,7 +232,7 @@ private fun OnScreen(
 
         BuildMode(viewModel, showSheet)
         BuildFanSpeed(viewModel, showSheet)
-        BuildSleepMode(viewModel)
+        BuildSleepMode(viewModel, showSheet)
         BuildPower(viewModel)
 
         BuildAirFlow(viewModel)
@@ -281,14 +299,15 @@ private fun BuildFanSpeed(viewModel: DeviceViewModel, onClick: (value: DeviceCon
 
 @ExperimentalMaterialApi
 @Composable
-private fun BuildSleepMode(viewModel: DeviceViewModel) {
+private fun BuildSleepMode(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
     val mode = viewModel.sleepMode.observeAsState().value
     if (mode != null) {
         val resId = sleepToStringMap.getValue(mode)
         Preference(
             title = "Sleep mode",
             summary = stringResource(resId),
-            icon = painterResource(R.drawable.ic_nights_stay)
+            icon = painterResource(R.drawable.ic_nights_stay),
+            onClick = { onClick(DeviceControlSheet.Sleep) }
         )
     }
 }

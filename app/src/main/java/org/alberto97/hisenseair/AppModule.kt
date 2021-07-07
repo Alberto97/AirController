@@ -9,7 +9,7 @@ val appModule = module {
     viewModel { parameters ->
         DeviceViewModel(
             parameters.get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
-            get(), get(), get(), get(), get(), get(), get(), get(), get()
+            get(), get(), get(), get(), get(), get(), get(), get(), get(), get()
         )
     }
     viewModel {  parameters -> DevicePreferenceViewModel(parameters.get(), get(), get()) }

@@ -40,6 +40,7 @@ class DeviceViewModel(
     private val sleepModeController: ISleepModeController,
     private val supportedFanSpeedController: ISupportedFanSpeedController,
     private val supportedModesController: ISupportedModesController,
+    private val supportedSleepModesController: ISupportedSleepModesController,
     private val tempController: ITempControlController
 ) : ViewModel() {
 
@@ -112,6 +113,10 @@ class DeviceViewModel(
         MutableLiveData<List<FanSpeed>>()
     }
 
+    val supportedSleepModes: MutableLiveData<List<SleepModeData>> by lazy {
+        MutableLiveData<List<SleepModeData>>()
+    }
+
     // Info
     val deviceName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -147,6 +152,7 @@ class DeviceViewModel(
             minTemp.value = minTempController.getValue(resp)
             supportedFanSpeeds.value = supportedFanSpeedController.getValue(resp)
             supportedModes.value = supportedModesController.getValue(resp)
+            supportedSleepModes.value = supportedSleepModesController.getValue(resp)
             createShortcut(resp)
         }
     }
@@ -290,6 +296,17 @@ class DeviceViewModel(
             val icon = R.drawable.ic_fan
             val selected = it == fanSpeed.value
             BottomSheetListItem(it, text, icon, selected)
+        }
+    }
+
+    fun getSupportedSleepModes(): List<BottomSheetListItem<SleepMode>> {
+        val modes = supportedSleepModes.value ?: return listOf()
+
+        return modes.map {
+            val text = sleepToStringMap.getValue(it.type)
+            val icon = R.drawable.ic_nights_stay
+            val selected = it.type == sleepMode.value
+            BottomSheetListItem(it.type, text, icon, selected)
         }
     }
 }
