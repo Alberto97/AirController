@@ -1,7 +1,5 @@
 package org.alberto97.hisenseair.ayla.repositories
 
-import android.content.Context
-import androidx.preference.PreferenceManager
 import org.alberto97.hisenseair.ayla.models.Login
 import org.alberto97.hisenseair.ayla.models.LoginOutput
 import org.alberto97.hisenseair.ayla.models.LoginRefresh
@@ -10,20 +8,14 @@ import org.alberto97.hisenseair.ayla.network.api.AylaLogin
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import retrofit2.HttpException
 
-object AuthPrefs {
-    const val SHARED_PREF_TOKEN_ACCESS = "access_token"
-    const val SHARED_PREF_TOKEN_REFRESH = "refresh_token"
-}
-
-class AuthenticationRepository(private val service: AylaLogin, context: Context) :
+class AuthenticationRepository(
+    private val service: AylaLogin,
+    private val repository: ISecretsRepository
+) :
     IAuthenticationRepository {
-    private val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-    private var authToken = preferences.getString(AuthPrefs.SHARED_PREF_TOKEN_ACCESS, "")!!
-    private var refreshToken = preferences.getString(AuthPrefs.SHARED_PREF_TOKEN_REFRESH, "")!!
 
     override fun getToken(): String {
-        return authToken
+        return repository.authToken
     }
 
     override suspend fun login(email: String, password: String): Boolean {
@@ -39,6 +31,7 @@ class AuthenticationRepository(private val service: AylaLogin, context: Context)
     }
 
     override suspend fun refreshToken(): Boolean {
+        val refreshToken = repository.refreshToken
         if (refreshToken.isEmpty())
             return false
 
@@ -58,13 +51,7 @@ class AuthenticationRepository(private val service: AylaLogin, context: Context)
     }
 
     private fun saveAuthData(output: LoginOutput) {
-        authToken = output.accessToken
-        refreshToken = output.refreshToken
-
-        preferences.edit().apply {
-            putString(AuthPrefs.SHARED_PREF_TOKEN_ACCESS, output.accessToken)
-            putString(AuthPrefs.SHARED_PREF_TOKEN_REFRESH, output.refreshToken)
-            apply()
-        }
+        repository.authToken = output.accessToken
+        repository.refreshToken = output.refreshToken
     }
 }

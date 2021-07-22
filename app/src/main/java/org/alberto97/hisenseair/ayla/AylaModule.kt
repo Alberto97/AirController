@@ -59,6 +59,7 @@ val aylaModule = module {
         DeviceControlRepository(get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
     single<IDeviceCacheRepository> { DeviceCacheRepository(androidApplication(), get()) }
+    single<ISecretsRepository> { SecretsRepository(get()) }
 }
 
 fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {
