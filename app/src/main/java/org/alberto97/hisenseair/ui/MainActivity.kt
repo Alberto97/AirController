@@ -19,11 +19,13 @@ import org.alberto97.hisenseair.ui.devicecontrol.DeviceControlScreen
 import org.alberto97.hisenseair.ui.devices.DevicesScreen
 import org.alberto97.hisenseair.ui.login.LoginScreen
 import org.alberto97.hisenseair.ui.pair.PairScreen
+import org.alberto97.hisenseair.ui.region.RegionScreen
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.SplashViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 object Routes {
+    const val RegionPicker = "regionPicker"
     const val Login = "login"
     const val Main = "main"
     const val Pair = "pair"
@@ -47,13 +49,14 @@ class MainActivity : ComponentActivity() {
         val startDestination = if (viewModel.isLoggedIn()) {
             Routes.Main
         } else {
-            Routes.Login
+            Routes.RegionPicker
         }
 
         setContent {
             AppTheme {
                 val navController = rememberNavController()
                 NavHost(navController, startDestination = startDestination) {
+                    composable(Routes.RegionPicker) { RegionScreen(navController) }
                     composable(Routes.Login) { LoginScreen(navController) }
                     composable(Routes.Main) { DevicesScreen(navController) }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

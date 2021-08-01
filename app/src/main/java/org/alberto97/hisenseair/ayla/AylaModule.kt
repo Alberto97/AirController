@@ -20,12 +20,20 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+val aylaEuApi = module {
+    single { getAylaApi(get(), "https://ads-eu.aylanetworks.com/apiv1/") }
+    single { getAylaLogin("https://user-field-eu.aylanetworks.com/users/") }
+}
+
+val aylaUsApi = module {
+    single { getAylaApi(get(), "https://ads-field.aylanetworks.com/apiv1/") }
+    single { getAylaLogin("https://user-field.aylanetworks.com/users/") }
+}
+
 val aylaModule = module {
     // API
     single { getOkHttp(get()) }
     single { getPairApi(get()) }
-    single { getAylaApi(get()) }
-    single { getAylaLogin() }
 
     // Controller
     single<IAirFlowHorizontalController> { AirFlowHorizontalController() }
@@ -56,7 +64,7 @@ val aylaModule = module {
     single<ITempUnitConverter> { TempUnitConverter() }
 
     // Repository
-    single<IAuthenticationRepository> { AuthenticationRepository(get(), get()) }
+    single<IAuthenticationRepository> { AuthenticationRepository(get(), get(), get()) }
     single<IDeviceRepository> { DeviceRepository(get()) }
     single<IDeviceControlRepository> {
         DeviceControlRepository(get(), get(), get(), get(), get(), get(), get(), get(), get())
@@ -91,9 +99,9 @@ fun getPairApi(httpClient: OkHttpClient) : PairApi {
     return retrofit.create(PairApi::class.java)
 }
 
-fun getAylaApi(httpClient: OkHttpClient) : AylaService {
+fun getAylaApi(httpClient: OkHttpClient, baseUrl: String) : AylaService {
     val retrofit = Retrofit.Builder()
-        .baseUrl("https://ads-eu.aylanetworks.com/apiv1/")
+        .baseUrl(baseUrl)
         .client(httpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -101,9 +109,9 @@ fun getAylaApi(httpClient: OkHttpClient) : AylaService {
     return retrofit.create(AylaService::class.java)
 }
 
-fun getAylaLogin(): AylaLogin {
+fun getAylaLogin(baseUrl: String): AylaLogin {
     val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("https://user-field-eu.aylanetworks.com/users/")
+        .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

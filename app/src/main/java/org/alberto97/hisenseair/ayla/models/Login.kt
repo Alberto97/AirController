@@ -5,21 +5,19 @@ package org.alberto97.hisenseair.ayla.models
 import com.google.gson.annotations.SerializedName
 
 // First access
-class Login(email: String, password: String) {
-    val user = User(email, password)
+class Login(email: String, password: String, app: Application) {
+    val user = User(email, password, app)
 }
 
-class User(val email: String, val password: String) {
-    val application = Application()
-}
+class User(val email: String, val password: String, val application: Application)
 
-class Application {
+class Application(
     @SerializedName("app_id")
-    val appId = "a-Hisense-oem-eu-field-id"
+    val appId: String,
 
     @SerializedName("app_secret")
-    val appSecret = "a-Hisense-oem-eu-field-YR569cQPGH7l67Gf5PUmQv4jiMs-Bk8secEGY52ZSsJ4rOuCk-UNiWQ"
-}
+    val appSecret: String
+)
 
 // Refresh Token
 class LoginRefresh(val user: UserRefresh)
