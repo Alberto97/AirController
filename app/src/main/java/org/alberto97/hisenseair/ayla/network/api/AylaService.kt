@@ -11,6 +11,19 @@ interface AylaService {
     suspend fun getDevices(): List<DeviceWrapper>
 
     @Authorized
+    @POST("devices.json")
+    suspend fun postDevice(@Body device: SetupDevice.Wrapper): DeviceWrapper
+
+    @Authorized
+    @GET("devices/connected.json")
+    suspend fun connected(
+        @Query("dsn")
+        dsn: String,
+        @Query("setup_token")
+        setupToken: String?
+    ): ConnectedDevice.Wrapper
+
+    @Authorized
     @GET("dsns/{dsn}.json")
     suspend fun getDevice(
         @Path("dsn")

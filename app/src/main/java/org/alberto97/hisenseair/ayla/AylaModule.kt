@@ -6,6 +6,7 @@ import org.alberto97.hisenseair.ayla.features.controllers.*
 import org.alberto97.hisenseair.ayla.features.converters.*
 import org.alberto97.hisenseair.ayla.network.api.AylaLogin
 import org.alberto97.hisenseair.ayla.network.api.AylaService
+import org.alberto97.hisenseair.ayla.network.api.PairApi
 import org.alberto97.hisenseair.ayla.network.interceptors.AuthInterceptor
 import org.alberto97.hisenseair.ayla.network.interceptors.TokenAuthenticator
 import org.alberto97.hisenseair.ayla.repositories.*
@@ -21,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 val aylaModule = module {
     // API
     single { getOkHttp(get()) }
+    single { getPairApi(get()) }
     single { getAylaApi(get()) }
     single { getAylaLogin() }
 
@@ -75,6 +77,16 @@ fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {
             chain.proceed(request)
         }
         .build()
+}
+
+fun getPairApi(httpClient: OkHttpClient) : PairApi {
+    val retrofit = Retrofit.Builder()
+        .baseUrl("http://192.168.0.1/")
+        .client(httpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    return retrofit.create(PairApi::class.java)
 }
 
 fun getAylaApi(httpClient: OkHttpClient) : AylaService {
