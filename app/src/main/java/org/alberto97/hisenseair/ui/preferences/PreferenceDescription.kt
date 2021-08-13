@@ -4,13 +4,14 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Thermostat
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
-import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @Composable
@@ -34,7 +35,7 @@ fun PreferenceDescription(
 private fun Preview() {
     AppTheme {
         Surface {
-            PreferenceDescription(painterResource(id = R.drawable.ic_thermometer), "Test")
+            PreferenceDescription(rememberVectorPainter(Icons.Outlined.Thermostat), "Test")
         }
     }
 }

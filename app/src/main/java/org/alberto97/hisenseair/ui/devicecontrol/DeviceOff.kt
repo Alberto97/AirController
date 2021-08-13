@@ -3,6 +3,8 @@ package org.alberto97.hisenseair.ui.devicecontrol
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +48,7 @@ fun DeviceOff(modeAsset: Painter, currentTemp: Int, onPower: () -> Unit) {
                 backgroundColor = MaterialTheme.colors.surface
             ) {
                 Icon(
-                    painterResource(R.drawable.round_power_settings_new_24),
+                    Icons.Rounded.PowerSettingsNew,
                     contentDescription = null,
                     tint = MaterialTheme.colors.primary
                 )

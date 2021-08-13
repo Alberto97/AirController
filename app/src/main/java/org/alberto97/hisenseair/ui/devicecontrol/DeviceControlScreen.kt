@@ -5,10 +5,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.HearingDisabled
+import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.Thermostat
+import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.SwapHoriz
+import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.delay
@@ -263,7 +270,7 @@ private fun BuildAmbientTemp(viewModel: DeviceViewModel) {
 
     PreferenceDescription(
         text = stringResource(R.string.device_ambient_temp, temp.value ?: 0),
-        icon = painterResource(id = R.drawable.ic_thermometer),
+        icon = rememberVectorPainter(Icons.Outlined.Thermostat),
     )
 }
 
@@ -319,7 +326,7 @@ private fun BuildPower(viewModel: DeviceViewModel) {
         title = "Power",
         summary = "Turn off the device",
         checked = true,
-        icon = painterResource(R.drawable.round_power_settings_new_24),
+        icon = rememberVectorPainter(Icons.Rounded.PowerSettingsNew),
         onCheckedChange = { viewModel.switchPower() }
     )
 }
@@ -338,7 +345,7 @@ private fun BuildAirFlow(viewModel: DeviceViewModel) {
             title = "Horizontal",
             checked = horizontal,
             onCheckedChange = { viewModel.switchAirFlowHorizontal() },
-            icon = painterResource(R.drawable.round_swap_horiz_24)
+            icon = rememberVectorPainter(Icons.Rounded.SwapHoriz)
         )
 
     if (vertical != null)
@@ -346,7 +353,7 @@ private fun BuildAirFlow(viewModel: DeviceViewModel) {
             title = "Vertical",
             checked = vertical,
             onCheckedChange = { viewModel.switchAirFlowVertical() },
-            icon = painterResource(R.drawable.round_swap_vert_24)
+            icon = rememberVectorPainter(Icons.Rounded.SwapVert)
         )
 }
 
@@ -359,7 +366,7 @@ private fun BuildBacklight(viewModel: DeviceViewModel) {
             title = "Dimmer",
             checked = backlight,
             onCheckedChange = { viewModel.switchBacklight() },
-            icon = painterResource(R.drawable.ic_lightbulb_md)
+            icon = rememberVectorPainter(Icons.Outlined.Lightbulb)
         )
 }
 
@@ -385,7 +392,7 @@ private fun BuildQuiet(viewModel: DeviceViewModel) {
             title = "Quiet",
             checked = quiet,
             onCheckedChange = { viewModel.switchQuiet() },
-            icon = painterResource(R.drawable.outline_hearing_disabled_24)
+            icon = rememberVectorPainter(Icons.Outlined.HearingDisabled)
         )
 }
 

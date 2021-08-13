@@ -4,11 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Switch
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
-import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @ExperimentalMaterialApi
@@ -44,7 +45,7 @@ private fun Preview() {
                     true,
                     {},
                     "Turn off the device",
-                    painterResource(R.drawable.round_power_settings_new_24)
+                    rememberVectorPainter(Icons.Rounded.PowerSettingsNew)
                 )
             }
         }
