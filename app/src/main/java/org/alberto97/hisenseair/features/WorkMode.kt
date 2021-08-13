@@ -14,11 +14,11 @@ enum class WorkMode {
 }
 
 val modeToIconMap = mapOf(
-    WorkMode.Heating to R.drawable.round_brightness_7_24,
+    WorkMode.Heating to R.drawable.outline_brightness_low,
     WorkMode.Cooling to R.drawable.ic_weather_windy,
-    WorkMode.Dry to R.drawable.water_outline,
+    WorkMode.Dry to R.drawable.outline_water_drop,
     WorkMode.FanOnly to R.drawable.ic_fan,
-    WorkMode.Auto to R.drawable.ic_air_conditioner
+    WorkMode.Auto to R.drawable.outline_thermostat_auto
 )
 
 val modeToStringMap = mapOf(

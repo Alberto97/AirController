@@ -133,7 +133,7 @@ private fun TopAppBar(
 private fun OffScreen(viewModel: DeviceViewModel) {
     val currentTemp by viewModel.roomTemp.observeAsState(-1)
     val currentMode by viewModel.workState.observeAsState()
-    val drawableId = modeToIconMap[currentMode] ?: R.drawable.round_brightness_7_24
+    val drawableId = modeToIconMap[currentMode] ?: R.drawable.outline_brightness_low
 
     DeviceOff(
         modeAsset = painterResource(drawableId),
@@ -279,7 +279,7 @@ private fun BuildAmbientTemp(viewModel: DeviceViewModel) {
 private fun BuildMode(viewModel: DeviceViewModel, onClick: (value: DeviceControlSheet) -> Unit) {
     val mode = viewModel.workState.observeAsState().value
     val resId = modeToStringMap[mode] ?: R.string.work_mode_unknown
-    val drawableId = modeToIconMap[mode] ?: R.drawable.round_brightness_7_24
+    val drawableId = modeToIconMap[mode] ?: R.drawable.outline_brightness_low
 
     Preference(
         title = "Mode",
