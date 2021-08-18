@@ -13,6 +13,7 @@ import org.alberto97.hisenseair.ayla.repositories.*
 import org.alberto97.hisenseair.features.controllers.*
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
+import org.alberto97.hisenseair.repositories.IDevicePairRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
@@ -62,6 +63,7 @@ val aylaModule = module {
     }
     single<IDeviceCacheRepository> { DeviceCacheRepository(androidApplication(), get()) }
     single<ISecretsRepository> { SecretsRepository(get()) }
+    single<IDevicePairRepository> { DevicePairRepository(get(), get()) }
 }
 
 fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {

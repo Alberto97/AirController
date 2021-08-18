@@ -1,6 +1,7 @@
 package org.alberto97.hisenseair.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,7 @@ import org.alberto97.hisenseair.UriConstants
 import org.alberto97.hisenseair.ui.devicecontrol.DeviceControlScreen
 import org.alberto97.hisenseair.ui.devices.DevicesScreen
 import org.alberto97.hisenseair.ui.login.LoginScreen
+import org.alberto97.hisenseair.ui.pair.PairScreen
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.SplashViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,6 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 object Routes {
     const val Login = "login"
     const val Main = "main"
+    const val Pair = "pair"
     const val DeviceControl = "deviceControl"
 }
 
@@ -53,6 +56,9 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, startDestination = startDestination) {
                     composable(Routes.Login) { LoginScreen(navController) }
                     composable(Routes.Main) { DevicesScreen(navController) }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        composable(Routes.Pair) { PairScreen(navController) }
+                    }
                     composable("${Routes.DeviceControl}/{dsn}",
                         deepLinks = listOf(navDeepLink { uriPattern = "${UriConstants.DEVICE_CONTROL}/{dsn}" })
                     ) { backStackEntry -> BuildDeviceControl(backStackEntry, displayInPanel)}

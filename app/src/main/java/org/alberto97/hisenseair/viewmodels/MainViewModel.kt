@@ -26,21 +26,27 @@ class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
     }
 
     init {
-        fetchData()
+        loadData()
     }
 
-    private fun fetchData() {
-        isLoading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val deviceList = repo.getDevices()
-                withContext(Dispatchers.Main) {
-                    devices.value = deviceList
-                    isLoading.value = false
-                }
-            } catch (e: HttpException) {
-                isLoggedOut.value = e.code() == HttpsURLConnection.HTTP_UNAUTHORIZED
+    fun loadData() {
+        viewModelScope.launch {
+            isLoading.value = true
+            withContext(Dispatchers.IO) {
+                fetchData()
             }
+            isLoading.value = false
+        }
+    }
+
+    private suspend fun fetchData() {
+        try {
+            val deviceList = repo.getDevices()
+            withContext(Dispatchers.Main) {
+                devices.value = deviceList
+            }
+        } catch (e: HttpException) {
+            isLoggedOut.value = e.code() == HttpsURLConnection.HTTP_UNAUTHORIZED
         }
     }
 }
