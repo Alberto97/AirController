@@ -31,6 +31,10 @@ fun DevicesScreen(
     navController: NavController,
     viewModel: MainViewModel = getViewModel()
 ) {
+    val isLoading by viewModel.isLoading.observeAsState(true)
+    val devices by viewModel.devices.observeAsState(listOf())
+    val loggedOut by viewModel.isLoggedOut.observeAsState(false)
+
     val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
     val refreshLiveData = savedStateHandle?.getLiveData<Boolean>(DevicesStateHandleParams.needsRefresh)
 
@@ -40,43 +44,58 @@ fun DevicesScreen(
         savedStateHandle?.set(DevicesStateHandleParams.needsRefresh, false)
     }
 
+    if (loggedOut)
+        navController.navigate(Routes.Login)
+
+    DevicesScreen(
+        isLoading = isLoading,
+        deviceList = devices,
+        onDeviceClick = { dsn ->
+            navController.navigate("${Routes.DeviceControl}/$dsn")
+        },
+        onAddClick = { navController.navigate(Routes.Pair) }
+    )
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun DevicesScreen(
+    isLoading: Boolean,
+    deviceList: List<AppDevice>,
+    onDeviceClick: (dsn: String) -> Unit,
+    onAddClick: () -> Unit
+) {
     AppTheme {
         Scaffold(
             topBar = {
                 TopAppBar({ Text(stringResource(R.string.app_name)) })
             },
-            floatingActionButton = { Fab(navController) }
+            floatingActionButton = {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                    Fab(onAddClick = onAddClick)
+            }
         ) {
-            val loggedOut by viewModel.isLoggedOut.observeAsState(false)
-            if (loggedOut)
-                navController.navigate(Routes.Login)
-
-            val isLoading by viewModel.isLoading.observeAsState(true)
             if (isLoading) {
                 FullscreenLoading()
             } else {
-                val devices by viewModel.devices.observeAsState(listOf())
-                Devices(devices, onDeviceClick = { dsn ->
-                    navController.navigate("${Routes.DeviceControl}/$dsn")
-                })
+                Devices(devices = deviceList, onDeviceClick = onDeviceClick)
             }
         }
     }
+
 }
 
 @Composable
-private fun Fab(navController: NavController) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        FloatingActionButton(
-            backgroundColor = MaterialTheme.colors.primary,
-            onClick = { navController.navigate(Routes.Pair) }
-        ) {
-            Icon(
-                Icons.Outlined.Add,
-                tint = Color.White,
-                contentDescription = ""
-            )
-        }
+private fun Fab(onAddClick: () -> Unit) {
+    FloatingActionButton(
+        backgroundColor = MaterialTheme.colors.primary,
+        onClick = onAddClick
+    ) {
+        Icon(
+            Icons.Outlined.Add,
+            tint = Color.White,
+            contentDescription = ""
+        )
     }
 }
 
@@ -103,9 +122,12 @@ private fun Preview() {
         AppDevice("1", "test1", true, "", "", ""),
         AppDevice("2", "test2", true, "", "", ""),
     )
-    AppTheme {
-        Scaffold {
-            Devices(devices = devices, onDeviceClick = {})
-        }
-    }
+
+    DevicesScreen(
+        isLoading = false,
+        deviceList = devices,
+        onDeviceClick = {},
+        onAddClick = {}
+    )
+
 }
