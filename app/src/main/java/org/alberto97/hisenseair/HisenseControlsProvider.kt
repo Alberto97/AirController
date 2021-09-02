@@ -3,6 +3,8 @@ package org.alberto97.hisenseair
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
 import android.service.controls.DeviceTypes
@@ -17,10 +19,6 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.jdk9.asPublisher
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.features.modeToControl
@@ -39,27 +37,56 @@ class HisenseControlsProvider : ControlsProviderService() {
     private val device: IDeviceRepository by inject()
     private val deviceControl: IDeviceControlRepository by inject()
 
-    override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
-        return flow {
-            val devices = device.getDevices()
-            devices.forEach {
-                val control = Control.StatelessBuilder(it.id, getPendingIntent(it.id))
-                    .setTitle(it.name)
-                    .setDeviceType(DeviceTypes.TYPE_THERMOSTAT)
-                    .build()
-                emit(control)
+    private val ioScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+
+    private var updateSubscriber: Flow.Subscriber<in Control>? = null
+    private val monitoredDevices = mutableListOf<String>()
+    private val handler = Handler(Looper.getMainLooper())
+
+    private val refresh = object : Runnable {
+        override fun run() {
+            monitoredDevices.forEach { deviceId ->
+                ioScope.launch {
+                    val status = getDeviceStatus(deviceId)
+                    val control = createControlById(deviceId, status)
+                    updateSubscriber?.onNext(control)
+                }
             }
-        }.flowOn(Dispatchers.IO).asPublisher()
+            handler.postDelayed(this, 2000)
+        }
+    }
+
+    override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
+        return Flow.Publisher { subscriber ->
+            ioScope.launch {
+                val devices = device.getDevices()
+                devices.forEach {
+                    val control = Control.StatelessBuilder(it.id, getPendingIntent(it.id))
+                        .setTitle(it.name)
+                        .setDeviceType(DeviceTypes.TYPE_THERMOSTAT)
+                        .build()
+                    subscriber.onNext(control)
+                }
+                subscriber.onComplete()
+            }
+        }
     }
 
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
-        return flow {
-            controlIds.forEach {
-                val status = getDeviceStatus(it)
-                val control = createControlById(it, status)
-                emit(control)
-            }
-        }.flowOn(Dispatchers.IO).asPublisher()
+        return Flow.Publisher { subscriber ->
+            subscriber.onSubscribe(object : Flow.Subscription {
+                override fun request(n: Long) {
+                    updateSubscriber = subscriber
+                }
+
+                override fun cancel() {
+                    updateSubscriber = null
+                    handler.removeCallbacks(refresh)
+                }
+            })
+            monitoredDevices.addAll(controlIds)
+            handler.post(refresh)
+        }
     }
 
     private suspend fun createControlById(dsn: String, status: Int): Control {
@@ -85,8 +112,6 @@ class HisenseControlsProvider : ControlsProviderService() {
     }
 
     override fun performControlAction(controlId: String, action: ControlAction, consumer: Consumer<Int>) {
-        val ioScope = CoroutineScope(Dispatchers.IO + Job())
-
         if (action is FloatAction) {
             consumer.accept(ControlAction.RESPONSE_OK)
             val newTemp = action.newValue.toInt()
