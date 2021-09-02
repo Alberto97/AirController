@@ -134,7 +134,8 @@ class HisenseControlsProvider : ControlsProviderService() {
 
         val deepLinkPendingIntent: PendingIntent? = TaskStackBuilder.create(baseContext).run {
             addNextIntentWithParentStack(deepLinkIntent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         return deepLinkPendingIntent!!
