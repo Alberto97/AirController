@@ -52,11 +52,6 @@ fun DeviceControlScreen(
     viewModel: DeviceViewModel = getViewModel { parametersOf(dsn) }
 ) {
 
-    if (displayInPanel)
-        Surface {
-            PanelUnsupported()
-        }
-    else {
         val (sheetType, setSheetType ) = remember { mutableStateOf(DeviceControlSheet.None) }
         val sheetScope = rememberCoroutineScope()
         val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -105,8 +100,6 @@ fun DeviceControlScreen(
                 }
             }
         }
-
-    }
 }
 
 @Composable
