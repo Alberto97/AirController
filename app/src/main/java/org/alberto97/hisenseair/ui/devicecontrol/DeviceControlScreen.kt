@@ -74,6 +74,7 @@ fun DeviceControlScreen(
                 topBar = {
                     TopAppBar(
                         viewModel = viewModel,
+                        displayInPanel = displayInPanel,
                         navigateToSettings = onSettingsClick
                     )
                 }
@@ -105,21 +106,24 @@ fun DeviceControlScreen(
 @Composable
 private fun TopAppBar(
     viewModel: DeviceViewModel,
+    displayInPanel: Boolean,
     navigateToSettings: () -> Unit
 ) {
     val deviceName = viewModel.deviceName.observeAsState().value ?: ""
 
-    TopAppBar(
-        title = { Text(deviceName) },
-        actions = {
-            IconButton({ navigateToSettings() }) {
-                Icon(
-                    Icons.Rounded.Settings,
-                    contentDescription = null
-                )
+    if (!displayInPanel) {
+        TopAppBar(
+            title = { Text(deviceName) },
+            actions = {
+                IconButton({ navigateToSettings() }) {
+                    Icon(
+                        Icons.Rounded.Settings,
+                        contentDescription = null
+                    )
+                }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable
