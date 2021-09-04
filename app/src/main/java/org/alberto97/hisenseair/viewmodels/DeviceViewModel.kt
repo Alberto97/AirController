@@ -6,10 +6,9 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.R
@@ -105,17 +104,46 @@ class DeviceViewModel(
         MutableLiveData<Int>()
     }
 
-    val supportedModes: MutableLiveData<List<WorkMode>> by lazy {
+    private val _supportedModes: MutableLiveData<List<WorkMode>> by lazy {
         MutableLiveData<List<WorkMode>>()
     }
 
-    val supportedFanSpeeds: MutableLiveData<List<FanSpeed>> by lazy {
+    val supportedModes = combine(_supportedModes.asFlow(), workState.asFlow()) { modes, mode ->
+        mapForSheetList(
+            modes = modes,
+            text = { modeToStringMap.getValue(it) },
+            icon = { modeToIconMap.getValue(it) },
+            selected = { it == mode }
+        )
+    }.asLiveData()
+
+    private val _supportedFanSpeeds: MutableLiveData<List<FanSpeed>> by lazy {
         MutableLiveData<List<FanSpeed>>()
     }
 
-    val supportedSleepModes: MutableLiveData<List<SleepModeData>> by lazy {
+    val supportedFanSpeeds = combine(_supportedFanSpeeds.asFlow(), fanSpeed.asFlow()) { speeds, speed ->
+        mapForSheetList(
+            modes = speeds,
+            text = { fanToStringMap.getValue(it) },
+            icon = { R.drawable.ic_fan },
+            selected = { it == speed }
+        )
+    }.asLiveData()
+
+    private val _supportedSleepModes: MutableLiveData<List<SleepModeData>> by lazy {
         MutableLiveData<List<SleepModeData>>()
     }
+
+    // TODO: This *really* needs to be improved by showing a graph or something to differentiate the modes
+    val supportedSleepModes = combine(_supportedSleepModes.asFlow(), sleepMode.asFlow()) { modes, mode ->
+        val allModes = modes.map { it.type }
+        mapForSheetList(
+            modes = allModes,
+            text = { sleepToStringMap.getValue(it) },
+            icon = { R.drawable.ic_nights_stay },
+            selected = { it == mode }
+        )
+    }.asLiveData()
 
     // Info
     val deviceName: MutableLiveData<String> by lazy {
@@ -150,9 +178,9 @@ class DeviceViewModel(
             isOn.value = powerController.getValue(resp)
             maxTemp.value = maxTempController.getValue(resp)
             minTemp.value = minTempController.getValue(resp)
-            supportedFanSpeeds.value = supportedFanSpeedController.getValue(resp)
-            supportedModes.value = supportedModesController.getValue(resp)
-            supportedSleepModes.value = supportedSleepModesController.getValue(resp)
+            _supportedFanSpeeds.value = supportedFanSpeedController.getValue(resp)
+            _supportedModes.value = supportedModesController.getValue(resp)
+            _supportedSleepModes.value = supportedSleepModesController.getValue(resp)
             createShortcut(resp)
         }
     }
@@ -277,36 +305,14 @@ class DeviceViewModel(
 
     fun reduceTemp() = setTemp(temp.value!! - 1)
 
-    fun getSupportedModes(): List<BottomSheetListItem<WorkMode>> {
-        val modes = supportedModes.value ?: return listOf()
-
+    private fun <T: Enum<*>> mapForSheetList(
+        modes: List<T>,
+        text: (value: T) -> Int,
+        icon: (value: T) -> Int,
+        selected: (value: T) -> Boolean,
+    ): List<BottomSheetListItem<T>> {
         return modes.map {
-            val text = modeToStringMap.getValue(it)
-            val icon = modeToIconMap.getValue(it)
-            val selected = it == workState.value
-            BottomSheetListItem(it, text, icon, selected)
-        }
-    }
-
-    fun getSupportedFanSpeed(): List<BottomSheetListItem<FanSpeed>> {
-        val modes = supportedFanSpeeds.value ?: return listOf()
-
-        return modes.map {
-            val text = fanToStringMap.getValue(it)
-            val icon = R.drawable.ic_fan
-            val selected = it == fanSpeed.value
-            BottomSheetListItem(it, text, icon, selected)
-        }
-    }
-
-    fun getSupportedSleepModes(): List<BottomSheetListItem<SleepMode>> {
-        val modes = supportedSleepModes.value ?: return listOf()
-
-        return modes.map {
-            val text = sleepToStringMap.getValue(it.type)
-            val icon = R.drawable.ic_nights_stay
-            val selected = it.type == sleepMode.value
-            BottomSheetListItem(it.type, text, icon, selected)
+            BottomSheetListItem(it, text(it), icon(it), selected(it))
         }
     }
 }

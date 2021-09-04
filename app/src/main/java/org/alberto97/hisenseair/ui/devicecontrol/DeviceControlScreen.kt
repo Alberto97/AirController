@@ -35,53 +35,53 @@ fun DeviceControlScreen(
     val isOn by viewModel.isOn.observeAsState(null)
 
 
-        val (sheetType, setSheetType) = remember { mutableStateOf(DeviceControlSheet.None) }
-        val sheetScope = rememberCoroutineScope()
-        val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val (sheetType, setSheetType) = remember { mutableStateOf(DeviceControlSheet.None) }
+    val sheetScope = rememberCoroutineScope()
+    val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-        ModalBottomSheetLayout(
-            sheetState = state,
-            sheetContent = {
-                SheetContent(
-                    viewModel = viewModel,
-                    currentSheet = sheetType,
-                    close = {
-                        sheetScope.launch {
-                            state.hide()
-                        }
+    ModalBottomSheetLayout(
+        sheetState = state,
+        sheetContent = {
+            SheetContent(
+                viewModel = viewModel,
+                currentSheet = sheetType,
+                close = {
+                    sheetScope.launch {
+                        state.hide()
                     }
+                }
+            )
+        }
+    ){
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    deviceName = deviceName,
+                    displayInPanel = displayInPanel,
+                    navigateToSettings = onSettingsClick
                 )
             }
-        ){
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        deviceName = deviceName,
-                        displayInPanel = displayInPanel,
-                        navigateToSettings = onSettingsClick
-                    )
-                }
-            ) {
-                if (isLoading) {
-                    FullscreenLoading()
-                } else {
-                    when (isOn) {
-                        false -> DeviceOff(viewModel)
-                        true -> DeviceOn(
-                            viewModel,
-                            showSheet = {
-                                setSheetType(it)
-                                sheetScope.launch {
-                                    delay(100L)
-                                    state.show()
-                                }
+        ) {
+            if (isLoading) {
+                FullscreenLoading()
+            } else {
+                when (isOn) {
+                    false -> DeviceOff(viewModel)
+                    true -> DeviceOn(
+                        viewModel,
+                        showSheet = {
+                            setSheetType(it)
+                            sheetScope.launch {
+                                delay(100L)
+                                state.show()
                             }
-                        )
-                        else -> FullscreenLoading()
-                    }
+                        }
+                    )
+                    else -> FullscreenLoading()
                 }
             }
         }
+    }
 }
 
 @Composable
@@ -104,22 +104,6 @@ private fun TopAppBar(
             }
         )
     }
-}
-
-@ExperimentalMaterialApi
-@Composable
-private fun FanSpeedSheet(
-    viewModel: DeviceViewModel,
-    close: () -> Unit
-) {
-    BottomSheetList(
-        title = "Fan Speed",
-        list = viewModel.getSupportedFanSpeed(),
-        onItemClick = { data ->
-            viewModel.setFanSpeed(data)
-            close()
-        }
-    )
 }
 
 @Composable
@@ -148,11 +132,31 @@ private fun ModeSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
+    val supportedModes by viewModel.supportedModes.observeAsState(emptyList())
+
     BottomSheetList(
         title = "Mode",
-        list = viewModel.getSupportedModes(),
+        list = supportedModes,
         onItemClick = { data ->
             viewModel.setMode(data)
+            close()
+        }
+    )
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun FanSpeedSheet(
+    viewModel: DeviceViewModel,
+    close: () -> Unit
+) {
+    val supportedFanSpeeds by viewModel.supportedFanSpeeds.observeAsState(emptyList())
+
+    BottomSheetList(
+        title = "Fan Speed",
+        list = supportedFanSpeeds,
+        onItemClick = { data ->
+            viewModel.setFanSpeed(data)
             close()
         }
     )
@@ -164,9 +168,11 @@ private fun SleepSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
+    val supportedSleepModes by viewModel.supportedSleepModes.observeAsState(emptyList())
+
     BottomSheetList(
         title = "Sleep Mode",
-        list = viewModel.getSupportedSleepModes(),
+        list = supportedSleepModes,
         onItemClick = { data ->
             viewModel.setSleepMode(data)
             close()
