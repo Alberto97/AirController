@@ -6,19 +6,37 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.features.WorkMode
+import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.ui.theme.AppTheme
+import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 
 @Composable
-fun DeviceOff(modeAsset: Painter, currentTemp: Int, onPower: () -> Unit) {
+fun DeviceOff(viewModel: DeviceViewModel) {
+    val currentTemp by viewModel.roomTemp.observeAsState(-1)
+    val currentMode by viewModel.workState.observeAsState(WorkMode.Auto)
+
+    DeviceOff(
+        currentMode = currentMode,
+        currentTemp = currentTemp,
+        onPower = { viewModel.switchPower() }
+    )
+}
+
+@Composable
+private fun DeviceOff(currentMode: WorkMode, currentTemp: Int, onPower: () -> Unit) {
+    val drawableId = modeToIconMap[currentMode] ?: R.drawable.outline_brightness_low
+
     Row(
         Modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
@@ -28,11 +46,14 @@ fun DeviceOff(modeAsset: Painter, currentTemp: Int, onPower: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                modeAsset,
+                painter = painterResource(drawableId),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                 alpha = 0.5f,
-                modifier = Modifier.padding(all = 16.dp).width(56.dp).height(56.dp)
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .width(56.dp)
+                    .height(56.dp)
             )
             Text(
                 text = stringResource(R.string.device_off),
@@ -62,7 +83,7 @@ fun DeviceOff(modeAsset: Painter, currentTemp: Int, onPower: () -> Unit) {
 private fun Preview() {
     AppTheme {
         Surface {
-            DeviceOff(painterResource(R.drawable.ic_weather_windy), 16) {}
+            DeviceOff(WorkMode.FanOnly, 16) {}
         }
     }
 }
