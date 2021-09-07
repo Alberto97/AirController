@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -29,12 +27,11 @@ sealed class Screen(val route: String) {
     object Main: Screen("main")
     object Pair: Screen("pair")
     object DeviceControl: Screen("deviceControl/{dsn}") {
+        object Params {
+            const val dsn = "dsn"
+        }
         fun createRoute(dsn: String) = "deviceControl/$dsn"
     }
-}
-
-object DeviceControlParams {
-    const val dsn = "dsn"
 }
 
 class MainActivity : ComponentActivity() {
@@ -57,29 +54,52 @@ class MainActivity : ComponentActivity() {
             AppTheme {
                 val navController = rememberNavController()
                 NavHost(navController, startDestination = startDestination) {
-                    composable(Screen.RegionPicker.route) { RegionScreen(navController) }
-                    composable(Screen.Login.route) { LoginScreen(navController) }
-                    composable(Screen.Main.route) { DevicesScreen(navController) }
-                    composable(Screen.Pair.route) { PairScreen(navController) }
+                    composable(Screen.RegionPicker.route) {
+                        RegionScreen(
+                            openLogin = { navController.navigate(Screen.Login.route) }
+                        )
+                    }
+                    composable(Screen.Login.route) {
+                        LoginScreen(
+                            openMain = { navController.navigate(Screen.Main.route) },
+                            navigateUp = navController::navigateUp
+                        )
+                    }
+                    composable(Screen.Main.route) {
+                        DevicesScreen(
+                            openDevice = { dsn ->
+                                navController.navigate(Screen.DeviceControl.createRoute(dsn))
+                             },
+                            openLogin = { navController.navigate(Screen.Login.route) },
+                            openPair = { navController.navigate(Screen.Pair.route) },
+                            currentBackStackEntry = navController.currentBackStackEntry
+                        )
+                    }
+                    composable(Screen.Pair.route) {
+                        PairScreen(
+                            popBackStack = navController::popBackStack,
+                            previousBackStackEntry = navController.previousBackStackEntry
+                        )
+                    }
                     composable(
                         route = Screen.DeviceControl.route,
-                        deepLinks = listOf(navDeepLink { uriPattern = "${UriConstants.DEVICE_CONTROL}/{dsn}" })
-                    ) { backStackEntry -> BuildDeviceControl(backStackEntry, displayInPanel)}
+                        deepLinks = listOf(
+                            navDeepLink { uriPattern = "${UriConstants.DEVICE_CONTROL}/{dsn}" }
+                        )
+                    ) { backStackEntry ->
+                        val dsn = backStackEntry.arguments?.getString(Screen.DeviceControl.Params.dsn)
+                        requireNotNull(dsn) { "Required parameter dsn not found" }
+
+                        DeviceControlScreen(
+                            dsn = dsn,
+                            displayInPanel = displayInPanel,
+                            navigateUp = navController::navigateUp,
+                            navigateSettings = { navigateToSettings(dsn) }
+                        )
+                    }
                 }
             }
         }
-    }
-
-    @ExperimentalMaterialApi
-    @Composable
-    private fun BuildDeviceControl(backStackEntry: NavBackStackEntry, displayInPanel: Boolean) {
-        val dsn = backStackEntry.arguments?.getString(DeviceControlParams.dsn)
-        requireNotNull(dsn) { "Required parameter dsn not found" }
-        DeviceControlScreen(
-            dsn,
-            displayInPanel,
-            { navigateToSettings(dsn) }
-        )
     }
 
     private fun navigateToSettings(dsn: String) {

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavController
+import androidx.navigation.NavBackStackEntry
 import org.alberto97.hisenseair.ui.devices.DevicesStateHandleParams
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 import org.koin.androidx.compose.getViewModel
@@ -16,7 +16,8 @@ import org.koin.androidx.compose.getViewModel
 @ExperimentalMaterialApi
 @Composable
 fun PairScreen(
-    navController: NavController,
+    popBackStack: () -> Unit,
+    previousBackStackEntry: NavBackStackEntry?,
     viewModel: PairViewModel = getViewModel()
 ) {
     val scaffoldState =  rememberScaffoldState()
@@ -32,9 +33,9 @@ fun PairScreen(
         }
 
     fun back(needsRefresh: Boolean = true) {
-        val savedStateHandle = navController.previousBackStackEntry?.savedStateHandle
+        val savedStateHandle = previousBackStackEntry?.savedStateHandle
         savedStateHandle?.set(DevicesStateHandleParams.needsRefresh, needsRefresh)
-        navController.popBackStack()
+        popBackStack()
     }
 
     if (exit)

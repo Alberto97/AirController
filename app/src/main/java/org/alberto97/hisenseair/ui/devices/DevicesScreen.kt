@@ -12,11 +12,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
+import androidx.navigation.NavBackStackEntry
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.ui.FullscreenLoading
-import org.alberto97.hisenseair.ui.Screen
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.MainViewModel
 import org.koin.androidx.compose.getViewModel
@@ -28,14 +27,17 @@ object DevicesStateHandleParams {
 @ExperimentalMaterialApi
 @Composable
 fun DevicesScreen(
-    navController: NavController,
+    openDevice: (dsn: String) -> Unit,
+    openLogin: () -> Unit,
+    openPair: () -> Unit,
+    currentBackStackEntry: NavBackStackEntry?,
     viewModel: MainViewModel = getViewModel()
 ) {
     val isLoading by viewModel.isLoading.observeAsState(true)
     val devices by viewModel.devices.observeAsState(listOf())
     val loggedOut by viewModel.isLoggedOut.observeAsState(false)
 
-    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val savedStateHandle = currentBackStackEntry?.savedStateHandle
     val refreshLiveData = savedStateHandle?.getLiveData<Boolean>(DevicesStateHandleParams.needsRefresh)
 
     val needsRefresh by refreshLiveData!!.observeAsState()
@@ -45,15 +47,13 @@ fun DevicesScreen(
     }
 
     if (loggedOut)
-        navController.navigate(Screen.Login.route)
+        openLogin()
 
     DevicesScreen(
         isLoading = isLoading,
         deviceList = devices,
-        onDeviceClick = { dsn ->
-            navController.navigate(Screen.DeviceControl.createRoute(dsn))
-        },
-        onAddClick = { navController.navigate(Screen.Pair.route) }
+        onDeviceClick = openDevice,
+        onAddClick = openPair
     )
 }
 

@@ -8,10 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.repositories.Region
-import org.alberto97.hisenseair.ui.Screen
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.RegionViewModel
 import org.koin.androidx.compose.getViewModel
@@ -19,13 +17,13 @@ import org.koin.androidx.compose.getViewModel
 @ExperimentalMaterialApi
 @Composable
 fun RegionScreen(
-    navController: NavController,
+    openLogin: () -> Unit,
     viewModel: RegionViewModel = getViewModel()
 ) {
 
     fun click(region: Region) {
         viewModel.setRegion(region)
-        navController.navigate(Screen.Login.route)
+        openLogin()
     }
     
     RegionScreen(click = { click(it) })
@@ -33,7 +31,7 @@ fun RegionScreen(
 
 @ExperimentalMaterialApi
 @Composable
-fun RegionScreen(click: (region: Region) -> Unit) {
+private fun RegionScreen(click: (region: Region) -> Unit) {
 
     AppTheme {
         Scaffold(topBar = { TopAppBar (title = { Text("Pick Region") }) }) {

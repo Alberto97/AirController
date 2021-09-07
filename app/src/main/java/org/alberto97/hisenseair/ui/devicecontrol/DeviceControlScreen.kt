@@ -2,6 +2,7 @@ package org.alberto97.hisenseair.ui.devicecontrol
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -26,7 +27,8 @@ enum class DeviceControlSheet {
 fun DeviceControlScreen(
     dsn: String,
     displayInPanel: Boolean,
-    onSettingsClick: () -> Unit,
+    navigateUp: () -> Unit,
+    navigateSettings: () -> Unit,
     viewModel: DeviceViewModel = getViewModel { parametersOf(dsn) }
 ) {
     val deviceName by viewModel.deviceName.observeAsState("")
@@ -58,7 +60,8 @@ fun DeviceControlScreen(
                 TopAppBar(
                     deviceName = deviceName,
                     displayInPanel = displayInPanel,
-                    navigateToSettings = onSettingsClick
+                    navigateUp = navigateUp,
+                    navigateToSettings = navigateSettings
                 )
             }
         ) {
@@ -88,12 +91,23 @@ fun DeviceControlScreen(
 private fun TopAppBar(
     deviceName: String,
     displayInPanel: Boolean,
+    navigateUp: () -> Unit,
     navigateToSettings: () -> Unit
 ) {
 
     if (!displayInPanel) {
         TopAppBar(
             title = { Text(deviceName) },
+            navigationIcon = {
+                IconButton(
+                    onClick = navigateUp,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null,
+                    )
+                }
+            },
             actions = {
                 IconButton({ navigateToSettings() }) {
                     Icon(

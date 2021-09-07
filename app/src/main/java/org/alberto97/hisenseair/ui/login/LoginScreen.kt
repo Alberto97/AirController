@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.*
@@ -15,17 +16,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.FullscreenLoading
-import org.alberto97.hisenseair.ui.Screen
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    navigateUp: () -> Unit,
+    openMain: () -> Unit,
     viewModel: LoginViewModel = getViewModel()
 ) {
     val scaffoldState =  rememberScaffoldState()
@@ -35,10 +35,13 @@ fun LoginScreen(
         false -> LaunchedEffect(scaffoldState.snackbarHostState) {
             scaffoldState.snackbarHostState.showSnackbar("Login failed")
         }
-        true -> navController.navigate(Screen.Main.route)
+        true -> openMain()
     }
 
-    LoginScaffold(scaffoldState = scaffoldState) {
+    LoginScaffold(
+        scaffoldState = scaffoldState,
+        navigateUp = navigateUp
+    ) {
         val isLoading by viewModel.isLoading.observeAsState(false)
         LoginContent(
             isLoading = isLoading,
@@ -50,12 +53,25 @@ fun LoginScreen(
 @Composable
 private fun LoginScaffold(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navigateUp: () -> Unit,
     content: @Composable () -> Unit
 ) {
     AppTheme {
         Scaffold(
             topBar = {
-                TopAppBar({ Text(stringResource(R.string.app_name)) })
+                TopAppBar(
+                    title = { Text(stringResource(R.string.app_name)) },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = navigateUp,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                )
             },
             scaffoldState = scaffoldState
         ) {
@@ -111,7 +127,7 @@ private fun LoginContent(
 @Preview
 @Composable
 private fun ScreenPreview() {
-    LoginScaffold {
+    LoginScaffold(navigateUp = {}) {
         LoginContent(isLoading = false, onLogin = { _, _ -> })
     }
 }
