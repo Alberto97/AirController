@@ -1,7 +1,5 @@
 package org.alberto97.hisenseair.ui.pair
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -14,7 +12,6 @@ import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun PickDeviceContent(viewModel: PairViewModel) {
     PickDeviceContent(onClick = { viewModel.selectDeviceAp() })

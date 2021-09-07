@@ -1,7 +1,5 @@
 package org.alberto97.hisenseair.ui.pair
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -15,7 +13,6 @@ import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun InsertPasswordContent(viewModel: PairViewModel) {
     val ssid by viewModel.selectedSsid.collectAsState()

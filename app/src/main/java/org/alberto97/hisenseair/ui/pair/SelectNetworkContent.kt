@@ -1,7 +1,5 @@
 package org.alberto97.hisenseair.ui.pair
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,7 +20,6 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
 @ExperimentalMaterialApi
-@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun SelectNetworkContent(viewModel: PairViewModel) {
     val loading by viewModel.loading.collectAsState()

@@ -1,7 +1,6 @@
 package org.alberto97.hisenseair.ui
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -59,9 +58,7 @@ class MainActivity : ComponentActivity() {
                     composable(Routes.RegionPicker) { RegionScreen(navController) }
                     composable(Routes.Login) { LoginScreen(navController) }
                     composable(Routes.Main) { DevicesScreen(navController) }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        composable(Routes.Pair) { PairScreen(navController) }
-                    }
+                    composable(Routes.Pair) { PairScreen(navController) }
                     composable("${Routes.DeviceControl}/{dsn}",
                         deepLinks = listOf(navDeepLink { uriPattern = "${UriConstants.DEVICE_CONTROL}/{dsn}" })
                     ) { backStackEntry -> BuildDeviceControl(backStackEntry, displayInPanel)}

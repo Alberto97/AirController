@@ -1,7 +1,5 @@
 package org.alberto97.hisenseair.ui.pair
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarResult
@@ -16,7 +14,6 @@ import org.alberto97.hisenseair.viewmodels.PairViewModel
 import org.koin.androidx.compose.getViewModel
 
 @ExperimentalMaterialApi
-@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun PairScreen(
     navController: NavController,

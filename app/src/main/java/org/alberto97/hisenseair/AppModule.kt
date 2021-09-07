@@ -1,6 +1,5 @@
 package org.alberto97.hisenseair
 
-import android.os.Build
 import org.alberto97.hisenseair.ayla.AylaModuleLoader
 import org.alberto97.hisenseair.ayla.IAylaModuleLoader
 import org.alberto97.hisenseair.repositories.ISettingsRepository
@@ -25,7 +24,5 @@ val appModule = module {
     viewModel { MainViewModel(get()) }
     viewModel { SplashViewModel(get()) }
     viewModel { RegionViewModel(get(), get()) }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-        viewModel { PairViewModel(get(), get()) }
+    viewModel { PairViewModel(get(), get()) }
 }

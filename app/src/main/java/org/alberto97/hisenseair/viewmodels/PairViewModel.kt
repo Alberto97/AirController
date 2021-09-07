@@ -8,7 +8,6 @@ import android.net.NetworkRequest
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
 import android.os.PatternMatcher
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +19,6 @@ import org.alberto97.hisenseair.ayla.AylaExtensions.isOpen
 import org.alberto97.hisenseair.ayla.models.WifiScanResults
 import org.alberto97.hisenseair.repositories.IDevicePairRepository
 
-@RequiresApi(Build.VERSION_CODES.Q)
 class PairViewModel(
     app: Application,
     private val repository: IDevicePairRepository
@@ -75,6 +73,10 @@ class PairViewModel(
     }
 
     fun selectDeviceAp() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            throw Exception("Device pairing is unsupported on < Q")
+        }
+
         val specifier = WifiNetworkSpecifier.Builder()
             .setSsidPattern(PatternMatcher(pattern, PatternMatcher.PATTERN_ADVANCED_GLOB))
             .build()
