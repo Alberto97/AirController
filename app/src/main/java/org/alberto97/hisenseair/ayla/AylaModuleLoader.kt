@@ -7,6 +7,7 @@ import org.koin.core.context.loadKoinModules
 
 interface IAylaModuleLoader {
     fun load()
+    fun load(region: Region)
 }
 
 class AylaModuleLoader(private val settings: ISettingsRepository) : IAylaModuleLoader {
@@ -21,7 +22,7 @@ class AylaModuleLoader(private val settings: ISettingsRepository) : IAylaModuleL
         load(region)
     }
 
-    private fun load(region: Region) {
+    override fun load(region: Region) {
         val module = map[region]
         if (module != null) {
             val list = listOf(module, aylaModule)

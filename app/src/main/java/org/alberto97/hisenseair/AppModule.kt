@@ -24,7 +24,7 @@ val appModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }
     viewModel { SplashViewModel(get()) }
-    viewModel { RegionViewModel(get()) }
+    viewModel { RegionViewModel(get(), get()) }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
         viewModel { PairViewModel(get(), get()) }
