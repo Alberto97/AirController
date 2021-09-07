@@ -23,12 +23,14 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.SplashViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-object Routes {
-    const val RegionPicker = "regionPicker"
-    const val Login = "login"
-    const val Main = "main"
-    const val Pair = "pair"
-    const val DeviceControl = "deviceControl"
+sealed class Screen(val route: String) {
+    object RegionPicker: Screen("regionPicker")
+    object Login: Screen("login")
+    object Main: Screen("main")
+    object Pair: Screen("pair")
+    object DeviceControl: Screen("deviceControl/{dsn}") {
+        fun createRoute(dsn: String) = "deviceControl/$dsn"
+    }
 }
 
 object DeviceControlParams {
@@ -46,20 +48,21 @@ class MainActivity : ComponentActivity() {
         val displayInPanel = intent.getBooleanExtra(UIConstants.EXTRA_USE_PANEL, false)
 
         val startDestination = if (viewModel.isLoggedIn()) {
-            Routes.Main
+            Screen.Main.route
         } else {
-            Routes.RegionPicker
+            Screen.RegionPicker.route
         }
 
         setContent {
             AppTheme {
                 val navController = rememberNavController()
                 NavHost(navController, startDestination = startDestination) {
-                    composable(Routes.RegionPicker) { RegionScreen(navController) }
-                    composable(Routes.Login) { LoginScreen(navController) }
-                    composable(Routes.Main) { DevicesScreen(navController) }
-                    composable(Routes.Pair) { PairScreen(navController) }
-                    composable("${Routes.DeviceControl}/{dsn}",
+                    composable(Screen.RegionPicker.route) { RegionScreen(navController) }
+                    composable(Screen.Login.route) { LoginScreen(navController) }
+                    composable(Screen.Main.route) { DevicesScreen(navController) }
+                    composable(Screen.Pair.route) { PairScreen(navController) }
+                    composable(
+                        route = Screen.DeviceControl.route,
                         deepLinks = listOf(navDeepLink { uriPattern = "${UriConstants.DEVICE_CONTROL}/{dsn}" })
                     ) { backStackEntry -> BuildDeviceControl(backStackEntry, displayInPanel)}
                 }
@@ -70,8 +73,8 @@ class MainActivity : ComponentActivity() {
     @ExperimentalMaterialApi
     @Composable
     private fun BuildDeviceControl(backStackEntry: NavBackStackEntry, displayInPanel: Boolean) {
-        val dsn = backStackEntry.arguments?.getString(DeviceControlParams.dsn)!!
-
+        val dsn = backStackEntry.arguments?.getString(DeviceControlParams.dsn)
+        requireNotNull(dsn) { "Required parameter dsn not found" }
         DeviceControlScreen(
             dsn,
             displayInPanel,

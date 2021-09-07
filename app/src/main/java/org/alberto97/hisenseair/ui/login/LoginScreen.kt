@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.FullscreenLoading
-import org.alberto97.hisenseair.ui.Routes
+import org.alberto97.hisenseair.ui.Screen
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
 import org.koin.androidx.compose.getViewModel
@@ -35,7 +35,7 @@ fun LoginScreen(
         false -> LaunchedEffect(scaffoldState.snackbarHostState) {
             scaffoldState.snackbarHostState.showSnackbar("Login failed")
         }
-        true -> navController.navigate(Routes.Main)
+        true -> navController.navigate(Screen.Main.route)
     }
 
     LoginScaffold(scaffoldState = scaffoldState) {

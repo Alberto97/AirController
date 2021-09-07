@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.repositories.Region
-import org.alberto97.hisenseair.ui.Routes
+import org.alberto97.hisenseair.ui.Screen
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.RegionViewModel
 import org.koin.androidx.compose.getViewModel
@@ -25,7 +25,7 @@ fun RegionScreen(
 
     fun click(region: Region) {
         viewModel.setRegion(region)
-        navController.navigate(Routes.Login)
+        navController.navigate(Screen.Login.route)
     }
     
     RegionScreen(click = { click(it) })

@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.ui.FullscreenLoading
-import org.alberto97.hisenseair.ui.Routes
+import org.alberto97.hisenseair.ui.Screen
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.MainViewModel
 import org.koin.androidx.compose.getViewModel
@@ -45,15 +45,15 @@ fun DevicesScreen(
     }
 
     if (loggedOut)
-        navController.navigate(Routes.Login)
+        navController.navigate(Screen.Login.route)
 
     DevicesScreen(
         isLoading = isLoading,
         deviceList = devices,
         onDeviceClick = { dsn ->
-            navController.navigate("${Routes.DeviceControl}/$dsn")
+            navController.navigate(Screen.DeviceControl.createRoute(dsn))
         },
-        onAddClick = { navController.navigate(Routes.Pair) }
+        onAddClick = { navController.navigate(Screen.Pair.route) }
     )
 }
 
