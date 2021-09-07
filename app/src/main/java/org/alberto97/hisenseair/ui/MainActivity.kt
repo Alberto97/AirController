@@ -71,7 +71,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun BuildDeviceControl(backStackEntry: NavBackStackEntry, displayInPanel: Boolean) {
         val dsn = backStackEntry.arguments?.getString(DeviceControlParams.dsn)!!
-            .replace("{dsn}/", "") // AAC Navigation bug?
 
         DeviceControlScreen(
             dsn,
