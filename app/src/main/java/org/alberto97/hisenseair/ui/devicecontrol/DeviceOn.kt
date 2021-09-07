@@ -143,6 +143,7 @@ private fun TempControl(
         )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun AmbientTemp(roomTemp: Int?) {
     PreferenceDescription(
