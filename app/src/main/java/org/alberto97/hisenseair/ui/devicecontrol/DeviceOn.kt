@@ -17,16 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.features.*
-import org.alberto97.hisenseair.ui.preferences.Preference
-import org.alberto97.hisenseair.ui.preferences.PreferenceCategory
-import org.alberto97.hisenseair.ui.preferences.PreferenceDescription
-import org.alberto97.hisenseair.ui.preferences.SwitchPreference
+import org.alberto97.hisenseair.ui.preferences.*
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 
@@ -148,7 +143,7 @@ private fun TempControl(
 private fun AmbientTemp(roomTemp: Int?) {
     PreferenceDescription(
         text = stringResource(R.string.device_ambient_temp, roomTemp ?: 0),
-        icon = rememberVectorPainter(Icons.Outlined.Thermostat),
+        icon = { PreferenceIcon(Icons.Outlined.Thermostat) },
     )
 }
 
@@ -161,7 +156,7 @@ private fun Mode(workMode: WorkMode?, onClick: (value: DeviceControlSheet) -> Un
     Preference(
         title = "Mode",
         summary = stringResource(resId),
-        icon = painterResource(drawableId),
+        icon = { PreferenceIcon(drawableId) },
         onClick = { onClick(DeviceControlSheet.Mode) }
     )
 }
@@ -174,7 +169,7 @@ private fun FanSpeed(fanSpeed: FanSpeed?, onClick: (value: DeviceControlSheet) -
         Preference(
             title = "Fan speed",
             summary = stringResource(resId),
-            icon = painterResource(R.drawable.ic_fan),
+            icon = { PreferenceIcon(R.drawable.ic_fan) },
             onClick = { onClick(DeviceControlSheet.FanSpeed) }
         )
     }
@@ -191,7 +186,7 @@ private fun SleepMode(
         Preference(
             title = "Sleep mode",
             summary = stringResource(resId),
-            icon = painterResource(R.drawable.ic_nights_stay),
+            icon = { PreferenceIcon(R.drawable.ic_nights_stay) },
             onClick = { onClick(DeviceControlSheet.Sleep) }
         )
     }
@@ -204,7 +199,7 @@ private fun Power(onOffClick: () -> Unit) {
         title = "Power",
         summary = "Turn off the device",
         checked = true,
-        icon = rememberVectorPainter(Icons.Rounded.PowerSettingsNew),
+        icon = { PreferenceIcon(Icons.Rounded.PowerSettingsNew) },
         onCheckedChange = { onOffClick() }
     )
 }
@@ -225,7 +220,7 @@ private fun AirFlow(
             title = "Horizontal",
             checked = horizontal,
             onCheckedChange = { switchHorizontal() },
-            icon = rememberVectorPainter(Icons.Rounded.SwapHoriz)
+            icon = { PreferenceIcon(Icons.Rounded.SwapHoriz) }
         )
 
     if (vertical != null)
@@ -233,7 +228,7 @@ private fun AirFlow(
             title = "Vertical",
             checked = vertical,
             onCheckedChange = { switchVertical() },
-            icon = rememberVectorPainter(Icons.Rounded.SwapVert)
+            icon = { PreferenceIcon(Icons.Rounded.SwapVert) }
         )
 }
 
@@ -245,7 +240,7 @@ private fun Backlight(backlight: Boolean?, switchBacklight: () -> Unit) {
             title = "Dimmer",
             checked = backlight,
             onCheckedChange = { switchBacklight() },
-            icon = rememberVectorPainter(Icons.Outlined.Lightbulb)
+            icon = { PreferenceIcon(Icons.Outlined.Lightbulb) }
         )
 }
 
@@ -257,7 +252,7 @@ private fun Eco(eco: Boolean?, switchEco: () -> Unit) {
             title = "Eco",
             checked = eco,
             onCheckedChange = { switchEco() },
-            icon = painterResource(R.drawable.ic_eco)
+            icon = { PreferenceIcon(R.drawable.ic_eco) }
         )
 }
 
@@ -269,7 +264,7 @@ private fun Quiet(quiet: Boolean?, switchQuiet: () -> Unit) {
             title = "Quiet",
             checked = quiet,
             onCheckedChange = { switchQuiet() },
-            icon = rememberVectorPainter(Icons.Outlined.HearingDisabled)
+            icon = { PreferenceIcon(Icons.Outlined.HearingDisabled) }
         )
 }
 
@@ -281,7 +276,7 @@ private fun Boost(boost: Boolean?, switchBoost: () -> Unit) {
             title = "Super",
             checked = boost,
             onCheckedChange = { switchBoost() },
-            icon = painterResource(R.drawable.ic_fan_plus)
+            icon = { PreferenceIcon(R.drawable.ic_fan_plus) }
         )
 }
 

@@ -7,8 +7,6 @@ import androidx.compose.material.Switch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
@@ -19,7 +17,7 @@ fun SwitchPreference(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     summary: String? = null,
-    icon: Painter? = null,
+    icon: @Composable (() -> Unit)? = null,
 ) {
     Preference(
         title = title,
@@ -45,7 +43,7 @@ private fun Preview() {
                     true,
                     {},
                     "Turn off the device",
-                    rememberVectorPainter(Icons.Rounded.PowerSettingsNew)
+                    { PreferenceIcon(Icons.Rounded.PowerSettingsNew) }
                 )
             }
         }

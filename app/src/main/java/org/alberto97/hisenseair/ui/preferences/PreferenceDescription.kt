@@ -7,8 +7,6 @@ import androidx.compose.material.icons.outlined.Thermostat
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.ui.theme.AppTheme
@@ -16,11 +14,11 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 @ExperimentalMaterialApi
 @Composable
 fun PreferenceDescription(
-    icon: Painter? = null,
+    icon: @Composable (() -> Unit)? = null,
     text: String
 ) {
     ListItem(
-        icon = { RenderIcon(icon) },
+        icon = icon,
         modifier = Modifier.widthIn(min = 72.dp)
     ) {
         Text(
@@ -36,7 +34,10 @@ fun PreferenceDescription(
 private fun Preview() {
     AppTheme {
         Surface {
-            PreferenceDescription(rememberVectorPainter(Icons.Outlined.Thermostat), "Test")
+            PreferenceDescription(
+                icon = {PreferenceIcon(Icons.Outlined.Thermostat)},
+                text = "Test"
+            )
         }
     }
 }
