@@ -1,30 +1,36 @@
 package org.alberto97.hisenseair.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 
+enum class LoginState {
+    None,
+    Loading,
+    Success,
+    Error
+}
+
 class LoginViewModel(private val repo: IAuthenticationRepository) : ViewModel() {
 
-    val isLoading: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
 
-    val isAuthenticated: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _state = MutableStateFlow(LoginState.None)
+    val state = _state.asStateFlow()
 
     fun login(email: String, password: String) {
-        isLoading.value = true
+        _state.value = LoginState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val success = repo.login(email, password)
             withContext(Dispatchers.Main) {
-                isAuthenticated.value = success
-                isLoading.value = false
+                _state.value = if (success)
+                    LoginState.Success
+                else
+                    LoginState.Error
             }
         }
     }

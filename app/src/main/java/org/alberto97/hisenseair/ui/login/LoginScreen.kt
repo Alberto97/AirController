@@ -9,7 +9,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
+import org.alberto97.hisenseair.viewmodels.LoginState
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
 import org.koin.androidx.compose.getViewModel
 
@@ -30,21 +30,22 @@ fun LoginScreen(
 ) {
     val scaffoldState =  rememberScaffoldState()
 
-    val isAuthenticated by viewModel.isAuthenticated.observeAsState()
-    when (isAuthenticated) {
-        false -> LaunchedEffect(scaffoldState.snackbarHostState) {
-            scaffoldState.snackbarHostState.showSnackbar("Login failed")
+    val state by viewModel.state.collectAsState()
+    LaunchedEffect(state) {
+        when (state) {
+            LoginState.Success -> openMain()
+            LoginState.Error ->
+                scaffoldState.snackbarHostState.showSnackbar("Login failed")
+            else -> {}
         }
-        true -> openMain()
     }
 
     LoginScaffold(
         scaffoldState = scaffoldState,
         navigateUp = navigateUp
     ) {
-        val isLoading by viewModel.isLoading.observeAsState(false)
         LoginContent(
-            isLoading = isLoading,
+            isLoading = state == LoginState.Loading,
             onLogin = { email, password -> viewModel.login(email, password) }
         )
     }
@@ -92,7 +93,9 @@ private fun LoginContent(
         FullscreenLoading()
     else
         Column(
-            Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             LoginTextField(
                 value = email,
