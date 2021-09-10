@@ -24,7 +24,7 @@ class DevicePairRepository(
             val resp = pairApi.status()
             ResultWrapper.Success(resp)
         } catch (ex: Exception) {
-            Log.e(LOG_TAG, ex.toString())
+            Log.e(LOG_TAG, ex.stackTraceToString())
             ResultWrapper.Error("Cannot retrieve device status")
         }
     }
@@ -44,7 +44,7 @@ class DevicePairRepository(
             val results = pairApi.wifiScanResults()
             ResultWrapper.Success(results.wifiScan.results)
         } catch (ex: Exception) {
-            Log.e(LOG_TAG, ex.toString())
+            Log.e(LOG_TAG, ex.stackTraceToString())
             ResultWrapper.Error("Cannot retrieve network scan result")
         }
     }
@@ -65,7 +65,7 @@ class DevicePairRepository(
         try {
             aylaApi.connected(dsn, setupToken)
         } catch (ex: Exception) {
-            Log.e(LOG_TAG, ex.toString())
+            Log.e(LOG_TAG, ex.stackTraceToString())
             return ResultWrapper.Error("Cannot notify the server a new device has been connected")
         }
 
@@ -76,7 +76,7 @@ class DevicePairRepository(
             val resp = aylaApi.postDevice(wrapper)
             ResultWrapper.Success(resp.device)
         } catch (ex: Exception) {
-            Log.e(LOG_TAG, ex.toString())
+            Log.e(LOG_TAG, ex.stackTraceToString())
             ResultWrapper.Error("Cannot pair device to the account")
         }
     }
