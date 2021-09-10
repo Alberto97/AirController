@@ -6,18 +6,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import androidx.navigation.navigation
 import org.alberto97.hisenseair.UIConstants
 import org.alberto97.hisenseair.UriConstants
+import org.alberto97.hisenseair.koin.getNavGraphViewModel
 import org.alberto97.hisenseair.ui.devicecontrol.DeviceControlScreen
 import org.alberto97.hisenseair.ui.devices.DevicesScreen
 import org.alberto97.hisenseair.ui.login.LoginScreen
-import org.alberto97.hisenseair.ui.pair.PairScreen
+import org.alberto97.hisenseair.ui.pair.*
 import org.alberto97.hisenseair.ui.region.RegionScreen
 import org.alberto97.hisenseair.ui.theme.AppTheme
+import org.alberto97.hisenseair.viewmodels.PairViewModel
 import org.alberto97.hisenseair.viewmodels.SplashViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,6 +37,14 @@ sealed class Screen(val route: String) {
         }
         fun createRoute(dsn: String) = "deviceControl/$dsn"
     }
+}
+
+sealed class PairScreen(val route: String) {
+    object PickDevice: PairScreen("pickDevice")
+    object SelectNetwork: PairScreen("selectNetwork")
+    object InsertPassword: PairScreen("insertPassword")
+    object Connecting: PairScreen("connecting")
+    object DevicePaired: PairScreen("devicePaired")
 }
 
 class MainActivity : ComponentActivity() {
@@ -75,11 +88,71 @@ class MainActivity : ComponentActivity() {
                             currentBackStackEntry = navController.currentBackStackEntry
                         )
                     }
-                    composable(Screen.Pair.route) {
-                        PairScreen(
-                            popBackStack = navController::popBackStack,
-                            previousBackStackEntry = navController.previousBackStackEntry
-                        )
+                    navigation(
+                        route = Screen.Pair.route,
+                        startDestination = PairScreen.PickDevice.route
+                    ) {
+                        composable(PairScreen.PickDevice.route) {
+                            val viewModel: PairViewModel = getNavGraphViewModel(
+                                backStackEntry = navController.getBackStackEntry(Screen.Pair.route)
+                            )
+                            PickDeviceScreen(
+                                viewModel = viewModel,
+                                exit = navController::popBackStack,
+                                navigateNetwork = {
+                                    navController.navigate(PairScreen.SelectNetwork.route)
+                                })
+                        }
+                        composable(PairScreen.SelectNetwork.route) {
+                            val viewModel: PairViewModel = getNavGraphViewModel(
+                                backStackEntry = navController.getBackStackEntry(Screen.Pair.route)
+                            )
+                            SelectNetworkScreen(
+                                viewModel = viewModel,
+                                exit = navController::popBackStack,
+                                navigatePassword = {
+                                    navController.navigate(PairScreen.InsertPassword.route)
+                                })
+                        }
+                        composable(PairScreen.InsertPassword.route) {
+                            val viewModel: PairViewModel = getNavGraphViewModel(
+                                backStackEntry = navController.getBackStackEntry(Screen.Pair.route)
+                            )
+                            InsertPasswordScreen(
+                                viewModel = viewModel,
+                                exit = navController::popBackStack,
+                                navigateConnecting = {
+                                    navController.navigate(PairScreen.Connecting.route) {
+                                        popUpTo(PairScreen.PickDevice.route)
+                                }
+                            })
+                        }
+                        composable(PairScreen.Connecting.route) {
+                            val viewModel: PairViewModel = getNavGraphViewModel(
+                                backStackEntry = navController.getBackStackEntry(Screen.Pair.route)
+                            )
+                            ConnectingScreen(
+                                viewModel = viewModel,
+                                exit = navController::popBackStack,
+                                navigatePaired = {
+                                    navController.navigate(PairScreen.DevicePaired.route) {
+                                        popUpTo(PairScreen.PickDevice.route) { inclusive = true }
+                                }
+                            })
+                        }
+                        composable(PairScreen.DevicePaired.route) {
+                            // https://stackoverflow.com/questions/68738304/jetpack-compose-navigation-problems-share-viewmodel-in-nested-graph
+                            if (it.lifecycleIsResumed()) {
+                                val viewModel: PairViewModel = getNavGraphViewModel(
+                                    backStackEntry = navController.getBackStackEntry(Screen.Pair.route)
+                                )
+                                DevicePairedScreen(
+                                    viewModel = viewModel,
+                                    previousBackStackEntry = navController.previousBackStackEntry,
+                                    finish = navController::popBackStack
+                                )
+                            }
+                        }
                     }
                     composable(
                         route = Screen.DeviceControl.route,
@@ -108,4 +181,12 @@ class MainActivity : ComponentActivity() {
         intent.putExtras(bundle)
         startActivity(intent)
     }
+
+    /**
+     * If the lifecycle is not resumed it means this NavBackStackEntry already processed a nav event.
+     *
+     * This is used to de-duplicate navigation events.
+     */
+    private fun NavBackStackEntry.lifecycleIsResumed() =
+        this.lifecycle.currentState == Lifecycle.State.RESUMED
 }

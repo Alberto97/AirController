@@ -17,28 +17,26 @@ class PairViewModel(
     private val connManager: IPairConnectivityManager
 ) : ViewModel() {
 
-    enum class Steps {
+    enum class NavAction {
         PickDevice,
         SelectNetwork,
         InsertPassword,
         Connecting,
-        DevicePaired
+        DevicePaired,
+        Exit
     }
 
     private val setupToken = getRandomString(8)
     private var dsn = ""
 
-    private val _currentStep = MutableStateFlow(Steps.PickDevice)
-    val currentStep = _currentStep.asStateFlow()
+    private val _navAction = MutableStateFlow(NavAction.PickDevice)
+    val navAction = _navAction.asStateFlow()
 
     private val _loading = MutableStateFlow(true)
     val loading = _loading.asStateFlow()
 
-    private val _messages = MutableStateFlow("")
-    val messages = _messages.asStateFlow()
-
-    private val _exit = MutableStateFlow(false)
-    val exit = _exit.asStateFlow()
+    private val _message = MutableStateFlow("")
+    val message = _message.asStateFlow()
 
     private val _scanResults = MutableStateFlow(listOf<WifiScanResults.WifiScanResult>())
     val scanResults = _scanResults.asStateFlow()
@@ -60,7 +58,7 @@ class PairViewModel(
 
             getDsn()
 
-            _currentStep.value = Steps.SelectNetwork
+            _navAction.value = NavAction.SelectNetwork
 
             scanNetwork()
         }
@@ -93,7 +91,7 @@ class PairViewModel(
         if (network.isOpen()) {
             connectDeviceToWifi()
         } else {
-            _currentStep.value = Steps.InsertPassword
+            _navAction.value = NavAction.InsertPassword
         }
     }
 
@@ -103,12 +101,12 @@ class PairViewModel(
             val result = repository.connect(_selectedSsid.value, password, setupToken)
             connManager.disconnectDevice()
             if (result.data != null) {
-                _currentStep.value = Steps.Connecting
+                _navAction.value = NavAction.Connecting
                 connManager.connectWifi()
                 pairToAccount()
                 connManager.disconnectWifi()
             } else if (result.message != null) {
-                _messages.value = result.message
+                _message.value = result.message
             }
 
             // TODO: Poll to stop ap?
@@ -120,14 +118,14 @@ class PairViewModel(
         val device = repository.pair(dsn, setupToken)
         if (device.data != null) {
             _deviceName.value = device.data.productName
-            _currentStep.value = Steps.DevicePaired
+            _navAction.value = NavAction.DevicePaired
         } else if (device.message != null) {
             handleInternetFailure(device.message)
         }
     }
 
     fun clearMessage() {
-        _messages.value = ""
+        _message.value = ""
     }
 
     @Suppress("SameParameterValue")
@@ -139,14 +137,14 @@ class PairViewModel(
     }
 
     private fun handleFailure(message: String) {
-        _messages.value = message
+        _message.value = message
         connManager.disconnectDevice()
-        _exit.value = true
+        _navAction.value = NavAction.Exit
     }
 
     private fun handleInternetFailure(message: String) {
-        _messages.value = message
+        _message.value = message
         connManager.disconnectWifi()
-        _exit.value = true
+        _navAction.value = NavAction.Exit
     }
 }

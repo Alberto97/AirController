@@ -1,32 +1,50 @@
 package org.alberto97.hisenseair.ui.pair
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ayla.models.WifiScanResults
 import org.alberto97.hisenseair.ui.FullscreenLoading
+import org.alberto97.hisenseair.ui.preferences.PreferenceIcon
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
 @ExperimentalMaterialApi
 @Composable
-fun SelectNetworkContent(viewModel: PairViewModel) {
+fun SelectNetworkScreen(
+    viewModel: PairViewModel,
+    navigatePassword: () -> Unit,
+    exit: () -> Unit
+) {
+    val message by viewModel.message.collectAsState()
     val loading by viewModel.loading.collectAsState()
     val results by viewModel.scanResults.collectAsState()
+    val step by viewModel.navAction.collectAsState(PairViewModel.NavAction.SelectNetwork)
 
-    SelectNetworkContent(
+    LaunchedEffect(step) {
+        when (step) {
+            PairViewModel.NavAction.InsertPassword  -> navigatePassword()
+            PairViewModel.NavAction.Exit -> exit()
+            else -> {}
+        }
+    }
+
+    SelectNetworkScreen(
         loading = loading,
+        message = message,
+        onClearMessage = { viewModel.clearMessage() },
         list = results,
         onClick = { viewModel.setSelectedSsid(it) }
     )
@@ -34,33 +52,19 @@ fun SelectNetworkContent(viewModel: PairViewModel) {
 
 @ExperimentalMaterialApi
 @Composable
-private fun SelectNetworkContent(
+private fun SelectNetworkScreen(
+    message: String,
+    onClearMessage: () -> Unit,
     loading: Boolean,
     list: List<WifiScanResults.WifiScanResult>,
     onClick: (network: WifiScanResults.WifiScanResult) -> Unit
 ) {
-
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(8.dp)
+    PairScaffold(
+        title = "Choose your Wi-Fi network",
+        subtitle = "Select the network the device will connect to",
+        message = message,
+        onClearMessage = onClearMessage
     ) {
-        Text(
-            "Choose your Wi-Fi network",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        Text(
-            "Select the network the device will connect to",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-        )
         Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
         if (loading)
@@ -96,12 +100,8 @@ private fun StrengthIcon(bars: Int) {
         2 -> R.drawable.wifi_strength_3
         else -> R.drawable.wifi_strength_4
     }
-    Icon(
+    PreferenceIcon(
         painterResource(resource),
-        contentDescription = null,
-        modifier = Modifier
-            .size(40.dp)
-            .padding(5.dp)
     )
 }
 
@@ -111,7 +111,8 @@ private fun StrengthIcon(bars: Int) {
 private fun Preview() {
     AppTheme {
         Surface {
-            SelectNetworkContent(
+            SelectNetworkScreen(
+                "", {},
                 false,
                 listOf(
                     WifiScanResults.WifiScanResult("Access Point", "", 1, -54, 3, "WPA2 Personal AES", ""),
@@ -130,7 +131,8 @@ private fun Preview() {
 private fun PreviewLoading() {
     AppTheme {
         Surface {
-            SelectNetworkContent(
+            SelectNetworkScreen(
+                "", {},
                 true,
                 listOf()
             ) {}

@@ -8,42 +8,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
+import org.alberto97.hisenseair.ui.devices.DevicesStateHandleParams
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
 @Composable
-fun DevicePairedContent(viewModel: PairViewModel, onClick: () -> Unit) {
+fun DevicePairedScreen(
+    previousBackStackEntry: NavBackStackEntry?,
+    finish: () -> Unit,
+    viewModel: PairViewModel
+) {
     val deviceName by viewModel.deviceName.collectAsState()
 
-    DevicePairedContent(onClick, deviceName)
+    DevicePairedScreen(
+        deviceName = deviceName,
+        onClick = {
+            val savedStateHandle = previousBackStackEntry?.savedStateHandle
+            savedStateHandle?.set(DevicesStateHandleParams.needsRefresh, true)
+            finish()
+        }
+    )
 }
 
 @Composable
-private fun DevicePairedContent(onClick: () -> Unit, deviceName: String) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(8.dp)) {
-
-        Text(
-            "Device connected successfully",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        Text(deviceName,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-        )
-
+private fun DevicePairedScreen(deviceName: String, onClick: () -> Unit) {
+    PairScaffold(
+        title = "Device connected successfully",
+        subtitle = deviceName
+    ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxSize()
@@ -63,7 +58,7 @@ private fun DevicePairedContent(onClick: () -> Unit, deviceName: String) {
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text("Exit")
+                Text("Done")
             }
         }
     }
@@ -74,7 +69,7 @@ private fun DevicePairedContent(onClick: () -> Unit, deviceName: String) {
 private fun Preview() {
     AppTheme {
         Surface{
-            DevicePairedContent({}, "Hi-Smart-serialNumber")
+            DevicePairedScreen("Hi-Smart-serialNumber", {})
         }
     }
 }

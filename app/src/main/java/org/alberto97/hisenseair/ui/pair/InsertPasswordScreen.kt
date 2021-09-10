@@ -1,12 +1,14 @@
 package org.alberto97.hisenseair.ui.pair
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.ui.FullscreenLoading
@@ -14,41 +16,47 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
 @Composable
-fun InsertPasswordContent(viewModel: PairViewModel) {
+fun InsertPasswordScreen(
+    viewModel: PairViewModel,
+    navigateConnecting: () -> Unit,
+    exit: () -> Unit
+) {
+
+    val message by viewModel.message.collectAsState()
     val ssid by viewModel.selectedSsid.collectAsState()
     val loading by viewModel.loading.collectAsState()
+    val step by viewModel.navAction.collectAsState(PairViewModel.NavAction.InsertPassword)
 
-    InsertPasswordContent(ssid, loading, onClick = {viewModel.connectDeviceToWifi(it)})
+    LaunchedEffect(step) {
+        when (step) {
+            PairViewModel.NavAction.Connecting  -> navigateConnecting()
+            PairViewModel.NavAction.Exit -> exit()
+            else -> {}
+        }
+    }
+
+    InsertPasswordScreen(
+        message = message,
+        onClearMessage = { viewModel.clearMessage() },
+        ssid = ssid,
+        loading = loading,
+        onClick = {viewModel.connectDeviceToWifi(it)})
 }
 
 @Composable
-private fun InsertPasswordContent(
+private fun InsertPasswordScreen(
+    message: String,
+    onClearMessage: () -> Unit,
     ssid: String,
     loading: Boolean,
     onClick: (password: String) -> Unit
 ) {
-
-
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(8.dp)) {
-        Text(
-            "Enter Wi-Fi password",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        Text(
-            ssid,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-        )
+    PairScaffold(
+        title = "Enter Wi-Fi password",
+        subtitle = ssid,
+        message = message,
+        onClearMessage = onClearMessage
+    ) {
         Spacer(Modifier.padding(18.dp))
 
         if (loading)
@@ -82,7 +90,7 @@ private fun Content(onClick: (password: String) -> Unit) {
 private fun Preview() {
     AppTheme {
         Surface {
-            InsertPasswordContent("Test", false, {})
+            InsertPasswordScreen("", {}, "Test", false, {})
         }
     }
 }
@@ -92,7 +100,7 @@ private fun Preview() {
 private fun PreviewLoading() {
     AppTheme {
         Surface {
-            InsertPasswordContent("Test", true, {})
+            InsertPasswordScreen("", {}, "Test", true, {})
         }
     }
 }

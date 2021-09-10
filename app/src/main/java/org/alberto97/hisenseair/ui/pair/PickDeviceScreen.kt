@@ -3,9 +3,11 @@ package org.alberto97.hisenseair.ui.pair
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
@@ -13,33 +15,41 @@ import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
 @Composable
-fun PickDeviceContent(viewModel: PairViewModel) {
-    PickDeviceContent(onClick = { viewModel.selectDeviceAp() })
+fun PickDeviceScreen(
+    viewModel: PairViewModel,
+    navigateNetwork: () -> Unit,
+    exit: () -> Unit
+) {
+    val message by viewModel.message.collectAsState()
+    val step by viewModel.navAction.collectAsState(PairViewModel.NavAction.PickDevice)
+
+    LaunchedEffect(step) {
+        when (step) {
+            PairViewModel.NavAction.SelectNetwork  -> navigateNetwork()
+            PairViewModel.NavAction.Exit -> exit()
+            else -> {}
+        }
+    }
+
+    PickDeviceScreen(
+        message = message,
+        onClearMessage = { viewModel.clearMessage() },
+        onClick = { viewModel.selectDeviceAp() }
+    )
 }
 
 @Composable
-private fun PickDeviceContent(onClick: () -> Unit) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(8.dp)
+private fun PickDeviceScreen(
+    message: String,
+    onClearMessage: () -> Unit,
+    onClick: () -> Unit
+) {
+    PairScaffold(
+        title = "Select the device you wish to connect",
+        subtitle = "Enable pairing on your device by pressing 6 times on the remote control and wait until the display shows \"77\"",
+        message = message,
+        onClearMessage = onClearMessage
     ) {
-
-            Text(
-                "Select the device you wish to connect",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
-            Text("Enable pairing on your device by pressing 6 times on the remote control and wait until the display shows \"77\"",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-            )
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxSize()
@@ -63,7 +73,6 @@ private fun PickDeviceContent(onClick: () -> Unit) {
                 Text("Next")
             }
         }
-
     }
 }
 
@@ -72,7 +81,7 @@ private fun PickDeviceContent(onClick: () -> Unit) {
 private fun Preview() {
     AppTheme {
         Surface {
-            PickDeviceContent {}
+            PickDeviceScreen("", {}, {})
         }
     }
 }
