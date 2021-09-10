@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.ui
+package org.alberto97.hisenseair.ui.devicesettings
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
