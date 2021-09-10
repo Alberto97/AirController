@@ -49,7 +49,6 @@ sealed class PairScreen(val route: String) {
 @Composable
 fun NavGraph(
     displayInPanel: Boolean,
-    openDeviceSettings: (dsn: String) -> Unit,
     startDestination: String = Screen.Login.route,
     navController: NavHostController = rememberNavController(),
 ) {

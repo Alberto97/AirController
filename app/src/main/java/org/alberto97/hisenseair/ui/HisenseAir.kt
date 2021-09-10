@@ -10,7 +10,6 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun HisenseAir(
     displayInPanel: Boolean,
-    openDeviceSettings: (dsn: String) -> Unit,
     viewModel: SplashViewModel = getViewModel()
 ) {
     val startDestination = if (viewModel.isLoggedIn()) {
@@ -22,7 +21,6 @@ fun HisenseAir(
     AppTheme {
         NavGraph(
             displayInPanel = displayInPanel,
-            openDeviceSettings = openDeviceSettings,
             startDestination = startDestination
         )
     }
