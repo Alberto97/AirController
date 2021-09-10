@@ -4,12 +4,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.alberto97.hisenseair.ui.common.HiSnackbar
+import org.alberto97.hisenseair.ui.common.AppScaffold
 
 @Composable
 fun PairScaffold(
@@ -20,13 +23,11 @@ fun PairScaffold(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     content: @Composable () -> Unit
 ) {
-    HiSnackbar(
-        scaffoldState = scaffoldState,
+    AppScaffold(
         message = message,
-        onClearMessage = onClearMessage
-    )
-
-    Scaffold(scaffoldState = scaffoldState) {
+        clearMessage = onClearMessage,
+        scaffoldState = scaffoldState
+    ) {
         Column(
             Modifier
                 .fillMaxSize()
