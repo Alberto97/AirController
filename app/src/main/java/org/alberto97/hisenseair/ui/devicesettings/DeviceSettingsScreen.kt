@@ -5,7 +5,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavBackStackEntry
@@ -29,12 +28,12 @@ fun DeviceSettingsScreen(
     homeBackStackEntry: NavBackStackEntry,
     viewModel: DevicePreferenceViewModel = getViewModel { parametersOf(dsn) }
 ) {
-    val deviceName by viewModel.deviceName.observeAsState("")
-    val popToHome by viewModel.popToHome.observeAsState(false)
-    val usesCelsius by viewModel.useCelsius.observeAsState(true)
-    val macAddress by viewModel.mac.observeAsState("")
-    val ipAddress by viewModel.ip.observeAsState("")
-    val network by viewModel.ssid.observeAsState("")
+    val deviceName by viewModel.deviceName.collectAsState()
+    val popToHome by viewModel.popToHome.collectAsState()
+    val usesCelsius by viewModel.useCelsius.collectAsState()
+    val macAddress by viewModel.mac.collectAsState()
+    val ipAddress by viewModel.ip.collectAsState()
+    val network by viewModel.ssid.collectAsState()
 
     LaunchedEffect(popToHome) {
         if (popToHome) {

@@ -1,10 +1,12 @@
 package org.alberto97.hisenseair.viewmodels
 
 import android.net.Uri
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
@@ -15,28 +17,23 @@ class DevicePreferenceViewModel(
     private val deviceControl: IDeviceControlRepository
 ) : ViewModel() {
 
-    val deviceName: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
+    private val _deviceName = MutableStateFlow("")
+    val deviceName = _deviceName.asStateFlow()
 
-    val useCelsius: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _useCelsius = MutableStateFlow(false)
+    val useCelsius = _useCelsius.asStateFlow()
 
-    val ip: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
+    private val _ip = MutableStateFlow("")
+    val ip = _ip.asStateFlow()
 
-    val mac: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
+    private val _mac = MutableStateFlow("")
+    val mac = _mac.asStateFlow()
 
-    val ssid: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
+    private val _ssid = MutableStateFlow("")
+    val ssid = _ssid.asStateFlow()
 
-    private val _popToHome = MutableLiveData(false)
-    val popToHome: LiveData<Boolean> = _popToHome
+    private val _popToHome = MutableStateFlow(false)
+    val popToHome = _popToHome.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -47,7 +44,7 @@ class DevicePreferenceViewModel(
 
     fun switchTempType() {
         val type =
-            if (useCelsius.value!!)
+            if (useCelsius.value)
                 TempType.Fahrenheit
             else
                 TempType.Celsius
@@ -61,9 +58,7 @@ class DevicePreferenceViewModel(
     fun deleteDevice() {
         viewModelScope.launch(Dispatchers.IO) {
             repo.deleteDevice(dsn)
-            withContext(Dispatchers.Main) {
-                _popToHome.value = true
-            }
+            _popToHome.value = true
         }
     }
 
@@ -76,19 +71,15 @@ class DevicePreferenceViewModel(
 
     private suspend fun fetchTempType() {
         val value = deviceControl.getTempUnit(dsn)
-        withContext(Dispatchers.Main) {
-            useCelsius.value = value == TempType.Celsius
-        }
+        _useCelsius.value = value == TempType.Celsius
     }
 
     private suspend fun updateDeviceProps() {
         val dev = repo.getDevice(dsn)
-        withContext(Dispatchers.Main) {
-            deviceName.value = dev.name
-            ip.value = dev.lanIp
-            mac.value = dev.mac
-            ssid.value = Uri.decode(dev.ssid)
-        }
+        _deviceName.value = dev.name
+        _ip.value = dev.lanIp
+        _mac.value = dev.mac
+        _ssid.value = Uri.decode(dev.ssid)
     }
 
 }
