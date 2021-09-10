@@ -17,6 +17,9 @@ class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
+    private val _message = MutableStateFlow("")
+    val message = _message.asStateFlow()
+
     init {
         loadData()
     }
@@ -30,7 +33,14 @@ class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
     }
 
     private suspend fun fetchData() {
-        val deviceList = repo.getDevices()
-        _devices.value = deviceList
+        val result = repo.getDevices()
+        if (result.data != null)
+            _devices.value = result.data
+        else
+            _message.value = result.message
+    }
+
+    fun clearMessage() {
+        _message.value = ""
     }
 }

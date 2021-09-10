@@ -35,6 +35,9 @@ class DevicePreferenceViewModel(
     private val _popToHome = MutableStateFlow(false)
     val popToHome = _popToHome.asStateFlow()
 
+    private val _message = MutableStateFlow("")
+    val message = _message.asStateFlow()
+
     init {
         viewModelScope.launch {
             updateDeviceProps()
@@ -43,11 +46,7 @@ class DevicePreferenceViewModel(
     }
 
     fun switchTempType() {
-        val type =
-            if (useCelsius.value)
-                TempType.Fahrenheit
-            else
-                TempType.Celsius
+        val type = if (useCelsius.value) TempType.Fahrenheit else TempType.Celsius
 
         viewModelScope.launch(Dispatchers.IO) {
             deviceControl.setTempUnit(dsn, type)
@@ -57,15 +56,21 @@ class DevicePreferenceViewModel(
 
     fun deleteDevice() {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.deleteDevice(dsn)
-            _popToHome.value = true
+            val result = repo.deleteDevice(dsn)
+            if (result.data != null)
+                _popToHome.value = true
+            else
+                _message.value = result.message
         }
     }
 
     fun updateDeviceName(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.setDeviceName(name, dsn)
-            updateDeviceProps()
+            val result = repo.setDeviceName(name, dsn)
+            if (result.data != null)
+                updateDeviceProps()
+            else
+                _message.value = result.message
         }
     }
 
@@ -75,11 +80,21 @@ class DevicePreferenceViewModel(
     }
 
     private suspend fun updateDeviceProps() {
-        val dev = repo.getDevice(dsn)
-        _deviceName.value = dev.name
-        _ip.value = dev.lanIp
-        _mac.value = dev.mac
-        _ssid.value = Uri.decode(dev.ssid)
+        val result = repo.getDevice(dsn)
+        if (result.data == null) {
+            _message.value = result.message
+            return
+        }
+
+        with(result.data) {
+            _deviceName.value = name
+            _ip.value = lanIp
+            _mac.value = mac
+            _ssid.value = Uri.decode(ssid)
+        }
     }
 
+    fun clearMessage() {
+        _message.value = ""
+    }
 }

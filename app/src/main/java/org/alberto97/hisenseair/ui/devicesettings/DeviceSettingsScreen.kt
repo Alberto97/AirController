@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavBackStackEntry
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.ui.common.AppScaffold
 import org.alberto97.hisenseair.ui.devices.DevicesStateHandleParams
 import org.alberto97.hisenseair.ui.preferences.DialogPreference
 import org.alberto97.hisenseair.ui.preferences.Preference
@@ -34,6 +35,7 @@ fun DeviceSettingsScreen(
     val macAddress by viewModel.mac.collectAsState()
     val ipAddress by viewModel.ip.collectAsState()
     val network by viewModel.ssid.collectAsState()
+    val message by viewModel.message.collectAsState()
 
     LaunchedEffect(popToHome) {
         if (popToHome) {
@@ -52,6 +54,8 @@ fun DeviceSettingsScreen(
         macAddress = macAddress,
         ipAddress = ipAddress,
         network = network,
+        message = message,
+        clearMessage = { viewModel.clearMessage() },
         navigateUp = navigateUp
     )
 }
@@ -66,18 +70,24 @@ private fun DeviceSettingsScreen(
     macAddress: String,
     ipAddress: String,
     network: String,
+    message: String,
+    clearMessage: () -> Unit,
     navigateUp: () -> Unit
 ) {
-    Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(stringResource(R.string.device_settings)) },
-            navigationIcon = {
-                IconButton(onClick = { navigateUp() }) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                }
-            },
-        )
-    }) {
+    AppScaffold(
+        message = message,
+        clearMessage = clearMessage,
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.device_settings)) },
+                navigationIcon = {
+                    IconButton(onClick = { navigateUp() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                    }
+                },
+            )
+        }
+    ) {
         Column {
             DialogPreference(
                 icon = {},
@@ -206,6 +216,8 @@ private fun Preview() {
             macAddress = "FF:FF:FF:FF:FF:FF",
             ipAddress = "192.168.0.56",
             network = "HomeWifi",
+            message = "",
+            clearMessage = {},
             navigateUp = {}
         )
     }

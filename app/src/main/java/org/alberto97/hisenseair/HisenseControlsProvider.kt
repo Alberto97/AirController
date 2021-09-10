@@ -60,7 +60,7 @@ class HisenseControlsProvider : ControlsProviderService() {
         return Flow.Publisher { subscriber ->
             ioScope.launch {
                 val devices = device.getDevices()
-                devices.forEach {
+                devices.data?.forEach {
                     val control = Control.StatelessBuilder(it.id, getPendingIntent(it.id))
                         .setTitle(it.name)
                         .setDeviceType(DeviceTypes.TYPE_THERMOSTAT)
@@ -105,7 +105,8 @@ class HisenseControlsProvider : ControlsProviderService() {
 
     private suspend fun getDeviceStatus(dsn: String): Int {
         val device = device.getDevice(dsn)
-        return if (device.available)
+        val available = device.data?.available ?: false
+        return if (available)
             Control.STATUS_OK
         else
             Control.STATUS_DISABLED

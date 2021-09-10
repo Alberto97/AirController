@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavBackStackEntry
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.AppDevice
+import org.alberto97.hisenseair.ui.common.AppScaffold
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.MainViewModel
@@ -35,6 +36,7 @@ fun DevicesScreen(
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val devices by viewModel.devices.collectAsState()
+    val message by viewModel.message.collectAsState()
 
     val savedStateHandle = currentBackStackEntry?.savedStateHandle
     val refreshLiveData = savedStateHandle?.getLiveData<Boolean>(DevicesStateHandleParams.needsRefresh)
@@ -46,6 +48,8 @@ fun DevicesScreen(
     }
 
     DevicesScreen(
+        message = message,
+        clearMessage = { viewModel.clearMessage() },
         isLoading = isLoading,
         deviceList = devices,
         onDeviceClick = openDevice,
@@ -56,29 +60,30 @@ fun DevicesScreen(
 @ExperimentalMaterialApi
 @Composable
 private fun DevicesScreen(
+    message: String,
+    clearMessage: () -> Unit,
     isLoading: Boolean,
     deviceList: List<AppDevice>,
     onDeviceClick: (dsn: String) -> Unit,
     onAddClick: () -> Unit
 ) {
-    AppTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar({ Text(stringResource(R.string.app_name)) })
-            },
-            floatingActionButton = {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                    Fab(onAddClick = onAddClick)
-            }
-        ) {
-            if (isLoading) {
-                FullscreenLoading()
-            } else {
-                Devices(devices = deviceList, onDeviceClick = onDeviceClick)
-            }
+    AppScaffold(
+        message = message,
+        clearMessage = clearMessage,
+        topBar = {
+            TopAppBar({ Text(stringResource(R.string.app_name)) })
+        },
+        floatingActionButton = {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                Fab(onAddClick = onAddClick)
+        }
+    ) {
+        if (isLoading) {
+            FullscreenLoading()
+        } else {
+            Devices(devices = deviceList, onDeviceClick = onDeviceClick)
         }
     }
-
 }
 
 @Composable
@@ -119,11 +124,14 @@ private fun Preview() {
         AppDevice("2", "test2", true, "", "", ""),
     )
 
-    DevicesScreen(
-        isLoading = false,
-        deviceList = devices,
-        onDeviceClick = {},
-        onAddClick = {}
-    )
-
+    AppTheme {
+        DevicesScreen(
+            message = "",
+            clearMessage = {},
+            isLoading = false,
+            deviceList = devices,
+            onDeviceClick = {},
+            onAddClick = {}
+        )
+    }
 }
