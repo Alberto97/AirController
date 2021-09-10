@@ -2,7 +2,7 @@ package org.alberto97.hisenseair.ui
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.Lifecycle
+import androidx.compose.runtime.remember
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -98,7 +98,9 @@ fun NavGraph(
                 dsn = dsn,
                 navigateUp = navController::navigateUp,
                 navigateHome = { navController.popBackStack(Screen.Main.route, false) },
-                homeBackStackEntry = navController.getBackStackEntry(Screen.Main.route)
+                homeBackStackEntry = remember {
+                    navController.getBackStackEntry(Screen.Main.route)
+                }
             )
         }
         addPairGraph(navController)
@@ -108,7 +110,9 @@ fun NavGraph(
 @Composable
 private fun getPairViewModel(navController: NavController): PairViewModel {
     return getNavGraphViewModel(
-        backStackEntry = navController.getBackStackEntry(Screen.Pair.route)
+        backStackEntry = remember {
+            navController.getBackStackEntry(Screen.Pair.route)
+        }
     )
 }
 
@@ -119,16 +123,14 @@ private fun NavGraphBuilder.addPairGraph(navController: NavController) {
         startDestination = PairScreen.PickDevice.route
     ) {
         composable(PairScreen.PickDevice.route) {
-            if (it.lifecycleIsResumed()) {
-                val viewModel: PairViewModel = getPairViewModel(navController)
-                PickDeviceScreen(
-                    viewModel = viewModel,
-                    exit = navController::popBackStack,
-                    navigateNetwork = {
-                        navController.navigate(PairScreen.SelectNetwork.route)
-                    }
-                )
-            }
+            val viewModel: PairViewModel = getPairViewModel(navController)
+            PickDeviceScreen(
+                viewModel = viewModel,
+                exit = navController::popBackStack,
+                navigateNetwork = {
+                    navController.navigate(PairScreen.SelectNetwork.route)
+                }
+            )
         }
         composable(PairScreen.SelectNetwork.route) {
             val viewModel: PairViewModel = getPairViewModel(navController)
@@ -165,23 +167,12 @@ private fun NavGraphBuilder.addPairGraph(navController: NavController) {
             )
         }
         composable(PairScreen.DevicePaired.route) {
-            // https://stackoverflow.com/questions/68738304/jetpack-compose-navigation-problems-share-viewmodel-in-nested-graph
-            if (it.lifecycleIsResumed()) {
-                val viewModel: PairViewModel = getPairViewModel(navController)
-                DevicePairedScreen(
-                    viewModel = viewModel,
-                    previousBackStackEntry = navController.previousBackStackEntry,
-                    finish = navController::popBackStack
-                )
-            }
+            val viewModel: PairViewModel = getPairViewModel(navController)
+            DevicePairedScreen(
+                viewModel = viewModel,
+                previousBackStackEntry = navController.previousBackStackEntry,
+                finish = navController::popBackStack
+            )
         }
     }
 }
-
-/**
- * If the lifecycle is not resumed it means this NavBackStackEntry already processed a nav event.
- *
- * This is used to de-duplicate navigation events.
- */
-private fun NavBackStackEntry.lifecycleIsResumed() =
-    this.lifecycle.currentState == Lifecycle.State.RESUMED
