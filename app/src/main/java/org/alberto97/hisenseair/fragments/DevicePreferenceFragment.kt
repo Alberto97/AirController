@@ -2,6 +2,7 @@ package org.alberto97.hisenseair.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.preference.*
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.features.TempType
@@ -46,6 +47,25 @@ class DevicePreferenceFragment : PreferenceFragmentCompat() {
             viewModel.switchTempType()
             true
         }
+
+        // Delete device
+        val deleteDevice = general?.findPreference<Preference>("deleteDevice")
+        deleteDevice?.setOnPreferenceClickListener {
+            AlertDialog.Builder(requireContext()).apply {
+                setTitle("Delete device")
+                setMessage("Delete the device from your account?")
+                setNegativeButton(android.R.string.cancel) { _, _ -> }
+                setPositiveButton(android.R.string.ok) { _, _ ->
+                    viewModel.deleteDevice()
+                }
+            }.show()
+            true
+        }
+        viewModel.popToHome.observe(viewLifecycleOwner, { popToHome ->
+            // TODO: Figure out how to close device control screen
+            if (popToHome)
+                requireActivity().finish()
+        })
 
         val info = findPreference<PreferenceCategory>("info")
 

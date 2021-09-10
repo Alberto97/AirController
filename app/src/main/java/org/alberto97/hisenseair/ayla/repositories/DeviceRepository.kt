@@ -26,6 +26,12 @@ class DeviceRepository(private val service: AylaService) : IDeviceRepository {
         service.putDevice(dsn, c)
     }
 
+    override suspend fun deleteDevice(dsn: String) {
+        val device = service.getDevice(dsn)
+        val key = device.device.key
+        service.deleteDevice(key)
+    }
+
     private fun mapDeviceData(it: Device): AppDevice {
         return AppDevice(it.dsn, it.productName, it.isAvailable(), it.lanIp, it.mac, it.ssid)
     }

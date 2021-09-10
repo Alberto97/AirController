@@ -2,6 +2,7 @@ package org.alberto97.hisenseair.ayla.network.api
 
 import org.alberto97.hisenseair.network.Authorized
 import org.alberto97.hisenseair.ayla.models.*
+import retrofit2.Response
 import retrofit2.http.*
 
 interface AylaService {
@@ -22,6 +23,13 @@ interface AylaService {
         @Query("setup_token")
         setupToken: String?
     ): ConnectedDevice.Wrapper
+
+    @Authorized
+    @DELETE("devices/{key}.json")
+    suspend fun deleteDevice(
+        @Path("key")
+        key: Int
+    ): Response<Unit>
 
     @Authorized
     @GET("dsns/{dsn}.json")

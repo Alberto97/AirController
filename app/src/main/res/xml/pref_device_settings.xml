@@ -16,6 +16,12 @@
             android:title="Celsius degrees"
             android:summary="Use Celsius scale instead of Fahrenheit"
             android:persistent="false" />
+
+        <Preference
+            android:key="deleteDevice"
+            android:title="Delete device"
+            android:summary="Unpair this device from your account"
+            android:persistent="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="info"

@@ -1,10 +1,7 @@
 package org.alberto97.hisenseair.viewmodels
 
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,6 +40,9 @@ class DevicePreferenceViewModel(
         MutableLiveData<String>()
     }
 
+    private val _popToHome = MutableLiveData(false)
+    val popToHome: LiveData<Boolean> = _popToHome
+
     init {
         viewModelScope.launch {
             updateDeviceProps()
@@ -60,6 +60,15 @@ class DevicePreferenceViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             deviceControl.setTempUnit(dsn, type)
             fetchTempType()
+        }
+    }
+
+    fun deleteDevice() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteDevice(dsn)
+            withContext(Dispatchers.Main) {
+                _popToHome.value = true
+            }
         }
     }
 
