@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.ui
+package org.alberto97.hisenseair.ui.common
 
 //import androidx.compose.foundation.Text
 //import androidx.compose.foundation.layout.padding

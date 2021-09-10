@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.ui
+package org.alberto97.hisenseair.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

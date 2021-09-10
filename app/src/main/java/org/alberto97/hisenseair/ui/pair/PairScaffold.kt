@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.alberto97.hisenseair.ui.HiSnackbar
+import org.alberto97.hisenseair.ui.common.HiSnackbar
 
 @Composable
 fun PairScaffold(

@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ayla.models.WifiScanResults
-import org.alberto97.hisenseair.ui.FullscreenLoading
+import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.preferences.PreferenceIcon
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel

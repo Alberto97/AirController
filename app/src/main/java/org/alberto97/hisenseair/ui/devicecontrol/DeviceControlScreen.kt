@@ -8,8 +8,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.ui.BottomSheetList
-import org.alberto97.hisenseair.ui.FullscreenLoading
+import org.alberto97.hisenseair.ui.common.BottomSheetList
+import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf

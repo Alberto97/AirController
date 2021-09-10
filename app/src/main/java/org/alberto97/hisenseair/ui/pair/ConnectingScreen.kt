@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import org.alberto97.hisenseair.ui.FullscreenLoading
+import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
 @Composable

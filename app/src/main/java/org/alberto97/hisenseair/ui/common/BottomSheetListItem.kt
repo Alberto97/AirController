@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.ui
+package org.alberto97.hisenseair.ui.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.*
