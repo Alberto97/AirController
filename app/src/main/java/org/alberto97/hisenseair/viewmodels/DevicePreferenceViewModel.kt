@@ -6,26 +6,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.features.TempType
-import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
-import org.alberto97.hisenseair.fragments.DeviceSettingsArgs
+//import org.alberto97.hisenseair.fragments.DeviceSettingsArgs
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
 class DevicePreferenceViewModel(
-    savedStateHandle: SavedStateHandle,
+    //savedStateHandle: SavedStateHandle,
+    private val dsn: String,
     private val repo: IDeviceRepository,
     private val deviceControl: IDeviceControlRepository
 ) : ViewModel() {
 
-    private val args = DeviceSettingsArgs.fromSavedStateHandle(savedStateHandle)
-    private val dsn get() = args.dsn
+//    private val args = DeviceSettingsArgs.fromSavedStateHandle(savedStateHandle)
+//    private val dsn get() = args.dsn
 
     val deviceName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
-    val tempType: MutableLiveData<TempType> by lazy {
-        MutableLiveData<TempType>()
+    val useCelsius: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
     }
 
     val ip: MutableLiveData<String> by lazy {
@@ -52,7 +52,7 @@ class DevicePreferenceViewModel(
 
     fun switchTempType() {
         val type =
-            if (tempType.value!!.isCelsius())
+            if (useCelsius.value!!)
                 TempType.Fahrenheit
             else
                 TempType.Celsius
@@ -82,7 +82,7 @@ class DevicePreferenceViewModel(
     private suspend fun fetchTempType() {
         val value = deviceControl.getTempUnit(dsn)
         withContext(Dispatchers.Main) {
-            tempType.value = value
+            useCelsius.value = value == TempType.Celsius
         }
     }
 

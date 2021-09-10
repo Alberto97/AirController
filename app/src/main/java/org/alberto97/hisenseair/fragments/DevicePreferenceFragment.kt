@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.*
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.viewmodels.DevicePreferenceViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedStateViewModel
 
@@ -40,8 +39,8 @@ class DevicePreferenceFragment : PreferenceFragmentCompat() {
 
         // Temp
         val tempType = general?.findPreference<SwitchPreference>("useCelsius")
-        viewModel.tempType.observe(viewLifecycleOwner, {
-            tempType?.isChecked = it == TempType.Celsius
+        viewModel.useCelsius.observe(viewLifecycleOwner, {
+            tempType?.isChecked = it
         })
         tempType?.setOnPreferenceClickListener {
             viewModel.switchTempType()

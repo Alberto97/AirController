@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Hisense Air</string>
-    <string name="device_settings">Device Settings</string>
     <string name="unknown">Unknown</string>
     <string name="temp" translatable="false">\u0020%1$d°</string>
     <string name="device_ambient_temp">The ambient temperature currently is %1$d°</string>
@@ -32,5 +31,20 @@
     <string name="work_mode_fan_only">Fan Only</string>
     <string name="work_mode_auto">Auto</string>
     <string name="work_mode_unknown">@string/unknown</string>
+
+    <!-- Device settings -->
+    <string name="device_settings">Device Settings</string>
+    <string name="device_settings_category_info">Info</string>
+    <string name="device_name_title">Name</string>
+    <string name="device_name_alert_title">Set name for this device</string>
+    <string name="device_delete_title">Delete device</string>
+    <string name="device_delete_summary">Unpair this device from your account</string>
+    <string name="device_delete_alert_title">Delete device</string>
+    <string name="device_delete_alert_message">Delete the device from your account?</string>
+    <string name="device_temp_unit_title">Celsius degrees</string>
+    <string name="device_temp_unit_summary">Use Celsius scale instead of Fahrenheit</string>
+    <string name="device_mac_address_title">MAC Address</string>
+    <string name="device_ip_address_title">IP Address</string>
+    <string name="device_network_title">Connected to</string>
 
 </resources>

@@ -11,6 +11,7 @@ import org.alberto97.hisenseair.UriConstants
 import org.alberto97.hisenseair.koin.getNavGraphViewModel
 import org.alberto97.hisenseair.ui.devicecontrol.DeviceControlScreen
 import org.alberto97.hisenseair.ui.devices.DevicesScreen
+import org.alberto97.hisenseair.ui.devicesettings.DeviceSettingsScreen
 import org.alberto97.hisenseair.ui.login.LoginScreen
 import org.alberto97.hisenseair.ui.pair.*
 import org.alberto97.hisenseair.ui.region.RegionScreen
@@ -27,6 +28,12 @@ sealed class Screen(val route: String) {
             const val dsn = "dsn"
         }
         fun createRoute(dsn: String) = "deviceControl/$dsn"
+    }
+    object DeviceSettings: Screen("deviceSettings/{dsn}") {
+        object Params {
+            const val dsn = "dsn"
+        }
+        fun createRoute(dsn: String) = "deviceSettings/$dsn"
     }
 }
 
@@ -81,7 +88,18 @@ fun NavGraph(
                 dsn = dsn,
                 displayInPanel = displayInPanel,
                 navigateUp = navController::navigateUp,
-                navigateSettings = { openDeviceSettings(dsn) }
+                navigateSettings = { navController.navigate(Screen.DeviceSettings.createRoute(dsn)) }
+            )
+        }
+        composable(Screen.DeviceSettings.route) { backStackEntry ->
+            val dsn = backStackEntry.arguments?.getString(Screen.DeviceSettings.Params.dsn)
+            requireNotNull(dsn) { "Required parameter dsn not found" }
+
+            DeviceSettingsScreen(
+                dsn = dsn,
+                navigateUp = navController::navigateUp,
+                navigateHome = { navController.popBackStack(Screen.Main.route, false) },
+                homeBackStackEntry = navController.getBackStackEntry(Screen.Main.route)
             )
         }
         addPairGraph(navController)
