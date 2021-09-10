@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
@@ -33,9 +34,9 @@ fun DevicesScreen(
     currentBackStackEntry: NavBackStackEntry?,
     viewModel: MainViewModel = getViewModel()
 ) {
-    val isLoading by viewModel.isLoading.observeAsState(true)
-    val devices by viewModel.devices.observeAsState(listOf())
-    val loggedOut by viewModel.isLoggedOut.observeAsState(false)
+    val isLoading by viewModel.isLoading.collectAsState()
+    val devices by viewModel.devices.collectAsState()
+    val loggedOut by viewModel.isLoggedOut.collectAsState()
 
     val savedStateHandle = currentBackStackEntry?.savedStateHandle
     val refreshLiveData = savedStateHandle?.getLiveData<Boolean>(DevicesStateHandleParams.needsRefresh)
