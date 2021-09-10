@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.features.WorkMode
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @ExperimentalMaterialApi
@@ -56,7 +55,7 @@ private fun DoneIcon(show: Boolean) {
 private fun Preview() {
     AppTheme(darkTheme = true) {
         Surface {
-            BottomSheetListItem(WorkMode.Auto, "Test", R.drawable.ic_fan, true, {})
+            BottomSheetListItem("", "Test", R.drawable.ic_fan, true, {})
         }
     }
 }
