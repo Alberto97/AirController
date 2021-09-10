@@ -69,7 +69,7 @@ class PairViewModel(
         val status = repository.getStatus()
         if (status.data != null)
             dsn = status.data.dsn
-        else if (status.message != null)
+        else
             handleFailure(status.message)
     }
 
@@ -79,7 +79,7 @@ class PairViewModel(
         val result = repository.getNetworks()
         if (result.data != null)
             _scanResults.value = result.data
-        else if (result.message != null)
+        else
             handleFailure(result.message)
 
         _loading.value = false
@@ -105,7 +105,7 @@ class PairViewModel(
                 connManager.connectWifi()
                 pairToAccount()
                 connManager.disconnectWifi()
-            } else if (result.message != null) {
+            } else {
                 _message.value = result.message
             }
 
@@ -119,7 +119,7 @@ class PairViewModel(
         if (device.data != null) {
             _deviceName.value = device.data.productName
             _navAction.value = NavAction.DevicePaired
-        } else if (device.message != null) {
+        } else {
             handleInternetFailure(device.message)
         }
     }
