@@ -4,14 +4,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
+import org.alberto97.hisenseair.ui.common.OutlinedPasswordField
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
@@ -70,11 +69,10 @@ private fun InsertPasswordScreen(
 private fun Content(onClick: (password: String) -> Unit) {
     val (password, setPassword) = remember { mutableStateOf("")}
     Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxSize()) {
-        TextField(
+        OutlinedPasswordField(
             value = password,
             onValueChange = setPassword,
             label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Button(onClick = {onClick(password)}, modifier = Modifier

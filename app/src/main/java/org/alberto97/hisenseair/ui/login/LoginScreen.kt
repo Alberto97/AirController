@@ -3,6 +3,7 @@ package org.alberto97.hisenseair.ui.login
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,11 +13,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
+import org.alberto97.hisenseair.ui.common.OutlinedPasswordField
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.LoginState
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
@@ -44,10 +45,12 @@ fun LoginScreen(
         scaffoldState = scaffoldState,
         navigateUp = navigateUp
     ) {
-        LoginContent(
-            isLoading = state == LoginState.Loading,
-            onLogin = { email, password -> viewModel.login(email, password) }
-        )
+        if (state == LoginState.Loading)
+            FullscreenLoading()
+        else
+            LoginContent(
+                onLogin = { email, password -> viewModel.login(email, password) }
+            )
     }
 }
 
@@ -83,54 +86,53 @@ private fun LoginScaffold(
 
 @Composable
 private fun LoginContent(
-    onLogin: (email: String, password: String) -> Unit,
-    isLoading: Boolean
+    onLogin: (email: String, password: String) -> Unit
 ) {
     val (password, setPassword) = remember { mutableStateOf("") }
     val (email, setEmail) = remember { mutableStateOf("") }
+    val modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
 
-    if (isLoading)
-        FullscreenLoading()
-    else
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            LoginTextField(
-                value = email,
-                onValueChange = setEmail,
-                keyboardType = KeyboardType.Email,
-                leadingIcon = {
-                    Icon(
-                        Icons.Outlined.Email,
-                        contentDescription = null
-                    )
-                }
-            )
-            LoginTextField(
-                value = password,
-                onValueChange = setPassword,
-                keyboardType = KeyboardType.Password,
-                visualTransformation = PasswordVisualTransformation(),
-                leadingIcon = {
-                    Icon(
-                        Icons.Outlined.Lock,
-                        contentDescription = null
-                    )
-                }
-            )
-            LoginButton(
-                enabled = email.isNotEmpty() && password.isNotEmpty(),
-                onClick = { onLogin(email, password) }
-            )
-        }
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        OutlinedTextField(
+            value = email,
+            onValueChange = setEmail,
+            label = { Text("Email address") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            modifier = modifier,
+            leadingIcon = {
+                Icon(
+                    Icons.Outlined.Email,
+                    contentDescription = null
+                )
+            }
+        )
+        OutlinedPasswordField(
+            value = password,
+            onValueChange = setPassword,
+            label = { Text("Password") },
+            modifier = modifier,
+            leadingIcon = {
+                Icon(
+                    Icons.Outlined.Lock,
+                    contentDescription = null
+                )
+            }
+        )
+        LoginButton(
+            enabled = email.isNotEmpty() && password.isNotEmpty(),
+            onClick = { onLogin(email, password) }
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun ScreenPreview() {
     LoginScaffold(navigateUp = {}) {
-        LoginContent(isLoading = false, onLogin = { _, _ -> })
+        LoginContent(onLogin = { _, _ -> })
     }
 }
