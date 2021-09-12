@@ -11,6 +11,7 @@ fun AppScaffold(
     clearMessage: () -> Unit = {},
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable () -> Unit = {},
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable () -> Unit
 ) {
 
@@ -23,6 +24,7 @@ fun AppScaffold(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = topBar,
+        floatingActionButton = floatingActionButton,
     ) {
         content()
     }
