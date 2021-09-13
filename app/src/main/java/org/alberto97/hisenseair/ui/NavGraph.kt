@@ -15,10 +15,12 @@ import org.alberto97.hisenseair.ui.devicesettings.DeviceSettingsScreen
 import org.alberto97.hisenseair.ui.login.LoginScreen
 import org.alberto97.hisenseair.ui.pair.*
 import org.alberto97.hisenseair.ui.region.RegionScreen
+import org.alberto97.hisenseair.ui.splash.SplashScreen
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
 
 sealed class Screen(val route: String) {
+    object Splash: Screen("splash")
     object RegionPicker: Screen("regionPicker")
     object Login: Screen("login")
     object Main: Screen("main")
@@ -49,10 +51,29 @@ sealed class PairScreen(val route: String) {
 @Composable
 fun NavGraph(
     displayInPanel: Boolean,
-    startDestination: String = Screen.Login.route,
+    startDestination: String = Screen.Splash.route,
     navController: NavHostController = rememberNavController(),
 ) {
     NavHost(navController, startDestination = startDestination) {
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                openRegion = {
+                    navController.navigate(Screen.RegionPicker.route) {
+                        popUpTo(startDestination) { inclusive = true }
+                    }
+                },
+                openLogin = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(startDestination) { inclusive = true }
+                    }
+                },
+                openMain = {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(startDestination) { inclusive = true }
+                    }
+                }
+            )
+        }
         composable(Screen.RegionPicker.route) {
             RegionScreen(
                 openLogin = { navController.navigate(Screen.Login.route) }
@@ -60,7 +81,11 @@ fun NavGraph(
         }
         composable(Screen.Login.route) {
             LoginScreen(
-                openMain = { navController.navigate(Screen.Main.route) },
+                openMain = {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(startDestination) { inclusive = true }
+                    }
+               },
                 navigateUp = navController::navigateUp
             )
         }

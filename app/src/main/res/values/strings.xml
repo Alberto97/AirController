@@ -9,6 +9,10 @@
     <string name="display_in_panel_unsupported">Device controls in panel are currently not supported</string>
     <string name="display_in_panel_extend">Use the top right icon to adjust the device in-app</string>
 
+    <!-- Splash screen -->
+    <string name="splash_offline_message">Please connect to the Internet and try again</string>
+    <string name="splash_offline_action">Try again</string>
+
     <!-- Fan Speed -->
     <string name="fan_speed_auto">Auto</string>
     <string name="fan_speed_lower">Low</string>
