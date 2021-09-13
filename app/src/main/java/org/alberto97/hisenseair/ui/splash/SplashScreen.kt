@@ -19,7 +19,6 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun SplashScreen(
     openLogin: () -> Unit,
-    openRegion: () -> Unit,
     openMain: () -> Unit,
     viewModel: SplashViewModel = getViewModel()
 ) {
@@ -30,7 +29,6 @@ fun SplashScreen(
         when (state) {
             SplashViewModel.SplashNavAction.Login -> openLogin()
             SplashViewModel.SplashNavAction.Main -> openMain()
-            SplashViewModel.SplashNavAction.Region -> openRegion()
             else -> {}
         }
     }

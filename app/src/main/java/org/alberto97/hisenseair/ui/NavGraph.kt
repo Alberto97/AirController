@@ -14,14 +14,12 @@ import org.alberto97.hisenseair.ui.devices.DevicesScreen
 import org.alberto97.hisenseair.ui.devicesettings.DeviceSettingsScreen
 import org.alberto97.hisenseair.ui.login.LoginScreen
 import org.alberto97.hisenseair.ui.pair.*
-import org.alberto97.hisenseair.ui.region.RegionScreen
 import org.alberto97.hisenseair.ui.splash.SplashScreen
 import org.alberto97.hisenseair.viewmodels.PairViewModel
 
 
 sealed class Screen(val route: String) {
     object Splash: Screen("splash")
-    object RegionPicker: Screen("regionPicker")
     object Login: Screen("login")
     object Main: Screen("main")
     object Pair: Screen("pair")
@@ -57,11 +55,6 @@ fun NavGraph(
     NavHost(navController, startDestination = startDestination) {
         composable(Screen.Splash.route) {
             SplashScreen(
-                openRegion = {
-                    navController.navigate(Screen.RegionPicker.route) {
-                        popUpTo(startDestination) { inclusive = true }
-                    }
-                },
                 openLogin = {
                     navController.navigate(Screen.Login.route) {
                         popUpTo(startDestination) { inclusive = true }
@@ -74,19 +67,13 @@ fun NavGraph(
                 }
             )
         }
-        composable(Screen.RegionPicker.route) {
-            RegionScreen(
-                openLogin = { navController.navigate(Screen.Login.route) }
-            )
-        }
         composable(Screen.Login.route) {
             LoginScreen(
                 openMain = {
                     navController.navigate(Screen.Main.route) {
-                        popUpTo(startDestination) { inclusive = true }
+                        popUpTo(Screen.Login.route) { inclusive = true }
                     }
-               },
-                navigateUp = navController::navigateUp
+               }
             )
         }
         composable(Screen.Main.route) {

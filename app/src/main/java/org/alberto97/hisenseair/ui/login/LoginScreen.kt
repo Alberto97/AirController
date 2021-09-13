@@ -1,5 +1,7 @@
 package org.alberto97.hisenseair.ui.login
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,30 +10,34 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.repositories.Region
+import org.alberto97.hisenseair.ui.common.AppDropDown
 import org.alberto97.hisenseair.ui.common.AppScaffold
-import org.alberto97.hisenseair.ui.common.AppToolbar
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.common.OutlinedPasswordField
 import org.alberto97.hisenseair.ui.theme.AppTheme
+import org.alberto97.hisenseair.viewmodels.DropDownModel
 import org.alberto97.hisenseair.viewmodels.LoginState
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
 import org.koin.androidx.compose.getViewModel
 
+@ExperimentalMaterialApi
 @Composable
 fun LoginScreen(
-    navigateUp: () -> Unit,
     openMain: () -> Unit,
     viewModel: LoginViewModel = getViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val message by viewModel.message.collectAsState()
+    val region by viewModel.region.collectAsState()
 
     LaunchedEffect(state) {
         when (state) {
@@ -44,17 +50,22 @@ fun LoginScreen(
         message = message,
         clearMessage = { viewModel.clearMessage() },
         state = state,
-        navigateUp = navigateUp,
+        region = region,
+        setRegion = { value -> viewModel.setRegion(value) },
+        regionOptions = viewModel.regions,
         onLogin = { email, password -> viewModel.login(email, password) }
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun LoginScreen(
     message: String,
     clearMessage: () -> Unit,
     state: LoginState,
-    navigateUp: () -> Unit,
+    region: DropDownModel<Region>?,
+    setRegion: (value: DropDownModel<Region>) -> Unit,
+    regionOptions: List<DropDownModel<Region>>,
     onLogin: (email: String, password: String) -> Unit
 ) {
     val (password, setPassword) = remember { mutableStateOf("") }
@@ -64,9 +75,8 @@ private fun LoginScreen(
         message = message,
         clearMessage = clearMessage,
         topBar = {
-            AppToolbar(
-                title = { Text(stringResource(R.string.app_name)) },
-                navigateUp = navigateUp
+            TopAppBar(
+                title = { Text("Login") }
             )
         }
     ) {
@@ -78,22 +88,30 @@ private fun LoginScreen(
                 setPassword = setPassword,
                 email = email,
                 setEmail = setEmail,
+                region = region,
+                setRegion = setRegion,
+                regionOptions = regionOptions,
                 onLogin = onLogin
             )
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun LoginContent(
     password: String,
     setPassword: (value: String) -> Unit,
     email: String,
     setEmail: (value: String) -> Unit,
+    region: DropDownModel<Region>?,
+    setRegion: (value: DropDownModel<Region>) -> Unit,
+    regionOptions: List<DropDownModel<Region>>,
     onLogin: (email: String, password: String) -> Unit
 ) {
+
     val modifier = Modifier
         .fillMaxWidth()
-        .padding(vertical = 12.dp)
+        .padding(vertical = 6.dp)
 
     Column(
         Modifier
@@ -125,17 +143,64 @@ private fun LoginContent(
                 )
             }
         )
+        LoginDropDown(
+            value = region,
+            setValue = setRegion,
+            options = regionOptions
+        )
         LoginButton(
-            enabled = email.isNotEmpty() && password.isNotEmpty(),
+            enabled = email.isNotEmpty() && password.isNotEmpty() && region != null,
             onClick = { onLogin(email, password) }
         )
     }
 }
 
+@ExperimentalMaterialApi
+@Composable
+private fun LoginDropDown(
+    value: DropDownModel<Region>?,
+    setValue: (value: DropDownModel<Region>) -> Unit,
+    options: List<DropDownModel<Region>>
+) {
+    AppDropDown(
+        value = value?.label ?: "",
+        label = { Text("Region") },
+        leadingIcon = { RegionIcon(value?.resourceDrawable) },
+        modifier = Modifier.padding(vertical = 6.dp),
+        items = { close ->
+            options.forEach { item ->
+                DropdownMenuItem(onClick = {
+                    setValue(item)
+                    close()
+                }) {
+                    ListItem(
+                        icon = { Image(painterResource(item.resourceDrawable), null) },
+                        text = { Text(item.label) }
+                    )
+                }
+            }
+        }
+    )
+}
+
+@Composable
+private fun RegionIcon(@DrawableRes resIcon: Int?) {
+    if (resIcon != null)
+        Image(painterResource(resIcon), null)
+    else
+        Icon(Icons.Outlined.Public, null)
+}
+
+@ExperimentalMaterialApi
 @Preview
 @Composable
 private fun ScreenPreview() {
+    val regions = listOf(
+        DropDownModel(Region.EU, "Europe", R.drawable.ic_eu),
+        DropDownModel(Region.US, "United States", R.drawable.ic_us)
+    )
+
     AppTheme {
-        LoginScreen("", {}, LoginState.None, {}, {_, _ ->})
+        LoginScreen("", {}, LoginState.None, null, {}, regions, {_, _ ->})
     }
 }

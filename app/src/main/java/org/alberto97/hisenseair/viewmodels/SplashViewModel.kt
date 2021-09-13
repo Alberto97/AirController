@@ -28,8 +28,7 @@ class SplashViewModel(
 
     enum class SplashNavAction {
         Main,
-        Login,
-        Region
+        Login
     }
 
     private val _navAction = MutableStateFlow<SplashNavAction?>(null)
@@ -49,7 +48,7 @@ class SplashViewModel(
         }
 
         if (!hasLoginData()) {
-            _navAction.value = SplashNavAction.Region
+            _navAction.value = SplashNavAction.Login
             return
         }
 

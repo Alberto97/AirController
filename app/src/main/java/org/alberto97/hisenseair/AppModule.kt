@@ -23,9 +23,8 @@ val appModule = module {
         )
     }
     viewModel { parameters -> DevicePreferenceViewModel(parameters.get(), get(), get()) }
-    viewModel { LoginViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { MainViewModel(get()) }
     viewModel { SplashViewModel(get(), get()) }
-    viewModel { RegionViewModel(get(), get()) }
     viewModel { PairViewModel(get(), get()) }
 }
