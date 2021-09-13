@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 
 enum class LoginState {
@@ -18,20 +17,26 @@ enum class LoginState {
 
 class LoginViewModel(private val repo: IAuthenticationRepository) : ViewModel() {
 
-
     private val _state = MutableStateFlow(LoginState.None)
     val state = _state.asStateFlow()
+
+    private val _message = MutableStateFlow("")
+    val message = _message.asStateFlow()
 
     fun login(email: String, password: String) {
         _state.value = LoginState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val success = repo.login(email, password)
-            withContext(Dispatchers.Main) {
-                _state.value = if (success)
-                    LoginState.Success
-                else
-                    LoginState.Error
+            if (success) {
+                _state.value = LoginState.Success
+            } else {
+                _state.value = LoginState.Error
+                _message.value = "Authentication failed"
             }
         }
+    }
+
+    fun clearMessage() {
+        _message.value = ""
     }
 }

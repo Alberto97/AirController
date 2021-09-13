@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.*
@@ -16,6 +15,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.ui.common.AppScaffold
+import org.alberto97.hisenseair.ui.common.AppToolbar
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.common.OutlinedPasswordField
 import org.alberto97.hisenseair.ui.theme.AppTheme
@@ -29,68 +30,70 @@ fun LoginScreen(
     openMain: () -> Unit,
     viewModel: LoginViewModel = getViewModel()
 ) {
-    val scaffoldState =  rememberScaffoldState()
-
     val state by viewModel.state.collectAsState()
+    val message by viewModel.message.collectAsState()
+
     LaunchedEffect(state) {
         when (state) {
             LoginState.Success -> openMain()
-            LoginState.Error ->
-                scaffoldState.snackbarHostState.showSnackbar("Login failed")
             else -> {}
         }
     }
 
-    LoginScaffold(
-        scaffoldState = scaffoldState,
-        navigateUp = navigateUp
+    LoginScreen(
+        message = message,
+        clearMessage = { viewModel.clearMessage() },
+        state = state,
+        navigateUp = navigateUp,
+        onLogin = { email, password -> viewModel.login(email, password) }
+    )
+}
+
+@Composable
+private fun LoginScreen(
+    message: String,
+    clearMessage: () -> Unit,
+    state: LoginState,
+    navigateUp: () -> Unit,
+    onLogin: (email: String, password: String) -> Unit
+) {
+    val (password, setPassword) = remember { mutableStateOf("") }
+    val (email, setEmail) = remember { mutableStateOf("") }
+
+    AppScaffold(
+        message = message,
+        clearMessage = clearMessage,
+        topBar = {
+            AppToolbar(
+                title = { Text(stringResource(R.string.app_name)) },
+                navigateUp = navigateUp
+            )
+        }
     ) {
         if (state == LoginState.Loading)
             FullscreenLoading()
         else
             LoginContent(
-                onLogin = { email, password -> viewModel.login(email, password) }
+                password = password,
+                setPassword = setPassword,
+                email = email,
+                setEmail = setEmail,
+                onLogin = onLogin
             )
     }
 }
 
 @Composable
-private fun LoginScaffold(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navigateUp: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    AppTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.app_name)) },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = navigateUp,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                )
-            },
-            scaffoldState = scaffoldState
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
 private fun LoginContent(
+    password: String,
+    setPassword: (value: String) -> Unit,
+    email: String,
+    setEmail: (value: String) -> Unit,
     onLogin: (email: String, password: String) -> Unit
 ) {
-    val (password, setPassword) = remember { mutableStateOf("") }
-    val (email, setEmail) = remember { mutableStateOf("") }
-    val modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
+    val modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 12.dp)
 
     Column(
         Modifier
@@ -132,7 +135,7 @@ private fun LoginContent(
 @Preview
 @Composable
 private fun ScreenPreview() {
-    LoginScaffold(navigateUp = {}) {
-        LoginContent(onLogin = { _, _ -> })
+    AppTheme {
+        LoginScreen("", {}, LoginState.None, {}, {_, _ ->})
     }
 }
