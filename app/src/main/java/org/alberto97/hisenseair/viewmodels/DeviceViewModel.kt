@@ -109,12 +109,14 @@ class DeviceViewModel(
     }
 
     val supportedModes = combine(_supportedModes.asFlow(), workState.asFlow()) { modes, mode ->
-        mapForSheetList(
-            modes = modes,
-            text = { modeToStringMap.getValue(it) },
-            icon = { modeToIconMap.getValue(it) },
-            selected = { it == mode }
-        )
+        modes.map { item ->
+            BottomSheetListItem(
+                id = item,
+                name = modeToStringMap.getValue(item),
+                icon = modeToIconMap.getValue(item),
+                current = item == mode
+            )
+        }
     }.asLiveData()
 
     private val _supportedFanSpeeds: MutableLiveData<List<FanSpeed>> by lazy {
@@ -122,27 +124,31 @@ class DeviceViewModel(
     }
 
     val supportedFanSpeeds = combine(_supportedFanSpeeds.asFlow(), fanSpeed.asFlow()) { speeds, speed ->
-        mapForSheetList(
-            modes = speeds,
-            text = { fanToStringMap.getValue(it) },
-            icon = { R.drawable.ic_fan },
-            selected = { it == speed }
-        )
+        speeds.map { item ->
+            BottomSheetListItem(
+                id = item,
+                name = fanToStringMap.getValue(item),
+                icon = R.drawable.ic_fan,
+                current = item == speed
+            )
+        }
     }.asLiveData()
 
     private val _supportedSleepModes: MutableLiveData<List<SleepModeData>> by lazy {
         MutableLiveData<List<SleepModeData>>()
     }
 
-    // TODO: This *really* needs to be improved by showing a graph or something to differentiate the modes
+    // TODO: This *really* needs to be improved by showing a graph
+    //  or something else to visually differentiate the modes
     val supportedSleepModes = combine(_supportedSleepModes.asFlow(), sleepMode.asFlow()) { modes, mode ->
-        val allModes = modes.map { it.type }
-        mapForSheetList(
-            modes = allModes,
-            text = { sleepToStringMap.getValue(it) },
-            icon = { R.drawable.ic_nights_stay },
-            selected = { it == mode }
-        )
+        modes.map { item ->
+            BottomSheetListItem(
+                id = item.type,
+                name = sleepToStringMap.getValue(item.type),
+                icon = R.drawable.ic_nights_stay,
+                current = item.type == mode
+            )
+        }
     }.asLiveData()
 
     // Info
@@ -304,15 +310,4 @@ class DeviceViewModel(
     fun increaseTemp() = setTemp(temp.value!! + 1)
 
     fun reduceTemp() = setTemp(temp.value!! - 1)
-
-    private fun <T: Enum<*>> mapForSheetList(
-        modes: List<T>,
-        text: (value: T) -> Int,
-        icon: (value: T) -> Int,
-        selected: (value: T) -> Boolean,
-    ): List<BottomSheetListItem<T>> {
-        return modes.map {
-            BottomSheetListItem(it, text(it), icon(it), selected(it))
-        }
-    }
 }
