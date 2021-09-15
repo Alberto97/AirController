@@ -37,6 +37,7 @@ class DeviceRepository(
     override suspend fun getDevice(dsn: String): ResultWrapper<AppDevice> {
         return try {
             val resp = service.getDevice(dsn)
+            prefs.setDeviceKey(dsn, resp.device.key)
             val data = mapDeviceData(resp.device)
             ResultWrapper.Success(data)
         } catch (ex: Exception) {
@@ -58,14 +59,7 @@ class DeviceRepository(
     }
 
     override suspend fun deleteDevice(dsn: String): ResultWrapper<Unit> {
-        val device = try {
-             service.getDevice(dsn)
-        } catch (ex: Exception) {
-            Log.e(LOG_TAG, ex.stackTraceToString())
-            return ResultWrapper.Error("Cannot retrieve device key")
-        }
-
-        val key = device.device.key
+        val key = prefs.getDeviceKey(dsn)
         val resp = service.deleteDevice(key)
         return if (resp.isSuccessful) {
             ResultWrapper.Success(Unit)

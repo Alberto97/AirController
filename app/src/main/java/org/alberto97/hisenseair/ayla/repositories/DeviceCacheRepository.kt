@@ -10,10 +10,13 @@ import org.alberto97.hisenseair.features.TempType
 interface IDeviceCacheRepository {
     fun getTempUnit(dsn: String): TempType
     fun setTempUnit(dsn: String, unit: TempType)
+    fun getDeviceKey(dsn: String): Int
+    fun setDeviceKey(dsn: String, key: Int)
 }
 
 object DevicePreferences {
     const val TEMP_UNIT = "TEMP_UNIT"
+    const val DEVICE_KEY = "DEVICE_KEY"
 }
 
 class DeviceCacheRepository(
@@ -32,6 +35,18 @@ class DeviceCacheRepository(
         val prefs = getPreferences(dsn)
         prefs.edit {
             putInt(DevicePreferences.TEMP_UNIT, value)
+        }
+    }
+
+    override fun getDeviceKey(dsn: String): Int {
+        val prefs = getPreferences(dsn)
+        return prefs.getInt(DevicePreferences.DEVICE_KEY, -1)
+    }
+
+    override fun setDeviceKey(dsn: String, key: Int) {
+        val prefs = getPreferences(dsn)
+        prefs.edit {
+            putInt(DevicePreferences.DEVICE_KEY, key)
         }
     }
 
