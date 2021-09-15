@@ -6,9 +6,13 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.ui.common.BottomSheetList
+import org.alberto97.hisenseair.ui.common.BottomSheetContent
+import org.alberto97.hisenseair.ui.common.BottomSheetListItem
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.compose.getViewModel
@@ -148,12 +152,21 @@ private fun ModeSheet(
 ) {
     val supportedModes by viewModel.supportedModes.observeAsState(emptyList())
 
-    BottomSheetList(
+    BottomSheetContent(
         title = "Mode",
-        list = supportedModes,
-        onItemClick = { data ->
-            viewModel.setMode(data)
-            close()
+        content = {
+            supportedModes.forEach { mode ->
+                BottomSheetListItem(
+                    text = stringResource(mode.name),
+                    icon = { SheetIcon(mode.icon) },
+                    selected = mode.current,
+                    onClick = {
+                        viewModel.setMode(mode.id)
+                        close()
+                    }
+                )
+
+            }
         }
     )
 }
@@ -166,12 +179,20 @@ private fun FanSpeedSheet(
 ) {
     val supportedFanSpeeds by viewModel.supportedFanSpeeds.observeAsState(emptyList())
 
-    BottomSheetList(
+    BottomSheetContent(
         title = "Fan Speed",
-        list = supportedFanSpeeds,
-        onItemClick = { data ->
-            viewModel.setFanSpeed(data)
-            close()
+        content = {
+            supportedFanSpeeds.forEach { mode ->
+                BottomSheetListItem(
+                    text = stringResource(mode.name),
+                    icon = { SheetIcon(mode.icon) },
+                    selected = mode.current,
+                    onClick = {
+                        viewModel.setFanSpeed(mode.id)
+                        close()
+                    }
+                )
+            }
         }
     )
 }
@@ -184,13 +205,30 @@ private fun SleepSheet(
 ) {
     val supportedSleepModes by viewModel.supportedSleepModes.observeAsState(emptyList())
 
-    BottomSheetList(
+    BottomSheetContent(
         title = "Sleep Mode",
-        list = supportedSleepModes,
-        onItemClick = { data ->
-            viewModel.setSleepMode(data)
-            close()
+        content = {
+            supportedSleepModes.forEach { mode ->
+                BottomSheetListItem(
+                    text = stringResource(mode.name),
+                    icon = { SheetIcon(mode.icon) },
+                    selected = mode.current,
+                    onClick = {
+                        viewModel.setSleepMode(mode.id)
+                        close()
+                    }
+                )
+            }
         }
+    )
+}
+
+@Composable
+private fun SheetIcon(icon: Int) {
+    Icon(
+        painterResource(icon),
+        contentDescription = null,
+        tint = Color.Gray
     )
 }
 

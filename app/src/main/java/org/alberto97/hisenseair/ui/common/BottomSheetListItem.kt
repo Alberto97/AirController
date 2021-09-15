@@ -3,20 +3,18 @@ package org.alberto97.hisenseair.ui.common
 import androidx.compose.foundation.clickable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ui.theme.AppTheme
 
 @ExperimentalMaterialApi
 @Composable
-fun <T> BottomSheetListItem(id: T, text: String, icon: Int, selected: Boolean, onClick: (data: T) -> Unit) {
+fun BottomSheetListItem(text: String, icon: @Composable (() -> Unit), selected: Boolean, onClick: () -> Unit) {
     ListItem (
-        icon = { LeadingIcon(icon) },
+        icon = icon,
         text = {
             Text(
                 text,
@@ -25,18 +23,8 @@ fun <T> BottomSheetListItem(id: T, text: String, icon: Int, selected: Boolean, o
             )
         },
         trailing = { DoneIcon(selected) },
-        modifier = Modifier.clickable(onClick = { onClick(id) })
+        modifier = Modifier.clickable(onClick = onClick)
     )
-}
-
-@Composable
-private fun LeadingIcon(icon: Int?) {
-    if (icon != null)
-        Icon(
-            painterResource(icon),
-            contentDescription = null,
-            tint = Color.Gray
-        )
 }
 
 @Composable
@@ -53,9 +41,14 @@ private fun DoneIcon(show: Boolean) {
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme(darkTheme = true) {
+    AppTheme {
         Surface {
-            BottomSheetListItem("", "Test", R.drawable.ic_fan, true, {})
+            BottomSheetListItem(
+                text = "Test",
+                icon = { Icon(Icons.Default.Air, null) },
+                selected = true,
+                onClick = {}
+            )
         }
     }
 }
