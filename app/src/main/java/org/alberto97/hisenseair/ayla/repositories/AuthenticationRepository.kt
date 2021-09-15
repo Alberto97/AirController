@@ -1,17 +1,25 @@
 package org.alberto97.hisenseair.ayla.repositories
 
+import android.util.Log
+import org.alberto97.hisenseair.ayla.AylaExtensions.aylaError
 import org.alberto97.hisenseair.ayla.models.*
 import org.alberto97.hisenseair.ayla.network.api.AylaLogin
+import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.repositories.AuthErrorCodes
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.ISettingsRepository
 import org.alberto97.hisenseair.repositories.Region
 import retrofit2.HttpException
+import java.net.HttpURLConnection
 
 class AuthenticationRepository(
     private val service: AylaLogin,
     private val repository: ISecretsRepository,
     private val settings: ISettingsRepository
 ) : IAuthenticationRepository {
+    companion object {
+        const val LOG_TAG = "AuthRepository"
+    }
 
     private val euApplication = Application(
         appId = "a-Hisense-oem-eu-field-id",
@@ -32,37 +40,48 @@ class AuthenticationRepository(
         return repository.authToken
     }
 
-    override suspend fun login(email: String, password: String): Boolean {
-        val app = appMap[settings.region] ?: return false
+    override suspend fun login(email: String, password: String): ResultWrapper<Unit> {
+        val region = settings.region
+        val app = appMap[region] ?:
+            return ResultWrapper.Error("App id and secret not found for $region")
 
         return try {
             val login = Login(email, password, app)
             val output = service.login(login)
 
             saveAuthData(output)
-            true
+            ResultWrapper.Success(Unit)
         } catch (e: HttpException) {
-            false
+            if (e.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+                Log.i(LOG_TAG, "app_id: ${app.appId}")
+                Log.i(LOG_TAG, "app_secret: ${app.appSecret}")
+                throw IllegalArgumentException("The app_id or app_secret are invalid")
+            }
+            val message = e.aylaError() ?: "Authentication failed"
+            ResultWrapper.Error(message, AuthErrorCodes.UNAUTHORIZED)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Authentication failed")
         }
     }
 
-    override suspend fun refreshToken(): Boolean {
+    override suspend fun refreshToken(): ResultWrapper<Unit> {
         val refreshToken = repository.refreshToken
         if (refreshToken.isEmpty())
-            return false
+            return ResultWrapper.Error("Missing refresh token", AuthErrorCodes.UNAUTHORIZED)
 
         return try {
             val user = UserRefresh(refreshToken)
             val data = LoginRefresh(user)
 
             val resultBody = service.refreshToken(data)
-            val successful = resultBody.error.isNullOrEmpty()
-            if (successful)
-                saveAuthData(resultBody)
+            saveAuthData(resultBody)
 
-            successful
+            ResultWrapper.Success(Unit)
         } catch (e: HttpException) {
-            false
+            val message = e.aylaError() ?: "Authentication failed"
+            ResultWrapper.Error(message, AuthErrorCodes.UNAUTHORIZED)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Authentication failed")
         }
     }
 

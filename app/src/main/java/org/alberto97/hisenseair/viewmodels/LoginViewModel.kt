@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ayla.IAylaModuleLoader
+import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.ISettingsRepository
 import org.alberto97.hisenseair.repositories.Region
@@ -58,8 +59,8 @@ class LoginViewModel(
     fun login(email: String, password: String) {
         _state.value = LoginState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            val success = repo.login(email, password)
-            if (success) {
+            val result = repo.login(email, password)
+            if (result is ResultWrapper.Success) {
                 _state.value = LoginState.Success
             } else {
                 _state.value = LoginState.Error

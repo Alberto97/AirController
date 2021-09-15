@@ -42,4 +42,4 @@ class LoginOutput(
 
     @SerializedName("role_tags")
     val roleTags: List<String>
-) : Response()
+)

@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.alberto97.hisenseair.repositories.AuthErrorCodes
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.ISettingsRepository
 import org.koin.core.component.KoinComponent
@@ -53,10 +54,15 @@ class SplashViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            if (auth.refreshToken())
-                _navAction.value = SplashNavAction.Main
-            else
+            val resp = auth.refreshToken()
+
+            // Only navigate to login when there is an authentication error
+            // otherwise any error (eg: the lack of connectivity)
+            // would lead to the login page which is unwanted
+            if (resp.code == AuthErrorCodes.UNAUTHORIZED)
                 _navAction.value = SplashNavAction.Login
+            else
+                _navAction.value = SplashNavAction.Main
         }
     }
 
