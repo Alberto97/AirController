@@ -185,99 +185,111 @@ class DeviceViewModel(
         ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
     }
 
-    private fun setProp(setProperty: suspend () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            setProperty()
-            fetchData()
-        }
+    private suspend fun setProp(setValue: suspend () -> Unit) {
+        setValue()
+        fetchData()
     }
 
-    private fun switchProp(data: MutableStateFlow<Boolean?>,
-                           postFetch: (suspend () -> Unit)? = null,
-                           setProperty: suspend (value: Boolean) -> Unit) {
-        val opposite = !data.value!!
-        data.value = opposite
-
-        viewModelScope.launch(Dispatchers.IO) {
-            setProperty(opposite)
-            fetchData()
-            if (postFetch != null)
-                postFetch()
-        }
+    private suspend fun switchProp(value: Boolean, setValue: suspend (value: Boolean) -> Unit) {
+        val opposite = !value
+        setValue(opposite)
+        fetchData()
     }
 
     fun setMode(mode: WorkMode) {
-        setProp {
-            repo.setMode(dsn, mode)
+        viewModelScope.launch(Dispatchers.IO) {
+            setProp {
+                repo.setMode(dsn, mode)
+            }
         }
     }
 
     fun setSleepMode(mode: SleepMode) {
-        setProp {
-            repo.setSleepMode(dsn, mode)
+        viewModelScope.launch(Dispatchers.IO) {
+            setProp {
+                repo.setSleepMode(dsn, mode)
+            }
         }
     }
 
     fun setFanSpeed(speed: FanSpeed) {
-        setProp {
-            repo.setFanSpeed(dsn, speed)
+        viewModelScope.launch(Dispatchers.IO) {
+            setProp {
+                repo.setFanSpeed(dsn, speed)
+            }
         }
     }
 
     fun switchBacklight() {
-        switchProp(_backlight) {
-            repo.setBacklight(dsn, it)
+        viewModelScope.launch(Dispatchers.IO) {
+            switchProp(
+                value = _backlight.value!!,
+                setValue = { value -> repo.setBacklight(dsn, value) }
+            )
         }
     }
 
     fun switchAirFlowHorizontal() {
-        switchProp(_horizontalAirFlow) {
-            repo.setAirFlowHorizontal(dsn, it)
+        viewModelScope.launch(Dispatchers.IO) {
+            switchProp(
+                value = _horizontalAirFlow.value!!,
+                setValue = { value -> repo.setAirFlowHorizontal(dsn, value) }
+            )
         }
     }
 
     fun switchAirFlowVertical() {
-        switchProp(_verticalAirFlow) {
-            repo.setAirFlowVertical(dsn, it)
+        viewModelScope.launch(Dispatchers.IO) {
+            switchProp(
+                value = _verticalAirFlow.value!!,
+                setValue = { value -> repo.setAirFlowVertical(dsn, value) }
+            )
         }
     }
 
     fun switchQuiet() {
-        switchProp(_isQuiet) {
-            repo.setQuiet(dsn, it)
+        viewModelScope.launch(Dispatchers.IO) {
+            switchProp(
+                value = _isQuiet.value!!,
+                setValue = { value -> repo.setQuiet(dsn, value) }
+            )
         }
     }
 
     fun switchEco() {
-        switchProp(_isEco) {
-            repo.setEco(dsn, it)
+        viewModelScope.launch(Dispatchers.IO) {
+            switchProp(
+                value = _isEco.value!!,
+                setValue = { value -> repo.setEco(dsn, value) }
+            )
         }
     }
 
     fun switchBoost() {
-        switchProp(_isBoost) {
-            repo.setBoost(dsn, it)
+        viewModelScope.launch(Dispatchers.IO) {
+            switchProp(
+                value = _isBoost.value!!,
+                setValue = { value -> repo.setBoost(dsn, value) }
+            )
         }
     }
 
     fun switchPower() {
-        _isLoading.value = true
-        switchProp(
-            _isOn,
-            setProperty = {
-                repo.setPower(dsn, it)
-            },
-            postFetch = {
-                withContext(Dispatchers.Main) {
-                    _isLoading.value = false
-                }
-            }
-        )
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.value = true
+            switchProp(
+                value = _isOn.value!!,
+                setValue = { value -> repo.setPower(dsn, value) },
+            )
+            _isLoading.value = false
+        }
     }
 
     fun setTemp(value: Int) {
-        setProp {
-            repo.setTemp(dsn, value)
+        viewModelScope.launch(Dispatchers.IO) {
+            setProp {
+                repo.setTemp(dsn, value)
+            }
         }
     }
 
