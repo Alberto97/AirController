@@ -16,7 +16,7 @@ import org.alberto97.hisenseair.UriConstants
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.controllers.*
 import org.alberto97.hisenseair.models.AppDeviceState
-import org.alberto97.hisenseair.models.BottomSheetListItem
+import org.alberto97.hisenseair.models.ListItemModel
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.ui.MainActivity
 
@@ -110,11 +110,11 @@ class DeviceViewModel(
 
     val supportedModes = combine(_supportedModes.asFlow(), workState.asFlow()) { modes, mode ->
         modes.map { item ->
-            BottomSheetListItem(
-                id = item,
-                name = modeToStringMap.getValue(item),
-                icon = modeToIconMap.getValue(item),
-                current = item == mode
+            ListItemModel(
+                value = item,
+                label = context.resources.getString(modeToStringMap.getValue(item)),
+                resourceDrawable = modeToIconMap.getValue(item),
+                selected = item == mode
             )
         }
     }.asLiveData()
@@ -125,11 +125,11 @@ class DeviceViewModel(
 
     val supportedFanSpeeds = combine(_supportedFanSpeeds.asFlow(), fanSpeed.asFlow()) { speeds, speed ->
         speeds.map { item ->
-            BottomSheetListItem(
-                id = item,
-                name = fanToStringMap.getValue(item),
-                icon = R.drawable.ic_fan,
-                current = item == speed
+            ListItemModel(
+                value = item,
+                label = context.resources.getString(fanToStringMap.getValue(item)),
+                resourceDrawable = R.drawable.ic_fan,
+                selected = item == speed
             )
         }
     }.asLiveData()
@@ -142,11 +142,11 @@ class DeviceViewModel(
     //  or something else to visually differentiate the modes
     val supportedSleepModes = combine(_supportedSleepModes.asFlow(), sleepMode.asFlow()) { modes, mode ->
         modes.map { item ->
-            BottomSheetListItem(
-                id = item.type,
-                name = sleepToStringMap.getValue(item.type),
-                icon = R.drawable.ic_nights_stay,
-                current = item.type == mode
+            ListItemModel(
+                value = item.type,
+                label = context.resources.getString(sleepToStringMap.getValue(item.type)),
+                resourceDrawable = R.drawable.ic_nights_stay,
+                selected = item.type == mode
             )
         }
     }.asLiveData()

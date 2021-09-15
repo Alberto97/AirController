@@ -1,6 +1,5 @@
 package org.alberto97.hisenseair.viewmodels
 
-import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -9,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ayla.IAylaModuleLoader
+import org.alberto97.hisenseair.models.ListItemModel
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.ISettingsRepository
@@ -22,8 +22,6 @@ enum class LoginState {
     Success,
     Error
 }
-
-class DropDownModel<T>(val value: T, val label: String, @DrawableRes val resourceDrawable: Int)
 
 class LoginViewModel(
     private val settings: ISettingsRepository,
@@ -41,11 +39,11 @@ class LoginViewModel(
     private val _message = MutableStateFlow("")
     val message = _message.asStateFlow()
 
-    private val _region = MutableStateFlow<DropDownModel<Region>?>(null)
+    private val _region = MutableStateFlow<ListItemModel<Region>?>(null)
     val region = _region.asStateFlow()
 
-    private val euRegion = DropDownModel(Region.EU, "Europe", R.drawable.ic_eu)
-    private val usRegion = DropDownModel(Region.US, "United States", R.drawable.ic_us)
+    private val euRegion = ListItemModel(Region.EU, "Europe", R.drawable.ic_eu)
+    private val usRegion = ListItemModel(Region.US, "United States", R.drawable.ic_us)
 
     val regions = listOf(euRegion, usRegion)
 
@@ -69,7 +67,7 @@ class LoginViewModel(
         }
     }
 
-    fun setRegion(region: DropDownModel<Region>) {
+    fun setRegion(region: ListItemModel<Region>) {
         _region.value = region
         moduleLoader.load(region.value)
         // Once region and appsecrets are untied, move this on login success

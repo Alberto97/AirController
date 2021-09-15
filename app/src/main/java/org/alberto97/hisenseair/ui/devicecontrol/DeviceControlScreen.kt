@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.ui.common.BottomSheetContent
@@ -157,11 +156,11 @@ private fun ModeSheet(
         content = {
             supportedModes.forEach { mode ->
                 BottomSheetListItem(
-                    text = stringResource(mode.name),
-                    icon = { SheetIcon(mode.icon) },
-                    selected = mode.current,
+                    text = mode.label,
+                    icon = { SheetIcon(mode.resourceDrawable) },
+                    selected = mode.selected,
                     onClick = {
-                        viewModel.setMode(mode.id)
+                        viewModel.setMode(mode.value)
                         close()
                     }
                 )
@@ -184,11 +183,11 @@ private fun FanSpeedSheet(
         content = {
             supportedFanSpeeds.forEach { mode ->
                 BottomSheetListItem(
-                    text = stringResource(mode.name),
-                    icon = { SheetIcon(mode.icon) },
-                    selected = mode.current,
+                    text = mode.label,
+                    icon = { SheetIcon(mode.resourceDrawable) },
+                    selected = mode.selected,
                     onClick = {
-                        viewModel.setFanSpeed(mode.id)
+                        viewModel.setFanSpeed(mode.value)
                         close()
                     }
                 )
@@ -210,11 +209,11 @@ private fun SleepSheet(
         content = {
             supportedSleepModes.forEach { mode ->
                 BottomSheetListItem(
-                    text = stringResource(mode.name),
-                    icon = { SheetIcon(mode.icon) },
-                    selected = mode.current,
+                    text = mode.label,
+                    icon = { SheetIcon(mode.resourceDrawable) },
+                    selected = mode.selected,
                     onClick = {
-                        viewModel.setSleepMode(mode.id)
+                        viewModel.setSleepMode(mode.value)
                         close()
                     }
                 )
