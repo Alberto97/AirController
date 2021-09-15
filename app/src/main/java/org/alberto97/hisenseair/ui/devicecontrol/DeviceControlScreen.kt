@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.alberto97.hisenseair.ui.common.AppScaffold
 import org.alberto97.hisenseair.ui.common.BottomSheetContent
 import org.alberto97.hisenseair.ui.common.BottomSheetListItem
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
@@ -37,6 +38,7 @@ fun DeviceControlScreen(
 
     val isLoading by viewModel.isLoading.collectAsState()
     val isOn by viewModel.isOn.collectAsState()
+    val message by viewModel.message.collectAsState()
 
 
     val (sheetType, setSheetType) = remember { mutableStateOf(DeviceControlSheet.None) }
@@ -57,7 +59,9 @@ fun DeviceControlScreen(
             )
         }
     ){
-        Scaffold(
+        AppScaffold(
+            message = message,
+            clearMessage = { viewModel.clearMessage() },
             topBar = {
                 TopAppBar(
                     deviceName = deviceName,

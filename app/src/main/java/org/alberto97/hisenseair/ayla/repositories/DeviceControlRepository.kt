@@ -13,6 +13,7 @@ import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
 import org.alberto97.hisenseair.features.TemperatureExtensions.toC
 import org.alberto97.hisenseair.features.TemperatureExtensions.toF
 import org.alberto97.hisenseair.models.AppDeviceState
+import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 
 class DeviceControlRepository(
@@ -38,10 +39,14 @@ class DeviceControlRepository(
         service.setDeviceProperty(dsn, property, data)
     }
 
-    override suspend fun getDeviceState(dsn: String): AppDeviceState {
+    override suspend fun getDeviceState(dsn: String): ResultWrapper<AppDeviceState> {
         val deviceState = AppDeviceState()
 
-        val wrappedProps = service.getDeviceProperties(dsn)
+        val wrappedProps = try {
+            service.getDeviceProperties(dsn)
+        } catch (e: Exception) {
+            return ResultWrapper.Error("Cannot retrieve device state")
+        }
         val props = wrappedProps.map { it.property }
 
         // Set device name
@@ -76,7 +81,7 @@ class DeviceControlRepository(
             deviceState.roomTemp = deviceState.roomTemp.toC()
         }
 
-        return deviceState
+        return ResultWrapper.Success(deviceState)
     }
 
     private fun mapByType(prop: Property) : Any? {
@@ -150,73 +155,137 @@ class DeviceControlRepository(
         return listOf(off, sleep1, sleep2, sleep3, sleep4)
     }
 
-    override suspend fun setAirFlowHorizontal(dsn: String, value: Boolean) {
-        val datapoint = boolConverter.map(value)
-        setProperty(dsn, HORIZONTAL_AIR_FLOW_PROP, datapoint)
+    override suspend fun setAirFlowHorizontal(dsn: String, value: Boolean): ResultWrapper<Unit> {
+        return try {
+            val datapoint = boolConverter.map(value)
+            setProperty(dsn, HORIZONTAL_AIR_FLOW_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update horizontal air flow")
+        }
     }
 
-    override suspend fun setAirFlowVertical(dsn: String, value: Boolean) {
-        val datapoint = boolConverter.map(value)
-        setProperty(dsn, VERTICAL_AIR_FLOW_PROP, datapoint)
+    override suspend fun setAirFlowVertical(dsn: String, value: Boolean): ResultWrapper<Unit> {
+        return try {
+            val datapoint = boolConverter.map(value)
+            setProperty(dsn, VERTICAL_AIR_FLOW_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update vertical air flow")
+        }
     }
 
-    override suspend fun setBacklight(dsn: String, value: Boolean) {
-        val datapoint = boolConverter.map(value)
-        setProperty(dsn, BACKLIGHT_PROP, datapoint)
+    override suspend fun setBacklight(dsn: String, value: Boolean): ResultWrapper<Unit> {
+        return try {
+            val datapoint = boolConverter.map(value)
+            setProperty(dsn, BACKLIGHT_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update backlight")
+        }
     }
 
-    override suspend fun setBoost(dsn: String, value: Boolean) {
-        val datapoint = boolConverter.map(value)
-        setProperty(dsn, BOOST_PROP, datapoint)
+    override suspend fun setBoost(dsn: String, value: Boolean): ResultWrapper<Unit> {
+        return try {
+            val datapoint = boolConverter.map(value)
+            setProperty(dsn, BOOST_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update boost mode")
+        }
     }
 
-    override suspend fun setEco(dsn: String, value: Boolean) {
-        val datapoint = boolConverter.map(value)
-        setProperty(dsn, ECO_PROP, datapoint)
+    override suspend fun setEco(dsn: String, value: Boolean): ResultWrapper<Unit> {
+        return try {
+            val datapoint = boolConverter.map(value)
+            setProperty(dsn, ECO_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update eco mode")
+        }
     }
 
-    override suspend fun setFanSpeed(dsn: String, value: FanSpeed) {
-        val data = fanSpeedConverter.map(value)
-        setProperty(dsn, FAN_SPEED_PROP, data)
+    override suspend fun setFanSpeed(dsn: String, value: FanSpeed): ResultWrapper<Unit> {
+        return try {
+            val data = fanSpeedConverter.map(value)
+            setProperty(dsn, FAN_SPEED_PROP, data)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+        ResultWrapper.Error("Cannot update fan speed")
+    }
     }
 
-    override suspend fun setMode(dsn: String, value: WorkMode) {
-        val data = modeConverter.map(value)
-        setProperty(dsn, WORK_MODE_PROP, data)
+    override suspend fun setMode(dsn: String, value: WorkMode): ResultWrapper<Unit> {
+        return try {
+            val data = modeConverter.map(value)
+            setProperty(dsn, WORK_MODE_PROP, data)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update work mode")
+        }
     }
 
-    override suspend fun setPower(dsn: String, value: Boolean) {
-        val datapoint = boolConverter.map(value)
-        setProperty(dsn, POWER_PROP, datapoint)
+    override suspend fun setPower(dsn: String, value: Boolean): ResultWrapper<Unit> {
+        return try {
+            val datapoint = boolConverter.map(value)
+            setProperty(dsn, POWER_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update power status")
+        }
     }
 
-    override suspend fun setQuiet(dsn: String, value: Boolean) {
-        val datapoint = boolConverter.map(value)
-        setProperty(dsn, QUIET_PROP, datapoint)
+    override suspend fun setQuiet(dsn: String, value: Boolean): ResultWrapper<Unit> {
+        return try {
+            val datapoint = boolConverter.map(value)
+            setProperty(dsn, QUIET_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update quiet mode")
+        }
     }
 
-    override suspend fun setSleepMode(dsn: String, value: SleepMode) {
-        val datapoint = sleepModeConverter.map(value)
-        setProperty(dsn, SLEEP_MODE_PROP, datapoint)
+    override suspend fun setSleepMode(dsn: String, value: SleepMode): ResultWrapper<Unit> {
+        return try {
+            val datapoint = sleepModeConverter.map(value)
+            setProperty(dsn, SLEEP_MODE_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update sleep mode")
+        }
     }
 
-    override suspend fun setTemp(dsn: String, value: Int) {
-        val unit = prefs.getTempUnit(dsn)
-        val temp = if (unit.isCelsius()) value.toF() else value
-        val datapoint = intConverter.map(temp)
-        setProperty(dsn, TEMP_PROP, datapoint)
+    override suspend fun setTemp(dsn: String, value: Int): ResultWrapper<Unit> {
+        return try {
+            val unit = prefs.getTempUnit(dsn)
+            val temp = if (unit.isCelsius()) value.toF() else value
+            val datapoint = intConverter.map(temp)
+            setProperty(dsn, TEMP_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot update temperature")
+        }
     }
 
-    override suspend fun getTempUnit(dsn: String): TempType {
-        val value = getProperty(TEMP_TYPE_PROP, dsn)
-        val unit = tempUnitConverter.map(value)
-        prefs.setTempUnit(dsn, unit)
-        return unit
+    override suspend fun getTempUnit(dsn: String): ResultWrapper<TempType> {
+        return try {
+            val value = getProperty(TEMP_TYPE_PROP, dsn)
+            val unit = tempUnitConverter.map(value)
+            prefs.setTempUnit(dsn, unit)
+            ResultWrapper.Success(unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot get temperature unit")
+        }
     }
 
-    override suspend fun setTempUnit(dsn: String, value: TempType) {
-        prefs.setTempUnit(dsn, value)
-        val datapoint = tempUnitConverter.map(value)
-        setProperty(dsn, TEMP_TYPE_PROP, datapoint)
+    override suspend fun setTempUnit(dsn: String, value: TempType): ResultWrapper<Unit> {
+        return try {
+            prefs.setTempUnit(dsn, value)
+            val datapoint = tempUnitConverter.map(value)
+            setProperty(dsn, TEMP_TYPE_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot set temperature unit")
+        }
     }
 }

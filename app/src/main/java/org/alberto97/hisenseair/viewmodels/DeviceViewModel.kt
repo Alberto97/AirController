@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.UriConstants
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.controllers.*
 import org.alberto97.hisenseair.models.AppDeviceState
 import org.alberto97.hisenseair.models.ListItemModel
+import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.ui.MainActivity
 
@@ -132,6 +132,9 @@ class DeviceViewModel(
     private val _deviceName = MutableStateFlow("")
     val deviceName = _deviceName.asStateFlow()
 
+    private val _message = MutableStateFlow("")
+    val message = _message.asStateFlow()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
@@ -142,29 +145,35 @@ class DeviceViewModel(
 
     private suspend fun fetchData() {
         val resp = repo.getDeviceState(dsn)
-        withContext(Dispatchers.Main) {
-            _deviceName.value = resp.productName
-            _backlight.value = backlightController.getValue(resp)
-            _workMode.value = modeController.getValue(resp)!!
-            _horizontalAirFlow.value = airFlowHorizontalController.getValue(resp)
-            _verticalAirFlow.value = airFlowVerticalController.getValue(resp)
-            _isQuiet.value = quietController.getValue(resp)
-            _isEco.value = ecoController.getValue(resp)
-            _isBoost.value = boostController.getValue(resp)
-            _sleepMode.value = sleepModeController.getValue(resp)
-            _fanSpeed.value = fanSpeedController.getValue(resp)
-            _temp.value = tempController.getValue(resp)
-            _roomTemp.value = roomTempController.getValue(resp)!!
-            _isOn.value = powerController.getValue(resp)
-            _maxTemp.value = maxTempController.getValue(resp)
-            _minTemp.value = minTempController.getValue(resp)
-            _supportedFanSpeeds.value = supportedFanSpeedController.getValue(resp)!!
-            _supportedModes.value = supportedModesController.getValue(resp)!!
-            _supportedSleepModes.value = supportedSleepModesController.getValue(resp)!!
-            createShortcut(resp)
+        if (resp.data == null) {
+            _message.value = resp.message
+            return
         }
+
+        updateUi(resp.data)
+        createShortcut(resp.data)
     }
 
+    private fun updateUi(data: AppDeviceState) {
+        _deviceName.value = data.productName
+        _backlight.value = backlightController.getValue(data)
+        _workMode.value = modeController.getValue(data)!!
+        _horizontalAirFlow.value = airFlowHorizontalController.getValue(data)
+        _verticalAirFlow.value = airFlowVerticalController.getValue(data)
+        _isQuiet.value = quietController.getValue(data)
+        _isEco.value = ecoController.getValue(data)
+        _isBoost.value = boostController.getValue(data)
+        _sleepMode.value = sleepModeController.getValue(data)
+        _fanSpeed.value = fanSpeedController.getValue(data)
+        _temp.value = tempController.getValue(data)
+        _roomTemp.value = roomTempController.getValue(data)!!
+        _isOn.value = powerController.getValue(data)
+        _maxTemp.value = maxTempController.getValue(data)
+        _minTemp.value = minTempController.getValue(data)
+        _supportedFanSpeeds.value = supportedFanSpeedController.getValue(data)!!
+        _supportedModes.value = supportedModesController.getValue(data)!!
+        _supportedSleepModes.value = supportedSleepModesController.getValue(data)!!
+    }
 
     private fun createShortcut(device: AppDeviceState) {
         val intent = Intent(
@@ -185,15 +194,25 @@ class DeviceViewModel(
         ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
     }
 
-    private suspend fun setProp(setValue: suspend () -> Unit) {
-        setValue()
-        fetchData()
+    fun clearMessage() {
+        _message.value = ""
     }
 
-    private suspend fun switchProp(value: Boolean, setValue: suspend (value: Boolean) -> Unit) {
+    private suspend fun <T> setProp(setValue: suspend () -> ResultWrapper<T>) {
+        val resp = setValue()
+        if (resp is ResultWrapper.Success)
+            fetchData()
+        else
+            _message.value = resp.message
+    }
+
+    private suspend fun <T> switchProp(value: Boolean, setValue: suspend (value: Boolean) -> ResultWrapper<T>) {
         val opposite = !value
-        setValue(opposite)
-        fetchData()
+        val resp = setValue(opposite)
+        if (resp is ResultWrapper.Success)
+            fetchData()
+        else
+            _message.value = resp.message
     }
 
     fun setMode(mode: WorkMode) {

@@ -89,8 +89,9 @@ class HisenseControlsProvider : ControlsProviderService() {
         }
     }
 
-    private suspend fun createControlById(dsn: String, status: Int): Control {
-        val state = deviceControl.getDeviceState(dsn)
+    private suspend fun createControlById(dsn: String, status: Int): Control? {
+        val result = deviceControl.getDeviceState(dsn)
+        val state = result.data ?: return null
         val template = createThermostatTemplate(state)
         val statusText = getStatusText(state.on, state.workMode)
         return Control.StatefulBuilder(dsn, getPendingIntent(dsn))

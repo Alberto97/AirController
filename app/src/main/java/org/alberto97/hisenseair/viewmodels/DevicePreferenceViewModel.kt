@@ -49,8 +49,11 @@ class DevicePreferenceViewModel(
         val type = if (useCelsius.value) TempType.Fahrenheit else TempType.Celsius
 
         viewModelScope.launch(Dispatchers.IO) {
-            deviceControl.setTempUnit(dsn, type)
-            fetchTempType()
+            val result = deviceControl.setTempUnit(dsn, type)
+            if (result.data != null)
+                fetchTempType()
+            else
+                _message.value = result.message
         }
     }
 
@@ -75,8 +78,11 @@ class DevicePreferenceViewModel(
     }
 
     private suspend fun fetchTempType() {
-        val value = deviceControl.getTempUnit(dsn)
-        _useCelsius.value = value == TempType.Celsius
+        val result = deviceControl.getTempUnit(dsn)
+        if (result.data != null)
+            _useCelsius.value = result.data == TempType.Celsius
+        else
+            _message.value = result.message
     }
 
     private suspend fun updateDeviceProps() {
