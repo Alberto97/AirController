@@ -2,15 +2,23 @@ package org.alberto97.hisenseair.ayla.repositories
 
 import android.util.Log
 import org.alberto97.hisenseair.ayla.AylaExtensions.isAvailable
+import org.alberto97.hisenseair.ayla.features.TEMP_TYPE_PROP
+import org.alberto97.hisenseair.ayla.features.converters.ITempUnitConverter
 import org.alberto97.hisenseair.ayla.models.Device
 import org.alberto97.hisenseair.ayla.models.ProductName
 import org.alberto97.hisenseair.ayla.models.ProductNameWrapper
 import org.alberto97.hisenseair.ayla.network.api.AylaService
+import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
-class DeviceRepository(private val service: AylaService) : IDeviceRepository {
+class DeviceRepository(
+    private val service: AylaService,
+    private val propertyRepo: IDevicePropertyRepository,
+    private val prefs: IDeviceCacheRepository,
+    private val tempUnitConverter: ITempUnitConverter,
+) : IDeviceRepository {
     companion object {
         private const val LOG_TAG = "HiDevice"
     }
@@ -66,6 +74,28 @@ class DeviceRepository(private val service: AylaService) : IDeviceRepository {
             ResultWrapper.Error("Cannot delete device")
         }
 
+    }
+
+    override suspend fun getTempUnit(dsn: String): ResultWrapper<TempType> {
+        return try {
+            val value = propertyRepo.getProperty(TEMP_TYPE_PROP, dsn)
+            val unit = tempUnitConverter.map(value)
+            prefs.setTempUnit(dsn, unit)
+            ResultWrapper.Success(unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot get temperature unit")
+        }
+    }
+
+    override suspend fun setTempUnit(dsn: String, value: TempType): ResultWrapper<Unit> {
+        return try {
+            prefs.setTempUnit(dsn, value)
+            val datapoint = tempUnitConverter.map(value)
+            propertyRepo.setProperty(dsn, TEMP_TYPE_PROP, datapoint)
+            ResultWrapper.Success(Unit)
+        } catch (e: Exception) {
+            ResultWrapper.Error("Cannot set temperature unit")
+        }
     }
 
     private fun mapDeviceData(it: Device): AppDevice {

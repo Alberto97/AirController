@@ -8,13 +8,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.features.TempType
-import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
 class DevicePreferenceViewModel(
     private val dsn: String,
-    private val repo: IDeviceRepository,
-    private val deviceControl: IDeviceControlRepository
+    private val repo: IDeviceRepository
 ) : ViewModel() {
 
     private val _deviceName = MutableStateFlow("")
@@ -49,7 +47,7 @@ class DevicePreferenceViewModel(
         val type = if (useCelsius.value) TempType.Fahrenheit else TempType.Celsius
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = deviceControl.setTempUnit(dsn, type)
+            val result = repo.setTempUnit(dsn, type)
             if (result.data != null)
                 fetchTempType()
             else
@@ -78,7 +76,7 @@ class DevicePreferenceViewModel(
     }
 
     private suspend fun fetchTempType() {
-        val result = deviceControl.getTempUnit(dsn)
+        val result = repo.getTempUnit(dsn)
         if (result.data != null)
             _useCelsius.value = result.data == TempType.Celsius
         else

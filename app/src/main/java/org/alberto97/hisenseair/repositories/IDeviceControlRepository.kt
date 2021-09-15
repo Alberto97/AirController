@@ -17,7 +17,5 @@ interface IDeviceControlRepository {
     suspend fun setQuiet(dsn: String, value: Boolean): ResultWrapper<Unit>
     suspend fun setSleepMode(dsn: String, value: SleepMode): ResultWrapper<Unit>
     suspend fun setTemp(dsn: String, value: Int): ResultWrapper<Unit>
-    suspend fun getTempUnit(dsn: String): ResultWrapper<TempType>
-    suspend fun setTempUnit(dsn: String, value: TempType): ResultWrapper<Unit>
 }
 
