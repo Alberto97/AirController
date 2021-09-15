@@ -69,7 +69,6 @@ fun NavGraph(
                 openDevice = { dsn ->
                     navController.navigate(Screen.DeviceControl.createRoute(dsn))
                 },
-                openLogin = { navController.navigate(Screen.Login.route) },
                 openPair = { navController.navigate(Screen.Pair.route) },
                 currentBackStackEntry = navController.currentBackStackEntry
             )

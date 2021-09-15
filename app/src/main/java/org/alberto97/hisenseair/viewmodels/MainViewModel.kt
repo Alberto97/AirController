@@ -8,8 +8,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.repositories.IDeviceRepository
-import retrofit2.HttpException
-import javax.net.ssl.HttpsURLConnection
 
 class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
 
@@ -18,9 +16,6 @@ class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
-
-    private val _isLoggedOut = MutableStateFlow(false)
-    val isLoggedOut = _isLoggedOut.asStateFlow()
 
     init {
         loadData()
@@ -35,11 +30,7 @@ class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
     }
 
     private suspend fun fetchData() {
-        try {
-            val deviceList = repo.getDevices()
-            _devices.value = deviceList
-        } catch (e: HttpException) {
-            _isLoggedOut.value = e.code() == HttpsURLConnection.HTTP_UNAUTHORIZED
-        }
+        val deviceList = repo.getDevices()
+        _devices.value = deviceList
     }
 }

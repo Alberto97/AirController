@@ -29,14 +29,12 @@ object DevicesStateHandleParams {
 @Composable
 fun DevicesScreen(
     openDevice: (dsn: String) -> Unit,
-    openLogin: () -> Unit,
     openPair: () -> Unit,
     currentBackStackEntry: NavBackStackEntry?,
     viewModel: MainViewModel = getViewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val devices by viewModel.devices.collectAsState()
-    val loggedOut by viewModel.isLoggedOut.collectAsState()
 
     val savedStateHandle = currentBackStackEntry?.savedStateHandle
     val refreshLiveData = savedStateHandle?.getLiveData<Boolean>(DevicesStateHandleParams.needsRefresh)
@@ -46,9 +44,6 @@ fun DevicesScreen(
         viewModel.loadData()
         savedStateHandle?.set(DevicesStateHandleParams.needsRefresh, false)
     }
-
-    if (loggedOut)
-        openLogin()
 
     DevicesScreen(
         isLoading = isLoading,
