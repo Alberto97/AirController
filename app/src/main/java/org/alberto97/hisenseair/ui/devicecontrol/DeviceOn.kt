@@ -14,8 +14,8 @@ import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,17 +28,17 @@ import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 @Composable
 @ExperimentalMaterialApi
 fun DeviceOn(viewModel: DeviceViewModel, showSheet: (data: DeviceControlSheet) -> Unit) {
-    val temp by viewModel.temp.observeAsState()
-    val roomTemp by viewModel.roomTemp.observeAsState()
-    val workMode by viewModel.workState.observeAsState()
-    val fanSpeed by viewModel.fanSpeed.observeAsState()
-    val sleepMode by viewModel.sleepMode.observeAsState()
-    val horizontalAirFlow by viewModel.horizontalAirFlow.observeAsState()
-    val verticalAirFlow by viewModel.verticalAirFlow.observeAsState()
-    val backlight by viewModel.backlight.observeAsState()
-    val eco by viewModel.isEco.observeAsState()
-    val quiet by viewModel.isQuiet.observeAsState()
-    val boost by viewModel.isBoost.observeAsState()
+    val temp by viewModel.temp.collectAsState()
+    val roomTemp by viewModel.roomTemp.collectAsState()
+    val workMode by viewModel.workMode.collectAsState()
+    val fanSpeed by viewModel.fanSpeed.collectAsState()
+    val sleepMode by viewModel.sleepMode.collectAsState()
+    val horizontalAirFlow by viewModel.horizontalAirFlow.collectAsState()
+    val verticalAirFlow by viewModel.verticalAirFlow.collectAsState()
+    val backlight by viewModel.backlight.collectAsState()
+    val eco by viewModel.isEco.collectAsState()
+    val quiet by viewModel.isQuiet.collectAsState()
+    val boost by viewModel.isBoost.collectAsState()
 
     DeviceOn(
         temp = temp,

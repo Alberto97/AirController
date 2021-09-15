@@ -5,7 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.delay
@@ -34,10 +33,10 @@ fun DeviceControlScreen(
     navigateSettings: () -> Unit,
     viewModel: DeviceViewModel = getViewModel { parametersOf(dsn) }
 ) {
-    val deviceName by viewModel.deviceName.observeAsState("")
+    val deviceName by viewModel.deviceName.collectAsState()
 
-    val isLoading by viewModel.isLoading.observeAsState(true)
-    val isOn by viewModel.isOn.observeAsState(null)
+    val isLoading by viewModel.isLoading.collectAsState()
+    val isOn by viewModel.isOn.collectAsState()
 
 
     val (sheetType, setSheetType) = remember { mutableStateOf(DeviceControlSheet.None) }
@@ -149,7 +148,7 @@ private fun ModeSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
-    val supportedModes by viewModel.supportedModes.observeAsState(emptyList())
+    val supportedModes by viewModel.supportedModes.collectAsState(emptyList())
 
     BottomSheetContent(
         title = "Mode",
@@ -176,7 +175,7 @@ private fun FanSpeedSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
-    val supportedFanSpeeds by viewModel.supportedFanSpeeds.observeAsState(emptyList())
+    val supportedFanSpeeds by viewModel.supportedFanSpeeds.collectAsState(emptyList())
 
     BottomSheetContent(
         title = "Fan Speed",
@@ -202,7 +201,7 @@ private fun SleepSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
-    val supportedSleepModes by viewModel.supportedSleepModes.observeAsState(emptyList())
+    val supportedSleepModes by viewModel.supportedSleepModes.collectAsState(emptyList())
 
     BottomSheetContent(
         title = "Sleep Mode",

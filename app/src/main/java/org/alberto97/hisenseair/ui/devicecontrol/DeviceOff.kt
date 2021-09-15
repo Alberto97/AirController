@@ -6,8 +6,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -23,8 +23,8 @@ import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 
 @Composable
 fun DeviceOff(viewModel: DeviceViewModel) {
-    val currentTemp by viewModel.roomTemp.observeAsState(-1)
-    val currentMode by viewModel.workState.observeAsState(WorkMode.Auto)
+    val currentTemp by viewModel.roomTemp.collectAsState()
+    val currentMode by viewModel.workMode.collectAsState()
 
     DeviceOff(
         currentMode = currentMode,

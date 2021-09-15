@@ -8,6 +8,8 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,72 +45,53 @@ class DeviceViewModel(
     private val tempController: ITempControlController
 ) : ViewModel() {
 
-    val isLoading: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
 
-    // State
-    val workState: MutableLiveData<WorkMode> by lazy {
-        MutableLiveData<WorkMode>()
-    }
+    private val _workMode = MutableStateFlow(WorkMode.Auto)
+    val workMode = _workMode.asStateFlow()
 
-    val sleepMode: MutableLiveData<SleepMode> by lazy {
-        MutableLiveData<SleepMode>()
-    }
+    private val _sleepMode = MutableStateFlow<SleepMode?>(SleepMode.OFF)
+    val sleepMode = _sleepMode.asStateFlow()
 
-    val fanSpeed: MutableLiveData<FanSpeed> by lazy {
-        MutableLiveData<FanSpeed>()
-    }
+    private val _fanSpeed = MutableStateFlow<FanSpeed?>(FanSpeed.Auto)
+    val fanSpeed = _fanSpeed.asStateFlow()
 
-    val backlight: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _backlight = MutableStateFlow<Boolean?>(true)
+    val backlight = _backlight.asStateFlow()
 
-    val horizontalAirFlow: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _horizontalAirFlow = MutableStateFlow<Boolean?>(false)
+    val horizontalAirFlow = _horizontalAirFlow.asStateFlow()
 
-    val verticalAirFlow: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _verticalAirFlow = MutableStateFlow<Boolean?>(false)
+    val verticalAirFlow = _verticalAirFlow.asStateFlow()
 
-    val isQuiet: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _isQuiet = MutableStateFlow<Boolean?>(false)
+    val isQuiet = _isQuiet.asStateFlow()
 
-    val isEco: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _isEco = MutableStateFlow<Boolean?>(false)
+    val isEco = _isEco.asStateFlow()
 
-    val isBoost: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _isBoost = MutableStateFlow<Boolean?>(false)
+    val isBoost = _isBoost.asStateFlow()
 
-    val isOn: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    private val _isOn = MutableStateFlow<Boolean?>(false)
+    val isOn = _isOn.asStateFlow()
 
-    val roomTemp: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
+    private val _roomTemp = MutableStateFlow(0)
+    val roomTemp = _roomTemp.asStateFlow()
 
-    val temp: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
+    private val _temp = MutableStateFlow<Int?>(0)
+    val temp = _temp.asStateFlow()
 
-    val maxTemp: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
+    private val _maxTemp = MutableStateFlow<Int?>(0)
+    val maxTemp = _maxTemp.asStateFlow()
 
-    val minTemp: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
+    private val _minTemp = MutableStateFlow<Int?>(0)
+    val minTemp = _minTemp.asStateFlow()
 
-    private val _supportedModes: MutableLiveData<List<WorkMode>> by lazy {
-        MutableLiveData<List<WorkMode>>()
-    }
-
-    val supportedModes = combine(_supportedModes.asFlow(), workState.asFlow()) { modes, mode ->
+    private val _supportedModes = MutableStateFlow<List<WorkMode>>(emptyList())
+    val supportedModes = combine(_supportedModes, workMode) { modes, mode ->
         modes.map { item ->
             ListItemModel(
                 value = item,
@@ -117,13 +100,10 @@ class DeviceViewModel(
                 selected = item == mode
             )
         }
-    }.asLiveData()
-
-    private val _supportedFanSpeeds: MutableLiveData<List<FanSpeed>> by lazy {
-        MutableLiveData<List<FanSpeed>>()
     }
 
-    val supportedFanSpeeds = combine(_supportedFanSpeeds.asFlow(), fanSpeed.asFlow()) { speeds, speed ->
+    private val _supportedFanSpeeds = MutableStateFlow<List<FanSpeed>>(emptyList())
+    val supportedFanSpeeds = combine(_supportedFanSpeeds, fanSpeed) { speeds, speed ->
         speeds.map { item ->
             ListItemModel(
                 value = item,
@@ -132,15 +112,12 @@ class DeviceViewModel(
                 selected = item == speed
             )
         }
-    }.asLiveData()
-
-    private val _supportedSleepModes: MutableLiveData<List<SleepModeData>> by lazy {
-        MutableLiveData<List<SleepModeData>>()
     }
 
     // TODO: This *really* needs to be improved by showing a graph
     //  or something else to visually differentiate the modes
-    val supportedSleepModes = combine(_supportedSleepModes.asFlow(), sleepMode.asFlow()) { modes, mode ->
+    private val _supportedSleepModes = MutableStateFlow<List<SleepModeData>>(emptyList())
+    val supportedSleepModes = combine(_supportedSleepModes, sleepMode) { modes, mode ->
         modes.map { item ->
             ListItemModel(
                 value = item.type,
@@ -149,44 +126,41 @@ class DeviceViewModel(
                 selected = item.type == mode
             )
         }
-    }.asLiveData()
-
-    // Info
-    val deviceName: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
     }
 
+    // Info
+    private val _deviceName = MutableStateFlow("")
+    val deviceName = _deviceName.asStateFlow()
+
     init {
-        isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.value = true
             fetchData()
-            withContext(Dispatchers.Main) {
-                isLoading.value = false
-            }
+            _isLoading.value = false
         }
     }
 
     private suspend fun fetchData() {
         val resp = repo.getDeviceState(dsn)
         withContext(Dispatchers.Main) {
-            deviceName.value = resp.productName
-            backlight.value = backlightController.getValue(resp)
-            workState.value = modeController.getValue(resp)
-            horizontalAirFlow.value = airFlowHorizontalController.getValue(resp)
-            verticalAirFlow.value = airFlowVerticalController.getValue(resp)
-            isQuiet.value = quietController.getValue(resp)
-            isEco.value = ecoController.getValue(resp)
-            isBoost.value = boostController.getValue(resp)
-            sleepMode.value = sleepModeController.getValue(resp)
-            fanSpeed.value = fanSpeedController.getValue(resp)
-            temp.value = tempController.getValue(resp)
-            roomTemp.value = roomTempController.getValue(resp)
-            isOn.value = powerController.getValue(resp)
-            maxTemp.value = maxTempController.getValue(resp)
-            minTemp.value = minTempController.getValue(resp)
-            _supportedFanSpeeds.value = supportedFanSpeedController.getValue(resp)
-            _supportedModes.value = supportedModesController.getValue(resp)
-            _supportedSleepModes.value = supportedSleepModesController.getValue(resp)
+            _deviceName.value = resp.productName
+            _backlight.value = backlightController.getValue(resp)
+            _workMode.value = modeController.getValue(resp)!!
+            _horizontalAirFlow.value = airFlowHorizontalController.getValue(resp)
+            _verticalAirFlow.value = airFlowVerticalController.getValue(resp)
+            _isQuiet.value = quietController.getValue(resp)
+            _isEco.value = ecoController.getValue(resp)
+            _isBoost.value = boostController.getValue(resp)
+            _sleepMode.value = sleepModeController.getValue(resp)
+            _fanSpeed.value = fanSpeedController.getValue(resp)
+            _temp.value = tempController.getValue(resp)
+            _roomTemp.value = roomTempController.getValue(resp)!!
+            _isOn.value = powerController.getValue(resp)
+            _maxTemp.value = maxTempController.getValue(resp)
+            _minTemp.value = minTempController.getValue(resp)
+            _supportedFanSpeeds.value = supportedFanSpeedController.getValue(resp)!!
+            _supportedModes.value = supportedModesController.getValue(resp)!!
+            _supportedSleepModes.value = supportedSleepModesController.getValue(resp)!!
             createShortcut(resp)
         }
     }
@@ -218,11 +192,11 @@ class DeviceViewModel(
         }
     }
 
-    private fun switchProp(liveData: MutableLiveData<Boolean>,
+    private fun switchProp(data: MutableStateFlow<Boolean?>,
                            postFetch: (suspend () -> Unit)? = null,
                            setProperty: suspend (value: Boolean) -> Unit) {
-        val opposite = !liveData.value!!
-        liveData.value = opposite
+        val opposite = !data.value!!
+        data.value = opposite
 
         viewModelScope.launch(Dispatchers.IO) {
             setProperty(opposite)
@@ -251,51 +225,51 @@ class DeviceViewModel(
     }
 
     fun switchBacklight() {
-        switchProp(backlight) {
+        switchProp(_backlight) {
             repo.setBacklight(dsn, it)
         }
     }
 
     fun switchAirFlowHorizontal() {
-        switchProp(horizontalAirFlow) {
+        switchProp(_horizontalAirFlow) {
             repo.setAirFlowHorizontal(dsn, it)
         }
     }
 
     fun switchAirFlowVertical() {
-        switchProp(verticalAirFlow) {
+        switchProp(_verticalAirFlow) {
             repo.setAirFlowVertical(dsn, it)
         }
     }
 
     fun switchQuiet() {
-        switchProp(isQuiet) {
+        switchProp(_isQuiet) {
             repo.setQuiet(dsn, it)
         }
     }
 
     fun switchEco() {
-        switchProp(isEco) {
+        switchProp(_isEco) {
             repo.setEco(dsn, it)
         }
     }
 
     fun switchBoost() {
-        switchProp(isBoost) {
+        switchProp(_isBoost) {
             repo.setBoost(dsn, it)
         }
     }
 
     fun switchPower() {
-        isLoading.value = true
+        _isLoading.value = true
         switchProp(
-            isOn,
+            _isOn,
             setProperty = {
                 repo.setPower(dsn, it)
             },
             postFetch = {
                 withContext(Dispatchers.Main) {
-                    isLoading.value = false
+                    _isLoading.value = false
                 }
             }
         )
