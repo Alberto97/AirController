@@ -2,8 +2,6 @@ package org.alberto97.hisenseair.ui.devicesettings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -11,6 +9,7 @@ import androidx.navigation.NavBackStackEntry
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.ui.common.AppScaffold
+import org.alberto97.hisenseair.ui.common.AppToolbar
 import org.alberto97.hisenseair.ui.common.FullscreenError
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.devices.DevicesStateHandleParams
@@ -86,13 +85,9 @@ private fun DeviceSettingsScreen(
         message = message,
         clearMessage = clearMessage,
         topBar = {
-            TopAppBar(
+            AppToolbar(
                 title = { Text(stringResource(R.string.device_settings)) },
-                navigationIcon = {
-                    IconButton(onClick = { navigateUp() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                    }
-                },
+                navigateUp = navigateUp
             )
         }
     ) {

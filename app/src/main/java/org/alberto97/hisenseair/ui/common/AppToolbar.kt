@@ -1,5 +1,6 @@
 package org.alberto97.hisenseair.ui.common
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.TopAppBar
@@ -10,14 +11,16 @@ import androidx.compose.runtime.Composable
 @Composable
 fun AppToolbar(
     title: @Composable () -> Unit,
-    navigateUp: (() -> Unit)? = null
+    navigateUp: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     if (navigateUp == null)
-        TopAppBar(title = title)
+        TopAppBar(title = title, actions = actions)
     else
         TopAppBar(
             title = title,
-            navigationIcon = { BackNavIcon(navigateUp) }
+            navigationIcon = { BackNavIcon(navigateUp) },
+            actions = actions
         )
 }
 

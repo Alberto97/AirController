@@ -1,8 +1,10 @@
 package org.alberto97.hisenseair.ui.devicecontrol
 
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -107,19 +109,10 @@ private fun TopAppBar(
     navigateToSettings: () -> Unit
 ) {
 
-    if (!displayInPanel) {
-        TopAppBar(
+    if (!displayInPanel)
+        AppToolbar(
             title = { Text(deviceName) },
-            navigationIcon = {
-                IconButton(
-                    onClick = navigateUp,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
-                    )
-                }
-            },
+            navigateUp = navigateUp,
             actions = {
                 IconButton({ navigateToSettings() }) {
                     Icon(
@@ -129,7 +122,6 @@ private fun TopAppBar(
                 }
             }
         )
-    }
 }
 
 @Composable
