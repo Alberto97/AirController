@@ -4,24 +4,16 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.ui.common.*
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
-
-enum class DeviceControlSheet {
-    None,
-    FanSpeed,
-    Mode,
-    TempControl,
-    Sleep
-}
 
 @ExperimentalMaterialApi
 @Composable
@@ -66,24 +58,12 @@ private fun DeviceControlScreen(
     navigateSettings: () -> Unit,
     navigateUp: () -> Unit
 ) {
-    val (sheetType, setSheetType) = remember { mutableStateOf(DeviceControlSheet.None) }
-    val sheetScope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = {
-            SheetContent(
-                viewModel = viewModel,
-                currentSheet = sheetType,
-                close = {
-                    sheetScope.launch {
-                        sheetState.hide()
-                    }
-                }
-            )
-        }
-    ){
+    DeviceControlBottomSheet(
+        sheetFanSpeed = { closeSheet -> FanSpeedSheet(viewModel, closeSheet) },
+        sheetTempControl = { closeSheet -> TempControlSheet(viewModel, closeSheet) },
+        sheetMode = { closeSheet ->  ModeSheet(viewModel, closeSheet) },
+        sheetSleep = { closeSheet ->  SleepSheet(viewModel, closeSheet) }
+    ){ openSheet ->
         AppScaffold(
             message = message,
             clearMessage = clearMessage,
@@ -99,17 +79,7 @@ private fun DeviceControlScreen(
             when (state) {
                 ScreenState.Loading -> FullscreenLoading()
                 ScreenState.Error -> FullscreenError(loadData)
-                else -> LoadedScreen(
-                    viewModel = viewModel,
-                    isOn = isOn,
-                    showSheet = {
-                        setSheetType(it)
-                        sheetScope.launch {
-                            delay(100L)
-                            sheetState.show()
-                        }
-                    }
-                )
+                else -> LoadedScreen(viewModel, isOn, openSheet)
             }
         }
     }
@@ -268,20 +238,4 @@ private fun SheetIcon(icon: Int) {
         contentDescription = null,
         tint = Color.Gray
     )
-}
-
-@ExperimentalMaterialApi
-@Composable
-private fun SheetContent(
-    viewModel: DeviceViewModel,
-    currentSheet: DeviceControlSheet,
-    close: () -> Unit
-) {
-    when (currentSheet) {
-        DeviceControlSheet.FanSpeed -> FanSpeedSheet(viewModel, close)
-        DeviceControlSheet.TempControl -> TempControlSheet(viewModel, close)
-        DeviceControlSheet.Mode -> ModeSheet(viewModel, close)
-        DeviceControlSheet.Sleep -> SleepSheet(viewModel, close)
-        else -> FullscreenLoading()
-    }
 }
