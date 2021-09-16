@@ -13,6 +13,8 @@
     <string name="splash_offline_message">Please connect to the Internet and try again</string>
     <string name="splash_offline_action">Try again</string>
 
+    <string name="error_message">"Oops something went wrong.\nPlease check your connection and try again"</string>
+
     <!-- Fan Speed -->
     <string name="fan_speed_auto">Auto</string>
     <string name="fan_speed_lower">Low</string>

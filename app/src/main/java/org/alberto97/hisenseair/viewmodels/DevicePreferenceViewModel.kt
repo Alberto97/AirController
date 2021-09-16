@@ -8,12 +8,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.features.TempType
+import org.alberto97.hisenseair.models.AppDevice
+import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.repositories.IDeviceRepository
 
 class DevicePreferenceViewModel(
     private val dsn: String,
     private val repo: IDeviceRepository
 ) : ViewModel() {
+
+    private val _state = MutableStateFlow(ScreenState.Loading)
+    val state = _state.asStateFlow()
 
     private val _deviceName = MutableStateFlow("")
     val deviceName = _deviceName.asStateFlow()
@@ -37,9 +43,18 @@ class DevicePreferenceViewModel(
     val message = _message.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            updateDeviceProps()
-            fetchTempType()
+        loadData()
+    }
+
+    fun loadData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value = ScreenState.Loading
+            val res1 = updateDeviceProps()
+            val res2 = fetchTempType()
+            _state.value = if (res1 is ResultWrapper.Error || res2 is ResultWrapper.Error)
+                ScreenState.Error
+            else
+                ScreenState.Success
         }
     }
 
@@ -75,19 +90,21 @@ class DevicePreferenceViewModel(
         }
     }
 
-    private suspend fun fetchTempType() {
+    private suspend fun fetchTempType(): ResultWrapper<TempType> {
         val result = repo.getTempUnit(dsn)
         if (result.data != null)
             _useCelsius.value = result.data == TempType.Celsius
         else
             _message.value = result.message
+
+        return result
     }
 
-    private suspend fun updateDeviceProps() {
+    private suspend fun updateDeviceProps(): ResultWrapper<AppDevice> {
         val result = repo.getDevice(dsn)
         if (result.data == null) {
             _message.value = result.message
-            return
+            return result
         }
 
         with(result.data) {
@@ -96,6 +113,8 @@ class DevicePreferenceViewModel(
             _mac.value = mac
             _ssid.value = Uri.decode(ssid)
         }
+
+        return result
     }
 
     fun clearMessage() {

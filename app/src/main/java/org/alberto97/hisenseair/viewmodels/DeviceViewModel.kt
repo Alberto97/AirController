@@ -19,6 +19,7 @@ import org.alberto97.hisenseair.features.controllers.*
 import org.alberto97.hisenseair.models.AppDeviceState
 import org.alberto97.hisenseair.models.ListItemModel
 import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.ui.MainActivity
 
@@ -45,8 +46,8 @@ class DeviceViewModel(
     private val tempController: ITempControlController
 ) : ViewModel() {
 
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading = _isLoading.asStateFlow()
+    private val _state = MutableStateFlow(ScreenState.Loading)
+    val state = _state.asStateFlow()
 
     private val _workMode = MutableStateFlow(WorkMode.Auto)
     val workMode = _workMode.asStateFlow()
@@ -136,22 +137,31 @@ class DeviceViewModel(
     val message = _message.asStateFlow()
 
     init {
+        loadData()
+    }
+
+    fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.value = true
-            fetchData()
-            _isLoading.value = false
+            _state.value = ScreenState.Loading
+            val result = fetchData()
+            _state.value = if (result is ResultWrapper.Success)
+                ScreenState.Success
+            else
+                ScreenState.Error
         }
     }
 
-    private suspend fun fetchData() {
+    private suspend fun fetchData(): ResultWrapper<AppDeviceState> {
         val resp = repo.getDeviceState(dsn)
         if (resp.data == null) {
             _message.value = resp.message
-            return
+            return resp
         }
 
         updateUi(resp.data)
         createShortcut(resp.data)
+
+        return resp
     }
 
     private fun updateUi(data: AppDeviceState) {
@@ -295,12 +305,15 @@ class DeviceViewModel(
 
     fun switchPower() {
         viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.value = true
+            _state.value = ScreenState.Loading
             switchProp(
                 value = _isOn.value!!,
                 setValue = { value -> repo.setPower(dsn, value) },
             )
-            _isLoading.value = false
+
+            // At this point it does not matter if this call fails,
+            // there is enough data to populate the UI anyway
+            _state.value = ScreenState.Success
         }
     }
 

@@ -10,18 +10,12 @@ import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ayla.IAylaModuleLoader
 import org.alberto97.hisenseair.models.ListItemModel
 import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.ISettingsRepository
 import org.alberto97.hisenseair.repositories.Region
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-
-enum class LoginState {
-    None,
-    Loading,
-    Success,
-    Error
-}
 
 class LoginViewModel(
     private val settings: ISettingsRepository,
@@ -33,7 +27,7 @@ class LoginViewModel(
     // and therefore the dependencies resolution would fail
     private val repo: IAuthenticationRepository by inject()
 
-    private val _state = MutableStateFlow(LoginState.None)
+    private val _state = MutableStateFlow<ScreenState?>(null)
     val state = _state.asStateFlow()
 
     private val _message = MutableStateFlow("")
@@ -55,13 +49,13 @@ class LoginViewModel(
     }
 
     fun login(email: String, password: String) {
-        _state.value = LoginState.Loading
+        _state.value = ScreenState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.login(email, password)
             if (result is ResultWrapper.Success) {
-                _state.value = LoginState.Success
+                _state.value = ScreenState.Success
             } else {
-                _state.value = LoginState.Error
+                _state.value = ScreenState.Error
                 _message.value = "Authentication failed"
             }
         }

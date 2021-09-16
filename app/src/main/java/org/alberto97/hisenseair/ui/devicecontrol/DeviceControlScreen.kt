@@ -9,10 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.ui.common.AppScaffold
-import org.alberto97.hisenseair.ui.common.BottomSheetContent
-import org.alberto97.hisenseair.ui.common.BottomSheetListItem
-import org.alberto97.hisenseair.ui.common.FullscreenLoading
+import org.alberto97.hisenseair.models.ScreenState
+import org.alberto97.hisenseair.ui.common.*
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -36,24 +34,51 @@ fun DeviceControlScreen(
 ) {
     val deviceName by viewModel.deviceName.collectAsState()
 
-    val isLoading by viewModel.isLoading.collectAsState()
+    val state by viewModel.state.collectAsState()
     val isOn by viewModel.isOn.collectAsState()
     val message by viewModel.message.collectAsState()
 
+    DeviceControlScreen(
+        viewModel = viewModel,
+        message = message,
+        clearMessage = { viewModel.clearMessage() },
+        loadData = { viewModel.loadData() },
+        deviceName = deviceName,
+        state = state,
+        isOn = isOn,
+        displayInPanel = displayInPanel,
+        navigateSettings = navigateSettings,
+        navigateUp = navigateUp
+    )
+}
 
+@ExperimentalMaterialApi
+@Composable
+private fun DeviceControlScreen(
+    viewModel: DeviceViewModel,
+    message: String,
+    clearMessage: () -> Unit,
+    loadData: () -> Unit,
+    deviceName: String,
+    state: ScreenState,
+    isOn: Boolean?,
+    displayInPanel: Boolean,
+    navigateSettings: () -> Unit,
+    navigateUp: () -> Unit
+) {
     val (sheetType, setSheetType) = remember { mutableStateOf(DeviceControlSheet.None) }
     val sheetScope = rememberCoroutineScope()
-    val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     ModalBottomSheetLayout(
-        sheetState = state,
+        sheetState = sheetState,
         sheetContent = {
             SheetContent(
                 viewModel = viewModel,
                 currentSheet = sheetType,
                 close = {
                     sheetScope.launch {
-                        state.hide()
+                        sheetState.hide()
                     }
                 }
             )
@@ -61,7 +86,7 @@ fun DeviceControlScreen(
     ){
         AppScaffold(
             message = message,
-            clearMessage = { viewModel.clearMessage() },
+            clearMessage = clearMessage,
             topBar = {
                 TopAppBar(
                     deviceName = deviceName,
@@ -71,25 +96,36 @@ fun DeviceControlScreen(
                 )
             }
         ) {
-            if (isLoading) {
-                FullscreenLoading()
-            } else {
-                when (isOn) {
-                    false -> DeviceOff(viewModel)
-                    true -> DeviceOn(
-                        viewModel,
-                        showSheet = {
-                            setSheetType(it)
-                            sheetScope.launch {
-                                delay(100L)
-                                state.show()
-                            }
+            when (state) {
+                ScreenState.Loading -> FullscreenLoading()
+                ScreenState.Error -> FullscreenError(loadData)
+                else -> LoadedScreen(
+                    viewModel = viewModel,
+                    isOn = isOn,
+                    showSheet = {
+                        setSheetType(it)
+                        sheetScope.launch {
+                            delay(100L)
+                            sheetState.show()
                         }
-                    )
-                    else -> FullscreenLoading()
-                }
+                    }
+                )
             }
         }
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun LoadedScreen(
+    viewModel: DeviceViewModel,
+    isOn: Boolean?,
+    showSheet: (data: DeviceControlSheet) -> Unit
+) {
+    when (isOn) {
+        false -> DeviceOff(viewModel)
+        true -> DeviceOn(viewModel, showSheet)
+        else -> FullscreenLoading()
     }
 }
 

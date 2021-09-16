@@ -9,7 +9,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavBackStackEntry
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.ui.common.AppScaffold
+import org.alberto97.hisenseair.ui.common.FullscreenError
+import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.devices.DevicesStateHandleParams
 import org.alberto97.hisenseair.ui.preferences.DialogPreference
 import org.alberto97.hisenseair.ui.preferences.Preference
@@ -30,6 +33,7 @@ fun DeviceSettingsScreen(
     viewModel: DevicePreferenceViewModel = getViewModel { parametersOf(dsn) }
 ) {
     val deviceName by viewModel.deviceName.collectAsState()
+    val state by viewModel.state.collectAsState()
     val popToHome by viewModel.popToHome.collectAsState()
     val usesCelsius by viewModel.useCelsius.collectAsState()
     val macAddress by viewModel.mac.collectAsState()
@@ -47,6 +51,8 @@ fun DeviceSettingsScreen(
 
     DeviceSettingsScreen(
         deviceName = deviceName,
+        state = state,
+        loadData = { viewModel.loadData() },
         renameDevice = { name -> viewModel.updateDeviceName(name) },
         useCelsius = usesCelsius,
         onUseCelsiusChange = { viewModel.switchTempType() },
@@ -63,6 +69,8 @@ fun DeviceSettingsScreen(
 @Composable
 private fun DeviceSettingsScreen(
     deviceName: String,
+    state: ScreenState,
+    loadData: () -> Unit,
     renameDevice: (value: String) -> Unit,
     useCelsius: Boolean,
     onUseCelsiusChange: (value: Boolean) -> Unit,
@@ -88,51 +96,79 @@ private fun DeviceSettingsScreen(
             )
         }
     ) {
-        Column {
-            DialogPreference(
-                icon = {},
-                title = stringResource(R.string.device_name_title),
-                summary = deviceName,
-                dialog = { closeDialog ->
-                    ChangeNameAlert(
-                        closeDialog = closeDialog,
-                        initialDeviceName = deviceName,
-                        setName = renameDevice
-                    )
-                }
-            )
-            SwitchPreference(
-                icon = {},
-                title = stringResource(R.string.device_temp_unit_title),
-                summary = stringResource(R.string.device_temp_unit_summary),
-                checked = useCelsius,
-                onCheckedChange = onUseCelsiusChange
-            )
-            DialogPreference(
-                icon = {},
-                title = stringResource(R.string.device_delete_title),
-                summary = stringResource(R.string.device_delete_summary),
-                dialog = { closeDialog -> DeleteAlert(closeDialog, deleteDevice) }
-            )
-            PreferenceCategory(
-                title = stringResource(R.string.device_settings_category_info)
-            )
-            Preference(
-                icon = {},
-                title = stringResource(R.string.device_mac_address_title),
-                summary = macAddress
-            )
-            Preference(
-                icon = {},
-                title = stringResource(R.string.device_ip_address_title),
-                summary = ipAddress
-            )
-            Preference(
-                icon = {},
-                title = stringResource(R.string.device_network_title),
-                summary = network
+        when(state) {
+            ScreenState.Loading -> FullscreenLoading()
+            ScreenState.Error -> FullscreenError(loadData)
+            else -> DeviceSettingsContent(
+                deviceName = deviceName,
+                renameDevice = renameDevice,
+                useCelsius = useCelsius,
+                onUseCelsiusChange = onUseCelsiusChange,
+                deleteDevice = deleteDevice,
+                macAddress = macAddress,
+                ipAddress = ipAddress,
+                network = network
             )
         }
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun DeviceSettingsContent(
+    deviceName: String,
+    renameDevice: (value: String) -> Unit,
+    useCelsius: Boolean,
+    onUseCelsiusChange: (value: Boolean) -> Unit,
+    deleteDevice: () -> Unit,
+    macAddress: String,
+    ipAddress: String,
+    network: String
+) {
+    Column {
+        DialogPreference(
+            icon = {},
+            title = stringResource(R.string.device_name_title),
+            summary = deviceName,
+            dialog = { closeDialog ->
+                ChangeNameAlert(
+                    closeDialog = closeDialog,
+                    initialDeviceName = deviceName,
+                    setName = renameDevice
+                )
+            }
+        )
+        SwitchPreference(
+            icon = {},
+            title = stringResource(R.string.device_temp_unit_title),
+            summary = stringResource(R.string.device_temp_unit_summary),
+            checked = useCelsius,
+            onCheckedChange = onUseCelsiusChange
+        )
+        DialogPreference(
+            icon = {},
+            title = stringResource(R.string.device_delete_title),
+            summary = stringResource(R.string.device_delete_summary),
+            dialog = { closeDialog -> DeleteAlert(closeDialog, deleteDevice) }
+        )
+        PreferenceCategory(
+            title = stringResource(R.string.device_settings_category_info)
+        )
+        Preference(
+            icon = {},
+            title = stringResource(R.string.device_mac_address_title),
+            summary = macAddress
+        )
+        Preference(
+            icon = {},
+            title = stringResource(R.string.device_ip_address_title),
+            summary = ipAddress
+        )
+        Preference(
+            icon = {},
+            title = stringResource(R.string.device_network_title),
+            summary = network
+        )
     }
 }
 
@@ -209,6 +245,8 @@ private fun Preview() {
     AppTheme {
         DeviceSettingsScreen(
             deviceName = "Camera piano terra",
+            loadData = {},
+            state = ScreenState.Success,
             renameDevice = {},
             useCelsius = true,
             onUseCelsiusChange = {},

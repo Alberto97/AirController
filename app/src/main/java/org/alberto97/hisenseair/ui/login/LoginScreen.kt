@@ -19,13 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.ListItemModel
+import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.repositories.Region
 import org.alberto97.hisenseair.ui.common.AppDropDown
 import org.alberto97.hisenseair.ui.common.AppScaffold
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.common.OutlinedPasswordField
 import org.alberto97.hisenseair.ui.theme.AppTheme
-import org.alberto97.hisenseair.viewmodels.LoginState
 import org.alberto97.hisenseair.viewmodels.LoginViewModel
 import org.koin.androidx.compose.getViewModel
 
@@ -41,7 +41,7 @@ fun LoginScreen(
 
     LaunchedEffect(state) {
         when (state) {
-            LoginState.Success -> openMain()
+            ScreenState.Success -> openMain()
             else -> {}
         }
     }
@@ -62,7 +62,7 @@ fun LoginScreen(
 private fun LoginScreen(
     message: String,
     clearMessage: () -> Unit,
-    state: LoginState,
+    state: ScreenState?,
     region: ListItemModel<Region>?,
     setRegion: (value: ListItemModel<Region>) -> Unit,
     regionOptions: List<ListItemModel<Region>>,
@@ -80,7 +80,7 @@ private fun LoginScreen(
             )
         }
     ) {
-        if (state == LoginState.Loading)
+        if (state == ScreenState.Loading)
             FullscreenLoading()
         else
             LoginContent(
@@ -201,6 +201,6 @@ private fun ScreenPreview() {
     )
 
     AppTheme {
-        LoginScreen("", {}, LoginState.None, null, {}, regions, {_, _ ->})
+        LoginScreen("", {}, null, null, {}, regions, { _, _ ->})
     }
 }

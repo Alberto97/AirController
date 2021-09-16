@@ -1,6 +1,5 @@
 package org.alberto97.hisenseair.ui.devices
 
-import android.os.Build
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -16,7 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavBackStackEntry
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.AppDevice
+import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.ui.common.AppScaffold
+import org.alberto97.hisenseair.ui.common.FullscreenError
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.MainViewModel
@@ -34,23 +35,26 @@ fun DevicesScreen(
     currentBackStackEntry: NavBackStackEntry?,
     viewModel: MainViewModel = getViewModel()
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
+    val state by viewModel.state.collectAsState()
     val devices by viewModel.devices.collectAsState()
     val message by viewModel.message.collectAsState()
+    val pairAvailable by viewModel.pairAvailable.collectAsState(false)
 
     val savedStateHandle = currentBackStackEntry?.savedStateHandle
     val refreshLiveData = savedStateHandle?.getLiveData<Boolean>(DevicesStateHandleParams.needsRefresh)
 
     val needsRefresh by refreshLiveData!!.observeAsState()
     if (needsRefresh == true) {
-        viewModel.loadData()
+        viewModel.refreshData()
         savedStateHandle?.set(DevicesStateHandleParams.needsRefresh, false)
     }
 
     DevicesScreen(
         message = message,
         clearMessage = { viewModel.clearMessage() },
-        isLoading = isLoading,
+        state = state,
+        loadData = { viewModel.loadData() },
+        pairAvailable = pairAvailable,
         deviceList = devices,
         onDeviceClick = openDevice,
         onAddClick = openPair
@@ -62,7 +66,9 @@ fun DevicesScreen(
 private fun DevicesScreen(
     message: String,
     clearMessage: () -> Unit,
-    isLoading: Boolean,
+    state: ScreenState,
+    loadData: () -> Unit,
+    pairAvailable: Boolean,
     deviceList: List<AppDevice>,
     onDeviceClick: (dsn: String) -> Unit,
     onAddClick: () -> Unit
@@ -74,14 +80,14 @@ private fun DevicesScreen(
             TopAppBar({ Text(stringResource(R.string.app_name)) })
         },
         floatingActionButton = {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            if (pairAvailable)
                 Fab(onAddClick = onAddClick)
         }
     ) {
-        if (isLoading) {
-            FullscreenLoading()
-        } else {
-            Devices(devices = deviceList, onDeviceClick = onDeviceClick)
+        when (state) {
+            ScreenState.Loading -> FullscreenLoading()
+            ScreenState.Error -> FullscreenError(tryAgain = loadData)
+            else -> Devices(devices = deviceList, onDeviceClick = onDeviceClick)
         }
     }
 }
@@ -128,7 +134,9 @@ private fun Preview() {
         DevicesScreen(
             message = "",
             clearMessage = {},
-            isLoading = false,
+            state = ScreenState.Success,
+            loadData = {},
+            pairAvailable = true,
             deviceList = devices,
             onDeviceClick = {},
             onAddClick = {}
