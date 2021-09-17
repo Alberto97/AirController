@@ -6,8 +6,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.alberto97.hisenseair.BuildConfig
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.ayla.IAylaModuleLoader
+import org.alberto97.hisenseair.demo.IDemoModuleLoader
 import org.alberto97.hisenseair.models.ListItemModel
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.models.ScreenState
@@ -19,7 +21,8 @@ import org.koin.core.component.inject
 
 class LoginViewModel(
     private val settings: ISettingsRepository,
-    private val moduleLoader: IAylaModuleLoader
+    private val moduleLoader: IAylaModuleLoader,
+    private val demoModuleLoader: IDemoModuleLoader
 ) : ViewModel(), KoinComponent {
 
     // This needs to be evaluated lazily because when there is no region data the retrofit
@@ -50,6 +53,7 @@ class LoginViewModel(
 
     fun login(email: String, password: String) {
         _state.value = ScreenState.Loading
+        handleDemoAccount(email)
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.login(email, password)
             if (result is ResultWrapper.Success) {
@@ -59,6 +63,11 @@ class LoginViewModel(
                 _message.value = "Authentication failed"
             }
         }
+    }
+
+    private fun handleDemoAccount(email: String) {
+        if (BuildConfig.DEMO_ACCOUNTS.contains(email))
+            demoModuleLoader.load()
     }
 
     fun setRegion(region: ListItemModel<Region>) {
