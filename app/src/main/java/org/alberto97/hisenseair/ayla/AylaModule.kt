@@ -86,6 +86,10 @@ val aylaModule = aylaInternal + aylaControllers + module {
     single<IDevicePairRepository> { DevicePairRepository(get(), get()) }
 }
 
+val aylaLoaderModule = module {
+    single<IAylaModuleLoader>{ AylaModuleLoader(get()) }
+}
+
 fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {
     return OkHttpClient.Builder()
         .authenticator(TokenAuthenticator(repo))

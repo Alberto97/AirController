@@ -1,7 +1,5 @@
 package org.alberto97.hisenseair
 
-import org.alberto97.hisenseair.ayla.AylaModuleLoader
-import org.alberto97.hisenseair.ayla.IAylaModuleLoader
 import org.alberto97.hisenseair.connectivity.IPairConnectivityManager
 import org.alberto97.hisenseair.connectivity.PairConnectivityManager
 import org.alberto97.hisenseair.repositories.ISettingsRepository
@@ -14,7 +12,6 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    single<IAylaModuleLoader>{ AylaModuleLoader(get()) }
     single<ISettingsRepository> { SettingsRepository(get()) }
     single<IPairConnectivityManager> { PairConnectivityManager(get()) }
     single<IDeviceShortcutManager> { DeviceShortcutManager(get()) }
