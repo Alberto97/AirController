@@ -30,10 +30,34 @@ val aylaUsApi = module {
     single { getAylaLogin("https://user-field.aylanetworks.com/users/") }
 }
 
-val aylaModule = module {
+/**
+ * Module internal dependencies
+ */
+val aylaInternal = module {
+
     // API
     single { getOkHttp(get()) }
     single { getPairApi(get()) }
+
+    // Converter
+    single<IBooleanConverter> { BooleanConverter() }
+    single<IFanSpeedConverter> { FanSpeedConverter() }
+    single<IIntConverter> { IntConverter() }
+    single<IModeConverter> { ModeConverter() }
+    single<ISleepModeConverter> { SleepModeConverter() }
+    single<IStringConverter> { StringConverter() }
+    single<ITempUnitConverter> { TempUnitConverter() }
+
+    // Repositories
+    single<IDevicePropertyRepository> { DevicePropertyRepository(get()) }
+    single<IDeviceCacheRepository> { DeviceCacheRepository(get(), get()) }
+    single<ISecretsRepository> { SecretsRepository(get()) }
+}
+
+/**
+ * Exposed APIs to the app
+ */
+val aylaModule = aylaInternal + module {
 
     // Controller
     single<IAirFlowHorizontalController> { AirFlowHorizontalController() }
@@ -54,24 +78,12 @@ val aylaModule = module {
     single<ISupportedSleepModesController> { SupportedSleepModesController() }
     single<ITempControlController> { TempControlController() }
 
-    // Converter
-    single<IBooleanConverter> { BooleanConverter() }
-    single<IFanSpeedConverter> { FanSpeedConverter() }
-    single<IIntConverter> { IntConverter() }
-    single<IModeConverter> { ModeConverter() }
-    single<ISleepModeConverter> { SleepModeConverter() }
-    single<IStringConverter> { StringConverter() }
-    single<ITempUnitConverter> { TempUnitConverter() }
-
     // Repository
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get(), get()) }
-    single<IDevicePropertyRepository> { DevicePropertyRepository(get()) }
     single<IDeviceRepository> { DeviceRepository(get(), get(), get(), get()) }
     single<IDeviceControlRepository> {
         DeviceControlRepository(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
-    single<IDeviceCacheRepository> { DeviceCacheRepository(androidApplication(), get()) }
-    single<ISecretsRepository> { SecretsRepository(get()) }
     single<IDevicePairRepository> { DevicePairRepository(get(), get()) }
 }
 

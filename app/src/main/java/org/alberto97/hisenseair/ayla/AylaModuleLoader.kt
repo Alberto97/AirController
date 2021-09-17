@@ -25,8 +25,7 @@ class AylaModuleLoader(private val settings: ISettingsRepository) : IAylaModuleL
     override fun load(region: Region) {
         val module = map[region]
         if (module != null) {
-            val list = listOf(module, aylaModule)
-            loadKoinModules(list)
+            loadKoinModules(module + aylaModule)
         } else {
             Log.e("AylaEnvironmentManager", "Cannot load ayla module, unknown country")
         }
