@@ -54,12 +54,7 @@ val aylaInternal = module {
     single<ISecretsRepository> { SecretsRepository(get()) }
 }
 
-/**
- * Exposed APIs to the app
- */
-val aylaModule = aylaInternal + module {
-
-    // Controller
+val aylaControllers = module {
     single<IAirFlowHorizontalController> { AirFlowHorizontalController() }
     single<IAirFlowVerticalController> { AirFlowVerticalController() }
     single<IBacklightController> { BacklightController() }
@@ -77,8 +72,12 @@ val aylaModule = aylaInternal + module {
     single<ISupportedModesController> { SupportedModesController() }
     single<ISupportedSleepModesController> { SupportedSleepModesController() }
     single<ITempControlController> { TempControlController() }
+}
 
-    // Repository
+/**
+ * Exposed APIs to the app
+ */
+val aylaModule = aylaInternal + aylaControllers + module {
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get(), get()) }
     single<IDeviceRepository> { DeviceRepository(get(), get(), get(), get()) }
     single<IDeviceControlRepository> {
