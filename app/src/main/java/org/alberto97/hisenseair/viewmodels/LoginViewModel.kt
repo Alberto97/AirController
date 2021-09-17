@@ -72,7 +72,7 @@ class LoginViewModel(
 
     fun setRegion(region: ListItemModel<Region>) {
         _region.value = region
-        moduleLoader.load(region.value)
+        moduleLoader.loadRegionTiedModules(region.value)
         // Once region and appsecrets are untied, move this on login success
         settings.region = region.value
     }

@@ -7,7 +7,7 @@ import org.koin.core.context.loadKoinModules
 
 interface IAylaModuleLoader {
     fun load()
-    fun load(region: Region)
+    fun loadRegionTiedModules(region: Region?)
 }
 
 class AylaModuleLoader(private val settings: ISettingsRepository) : IAylaModuleLoader {
@@ -18,16 +18,16 @@ class AylaModuleLoader(private val settings: ISettingsRepository) : IAylaModuleL
     )
 
     override fun load() {
-        val region = settings.region ?: return
-        load(region)
+        loadKoinModules(aylaModule)
+        loadRegionTiedModules(settings.region)
     }
 
-    override fun load(region: Region) {
+    override fun loadRegionTiedModules(region: Region?) {
         val module = map[region]
         if (module != null) {
-            loadKoinModules(module + aylaModule)
+            loadKoinModules(module)
         } else {
-            Log.e("AylaEnvironmentManager", "Cannot load ayla module, unknown country")
+            Log.e("AylaEnvironmentManager", "Cannot load region tied ayla modules, unknown country")
         }
     }
 }
