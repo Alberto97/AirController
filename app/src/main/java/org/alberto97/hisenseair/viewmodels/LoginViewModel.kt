@@ -8,21 +8,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.BuildConfig
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.ayla.IAylaModuleLoader
-import org.alberto97.hisenseair.demo.IDemoModuleLoader
 import org.alberto97.hisenseair.models.ListItemModel
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.ISettingsRepository
 import org.alberto97.hisenseair.repositories.Region
+import org.alberto97.hisenseair.utils.IProviderManager
+import org.alberto97.hisenseair.utils.Provider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class LoginViewModel(
     private val settings: ISettingsRepository,
-    private val moduleLoader: IAylaModuleLoader,
-    private val demoModuleLoader: IDemoModuleLoader
+    private val providerManager: IProviderManager
 ) : ViewModel(), KoinComponent {
 
     // This needs to be evaluated lazily because when there is no region data the retrofit
@@ -49,6 +48,7 @@ class LoginViewModel(
             Region.EU -> _region.value = euRegion
             Region.US -> _region.value = usRegion
         }
+        providerManager.setProvider(Provider.Ayla)
     }
 
     fun login(email: String, password: String) {
@@ -67,12 +67,12 @@ class LoginViewModel(
 
     private fun handleDemoAccount(email: String) {
         if (BuildConfig.DEMO_ACCOUNTS.contains(email))
-            demoModuleLoader.load()
+            providerManager.setProvider(Provider.Demo)
     }
 
     fun setRegion(region: ListItemModel<Region>) {
         _region.value = region
-        moduleLoader.loadRegionTiedModules(region.value)
+        providerManager.setRegion(region.value)
         // Once region and appsecrets are untied, move this on login success
         settings.region = region.value
     }

@@ -6,6 +6,8 @@ import org.alberto97.hisenseair.repositories.ISettingsRepository
 import org.alberto97.hisenseair.repositories.SettingsRepository
 import org.alberto97.hisenseair.utils.DeviceShortcutManager
 import org.alberto97.hisenseair.utils.IDeviceShortcutManager
+import org.alberto97.hisenseair.utils.IProviderManager
+import org.alberto97.hisenseair.utils.ProviderManager
 import org.alberto97.hisenseair.viewmodels.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -13,6 +15,7 @@ import org.koin.dsl.module
 val appModule = module {
 
     single<ISettingsRepository> { SettingsRepository(get()) }
+    single<IProviderManager> { ProviderManager(get()) }
     single<IPairConnectivityManager> { PairConnectivityManager(get()) }
     single<IDeviceShortcutManager> { DeviceShortcutManager(get()) }
 
@@ -23,7 +26,7 @@ val appModule = module {
         )
     }
     viewModel { parameters -> DevicePreferenceViewModel(parameters.get(), get(), get()) }
-    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { MainViewModel(get()) }
     viewModel { SplashViewModel(get(), get()) }
     viewModel { PairViewModel(get(), get()) }

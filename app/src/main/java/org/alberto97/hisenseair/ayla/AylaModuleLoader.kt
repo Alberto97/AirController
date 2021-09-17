@@ -1,16 +1,12 @@
 package org.alberto97.hisenseair.ayla
 
 import android.util.Log
-import org.alberto97.hisenseair.repositories.ISettingsRepository
 import org.alberto97.hisenseair.repositories.Region
+import org.alberto97.hisenseair.utils.IProviderModuleLoader
 import org.koin.core.context.loadKoinModules
 
-interface IAylaModuleLoader {
-    fun load()
-    fun loadRegionTiedModules(region: Region?)
-}
 
-class AylaModuleLoader(private val settings: ISettingsRepository) : IAylaModuleLoader {
+class AylaModuleLoader : IProviderModuleLoader {
 
     private val map = mapOf(
         Region.EU to aylaEuApi,
@@ -19,10 +15,9 @@ class AylaModuleLoader(private val settings: ISettingsRepository) : IAylaModuleL
 
     override fun load() {
         loadKoinModules(aylaModule)
-        loadRegionTiedModules(settings.region)
     }
 
-    override fun loadRegionTiedModules(region: Region?) {
+    override fun setRegion(region: Region) {
         val module = map[region]
         if (module != null) {
             loadKoinModules(module)

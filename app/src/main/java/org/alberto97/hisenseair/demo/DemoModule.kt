@@ -10,6 +10,9 @@ import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDevicePairRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
+import org.alberto97.hisenseair.utils.IProviderModuleLoader
+import org.alberto97.hisenseair.utils.Provider
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val demoModule = aylaControllers + module {
@@ -22,5 +25,5 @@ val demoModule = aylaControllers + module {
 }
 
 val demoLoaderModule = module {
-    single<IDemoModuleLoader>{ DemoModuleLoader() }
+    single<IProviderModuleLoader>(named(Provider.Demo)){ DemoModuleLoader() }
 }

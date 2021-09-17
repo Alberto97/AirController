@@ -11,6 +11,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import org.alberto97.hisenseair.utils.Provider
 
 
 enum class Region {
@@ -20,6 +21,7 @@ enum class Region {
 interface ISettingsRepository {
     var region: Region?
     var loggedIn: Boolean
+    var provider: Provider?
 }
 
 class SettingsRepository(private val app: Application): ISettingsRepository {
@@ -28,6 +30,7 @@ class SettingsRepository(private val app: Application): ISettingsRepository {
 
     private val regionKey = stringPreferencesKey("region")
     private val loggedInKey = booleanPreferencesKey("logged_in")
+    private val providerKey = stringPreferencesKey("provider")
 
     private var _region = getReg()
     override var region: Region?
@@ -38,6 +41,11 @@ class SettingsRepository(private val app: Application): ISettingsRepository {
     override var loggedIn: Boolean
         get() = _loggedIn
         set(value) = setLogged(value)
+
+    private var _provider = getProv()
+    override var provider: Provider?
+        get() = _provider
+        set(value) = setProv(value)
 
     private fun getReg(): Region? {
         val str = runBlocking {
@@ -65,5 +73,19 @@ class SettingsRepository(private val app: Application): ISettingsRepository {
             app.dataStore.edit { settings -> settings[loggedInKey] = loggedIn }
         }
         _loggedIn = loggedIn
+    }
+
+    private fun getProv(): Provider? {
+        val str = runBlocking {
+            app.dataStore.data.map { settings -> settings[providerKey] }.first()
+        } ?: return null
+        return Provider.valueOf(str)
+    }
+
+    private fun setProv(provider: Provider?) {
+        runBlocking {
+            app.dataStore.edit { settings -> settings[providerKey] = provider.toString() }
+        }
+        _provider = provider
     }
 }

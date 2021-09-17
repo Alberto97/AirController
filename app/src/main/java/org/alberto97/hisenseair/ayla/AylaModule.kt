@@ -15,7 +15,9 @@ import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.repositories.IDevicePairRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
-import org.koin.android.ext.koin.androidApplication
+import org.alberto97.hisenseair.utils.IProviderModuleLoader
+import org.alberto97.hisenseair.utils.Provider
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -87,7 +89,7 @@ val aylaModule = aylaInternal + aylaControllers + module {
 }
 
 val aylaLoaderModule = module {
-    single<IAylaModuleLoader>{ AylaModuleLoader(get()) }
+    single<IProviderModuleLoader>(named(Provider.Ayla)){ AylaModuleLoader() }
 }
 
 fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {
