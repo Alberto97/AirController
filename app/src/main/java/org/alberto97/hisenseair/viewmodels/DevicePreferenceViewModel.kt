@@ -12,10 +12,12 @@ import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.repositories.IDeviceRepository
+import org.alberto97.hisenseair.utils.IDeviceShortcutManager
 
 class DevicePreferenceViewModel(
     private val dsn: String,
-    private val repo: IDeviceRepository
+    private val repo: IDeviceRepository,
+    private val shortcutManager: IDeviceShortcutManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ScreenState.Loading)
@@ -73,20 +75,24 @@ class DevicePreferenceViewModel(
     fun deleteDevice() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.deleteDevice(dsn)
-            if (result.data != null)
+            if (result.data != null) {
+                shortcutManager.removeShortcut(dsn)
                 _popToHome.value = true
-            else
+            } else {
                 _message.value = result.message
+            }
         }
     }
 
     fun updateDeviceName(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.setDeviceName(name, dsn)
-            if (result.data != null)
+            if (result.data != null) {
+                shortcutManager.updateShortcut(name, dsn)
                 updateDeviceProps()
-            else
+            } else {
                 _message.value = result.message
+            }
         }
     }
 

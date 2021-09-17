@@ -1,19 +1,14 @@
 package org.alberto97.hisenseair.viewmodels
 
 import android.content.Context
-import android.content.Intent
-import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.graphics.drawable.IconCompat
-import androidx.core.net.toUri
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.UriConstants
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.controllers.*
 import org.alberto97.hisenseair.models.AppDeviceState
@@ -21,12 +16,13 @@ import org.alberto97.hisenseair.models.ListItemModel
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.repositories.IDeviceControlRepository
-import org.alberto97.hisenseair.ui.MainActivity
+import org.alberto97.hisenseair.utils.IDeviceShortcutManager
 
 class DeviceViewModel(
     private val dsn: String,
     private val repo: IDeviceControlRepository,
     private val context: Context,
+    private val shortcutManager: IDeviceShortcutManager,
     private val airFlowHorizontalController: IAirFlowHorizontalController,
     private val airFlowVerticalController: IAirFlowVerticalController,
     private val backlightController: IBacklightController,
@@ -159,7 +155,7 @@ class DeviceViewModel(
         }
 
         updateUi(resp.data)
-        createShortcut(resp.data)
+        shortcutManager.createShortcut(resp.data.productName, dsn)
 
         return resp
     }
@@ -183,25 +179,6 @@ class DeviceViewModel(
         _supportedFanSpeeds.value = supportedFanSpeedController.getValue(data)!!
         _supportedModes.value = supportedModesController.getValue(data)!!
         _supportedSleepModes.value = supportedSleepModesController.getValue(data)!!
-    }
-
-    private fun createShortcut(device: AppDeviceState) {
-        val intent = Intent(
-            Intent.ACTION_VIEW,
-            "${UriConstants.DEVICE_CONTROL}/$dsn".toUri(),
-            context,
-            MainActivity::class.java
-        )
-
-        val shortcut = ShortcutInfoCompat.Builder(context, dsn)
-            .setShortLabel(device.productName)
-            .setLongLabel(device.productName)
-            .setRank(0)
-            .setIcon(IconCompat.createWithResource(context, R.drawable.ic_fan_primary))
-            .setIntent(intent)
-            .build()
-
-        ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
     }
 
     fun clearMessage() {
