@@ -11,6 +11,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import org.alberto97.hisenseair.utils.DataStoreExtensions.setOrRemove
 import org.alberto97.hisenseair.utils.Provider
 
 
@@ -57,7 +58,7 @@ class SettingsRepository(private val app: Application): ISettingsRepository {
 
     private fun setReg(region: Region?) {
         runBlocking {
-            app.dataStore.edit { settings -> settings[regionKey] = region.toString() }
+            app.dataStore.edit { settings -> settings.setOrRemove(regionKey, region?.name) }
         }
         _region = region
     }
@@ -84,7 +85,7 @@ class SettingsRepository(private val app: Application): ISettingsRepository {
 
     private fun setProv(provider: Provider?) {
         runBlocking {
-            app.dataStore.edit { settings -> settings[providerKey] = provider.toString() }
+            app.dataStore.edit { settings -> settings.setOrRemove(providerKey, provider?.name) }
         }
         _provider = provider
     }
