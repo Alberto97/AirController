@@ -78,6 +78,7 @@ class AuthenticationRepository(
 
             ResultWrapper.Success(Unit)
         } catch (e: HttpException) {
+            settings.loggedIn = false
             val message = e.aylaError() ?: "Authentication failed"
             ResultWrapper.Error(message, AuthErrorCodes.UNAUTHORIZED)
         } catch (e: Exception) {
