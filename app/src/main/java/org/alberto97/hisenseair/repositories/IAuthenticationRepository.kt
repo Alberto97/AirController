@@ -11,4 +11,5 @@ interface IAuthenticationRepository {
     fun getToken(): String
     suspend fun login(email: String, password: String): ResultWrapper<Unit>
     suspend fun refreshToken(): ResultWrapper<Unit>
+    fun logout()
 }

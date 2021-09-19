@@ -11,10 +11,18 @@ import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.models.ScreenState
+import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 import org.alberto97.hisenseair.repositories.IDeviceRepository
+import org.alberto97.hisenseair.repositories.ISettingsRepository
+import org.alberto97.hisenseair.utils.IDeviceShortcutManager
 
 
-class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
+class MainViewModel(
+    private val repo: IDeviceRepository,
+    private val auth: IAuthenticationRepository,
+    private val settings: ISettingsRepository,
+    private val shortcutManager: IDeviceShortcutManager
+) : ViewModel() {
 
     private val _devices = MutableStateFlow(emptyList<AppDevice>())
     val devices = _devices.asStateFlow()
@@ -66,5 +74,12 @@ class MainViewModel(private val repo : IDeviceRepository) : ViewModel() {
 
     fun clearMessage() {
         _message.value = ""
+    }
+
+    fun logOut() {
+        auth.logout()
+        settings.region = null
+        settings.provider = null
+        shortcutManager.removeAllShortcuts()
     }
 }

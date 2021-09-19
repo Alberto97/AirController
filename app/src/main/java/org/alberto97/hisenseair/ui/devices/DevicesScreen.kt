@@ -4,10 +4,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,6 +31,7 @@ object DevicesStateHandleParams {
 fun DevicesScreen(
     openDevice: (dsn: String) -> Unit,
     openPair: () -> Unit,
+    openLogin: () -> Unit,
     currentBackStackEntry: NavBackStackEntry?,
     viewModel: MainViewModel = getViewModel()
 ) {
@@ -57,7 +57,11 @@ fun DevicesScreen(
         pairAvailable = pairAvailable,
         deviceList = devices,
         onDeviceClick = openDevice,
-        onAddClick = openPair
+        onAddClick = openPair,
+        onLogoutClick = {
+            viewModel.logOut()
+            openLogin()
+        }
     )
 }
 
@@ -71,13 +75,21 @@ private fun DevicesScreen(
     pairAvailable: Boolean,
     deviceList: List<AppDevice>,
     onDeviceClick: (dsn: String) -> Unit,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onLogoutClick: () -> Unit
 ) {
     AppScaffold(
         message = message,
         clearMessage = clearMessage,
         topBar = {
-            TopAppBar({ Text(stringResource(R.string.app_name)) })
+            TopAppBar(
+                title = {
+                    Text(stringResource(R.string.app_name))
+                },
+                actions = {
+                    DropdownButton(onLogoutClick)
+                }
+            )
         },
         floatingActionButton = {
             if (pairAvailable)
@@ -88,6 +100,36 @@ private fun DevicesScreen(
             ScreenState.Loading -> FullscreenLoading()
             ScreenState.Error -> FullscreenError(tryAgain = loadData)
             else -> Devices(devices = deviceList, onDeviceClick = onDeviceClick)
+        }
+    }
+}
+
+@Composable
+fun DropdownButton(onInfoClick: () -> Unit) {
+    val (dropdownExpanded, setDropdownExpanded) = remember { mutableStateOf(false) }
+
+    IconButton(onClick = { setDropdownExpanded(true) }) {
+        Icon(Icons.Filled.MoreVert, contentDescription = "More")
+        Dropdown(
+            expanded = dropdownExpanded,
+            onDismissRequest = { setDropdownExpanded(false) },
+            onInfoClick = onInfoClick
+        )
+    }
+}
+
+@Composable
+fun Dropdown(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    onInfoClick: () -> Unit
+) {
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { onDismissRequest() }
+    ) {
+        DropdownMenuItem(onClick = { onInfoClick() }) {
+            Text("Logout")
         }
     }
 }
@@ -139,7 +181,8 @@ private fun Preview() {
             pairAvailable = true,
             deviceList = devices,
             onDeviceClick = {},
-            onAddClick = {}
+            onAddClick = {},
+            onLogoutClick = {}
         )
     }
 }

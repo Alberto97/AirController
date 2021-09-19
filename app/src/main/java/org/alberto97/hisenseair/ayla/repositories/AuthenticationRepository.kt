@@ -85,6 +85,12 @@ class AuthenticationRepository(
         }
     }
 
+    override fun logout() {
+        repository.authToken = ""
+        repository.refreshToken = ""
+        settings.loggedIn = false
+    }
+
     private fun saveAuthData(output: LoginOutput) {
         repository.authToken = output.accessToken
         repository.refreshToken = output.refreshToken

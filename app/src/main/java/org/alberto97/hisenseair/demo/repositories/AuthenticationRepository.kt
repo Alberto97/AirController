@@ -21,4 +21,8 @@ internal class AuthenticationRepository(
         settings.loggedIn = true
         return ResultWrapper.Success(Unit)
     }
+
+    override fun logout() {
+        settings.loggedIn = false
+    }
 }

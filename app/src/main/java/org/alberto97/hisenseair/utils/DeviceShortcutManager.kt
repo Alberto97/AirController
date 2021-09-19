@@ -14,6 +14,7 @@ interface IDeviceShortcutManager {
     fun createShortcut(deviceName: String, id: String)
     fun updateShortcut(deviceName: String, id: String)
     fun removeShortcut(id: String)
+    fun removeAllShortcuts()
 }
 
 class DeviceShortcutManager(private val app: Application): IDeviceShortcutManager {
@@ -47,5 +48,9 @@ class DeviceShortcutManager(private val app: Application): IDeviceShortcutManage
 
     override fun removeShortcut(id: String) {
         ShortcutManagerCompat.removeDynamicShortcuts(app, listOf(id))
+    }
+
+    override fun removeAllShortcuts() {
+        ShortcutManagerCompat.removeAllDynamicShortcuts(app)
     }
 }

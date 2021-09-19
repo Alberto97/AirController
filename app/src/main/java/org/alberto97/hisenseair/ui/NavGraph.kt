@@ -82,6 +82,11 @@ fun NavGraph(
                     navController.navigate(Screen.DeviceControl.createRoute(dsn))
                 },
                 openPair = { navController.navigate(Screen.Pair.route) },
+                openLogin = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Main.route) { inclusive = true }
+                    }
+                },
                 currentBackStackEntry = navController.currentBackStackEntry
             )
         }
