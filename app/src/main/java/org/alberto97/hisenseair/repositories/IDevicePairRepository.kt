@@ -1,8 +1,8 @@
 package org.alberto97.hisenseair.repositories
 
-import org.alberto97.hisenseair.ayla.models.Device
-import org.alberto97.hisenseair.ayla.models.Status
-import org.alberto97.hisenseair.ayla.models.WifiScanResults
+import org.alberto97.hisenseair.ayla.internal.models.Device
+import org.alberto97.hisenseair.ayla.internal.models.Status
+import org.alberto97.hisenseair.ayla.internal.models.WifiScanResults
 import org.alberto97.hisenseair.models.ResultWrapper
 
 interface IDevicePairRepository {

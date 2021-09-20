@@ -3,12 +3,13 @@ package org.alberto97.hisenseair.ayla
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.alberto97.hisenseair.ayla.features.controllers.*
-import org.alberto97.hisenseair.ayla.features.converters.*
-import org.alberto97.hisenseair.ayla.network.api.AylaLogin
-import org.alberto97.hisenseair.ayla.network.api.AylaService
-import org.alberto97.hisenseair.ayla.network.api.PairApi
-import org.alberto97.hisenseair.ayla.network.interceptors.AuthInterceptor
-import org.alberto97.hisenseair.ayla.network.interceptors.TokenAuthenticator
+import org.alberto97.hisenseair.ayla.internal.converters.*
+import org.alberto97.hisenseair.ayla.internal.network.api.AylaLogin
+import org.alberto97.hisenseair.ayla.internal.network.api.AylaService
+import org.alberto97.hisenseair.ayla.internal.network.api.PairApi
+import org.alberto97.hisenseair.ayla.internal.network.interceptors.AuthInterceptor
+import org.alberto97.hisenseair.ayla.internal.network.interceptors.TokenAuthenticator
+import org.alberto97.hisenseair.ayla.internal.repositories.*
 import org.alberto97.hisenseair.ayla.repositories.*
 import org.alberto97.hisenseair.features.controllers.*
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
@@ -35,7 +36,7 @@ val aylaUsApi = module {
 /**
  * Module internal dependencies
  */
-val aylaInternal = module {
+private val aylaInternal = module {
 
     // API
     single { getOkHttp(get()) }
@@ -92,7 +93,7 @@ val aylaLoaderModule = module {
     single<IProviderModuleLoader>(named(Provider.Ayla)){ AylaModuleLoader() }
 }
 
-fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {
+private fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {
     return OkHttpClient.Builder()
         .authenticator(TokenAuthenticator(repo))
         .addInterceptor(AuthInterceptor(repo))
@@ -107,7 +108,7 @@ fun getOkHttp(repo: IAuthenticationRepository): OkHttpClient {
         .build()
 }
 
-fun getPairApi(httpClient: OkHttpClient) : PairApi {
+private fun getPairApi(httpClient: OkHttpClient) : PairApi {
     val retrofit = Retrofit.Builder()
         .baseUrl("http://192.168.0.1/")
         .client(httpClient)
@@ -117,7 +118,7 @@ fun getPairApi(httpClient: OkHttpClient) : PairApi {
     return retrofit.create(PairApi::class.java)
 }
 
-fun getAylaApi(httpClient: OkHttpClient, baseUrl: String) : AylaService {
+private fun getAylaApi(httpClient: OkHttpClient, baseUrl: String) : AylaService {
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(httpClient)
@@ -127,7 +128,7 @@ fun getAylaApi(httpClient: OkHttpClient, baseUrl: String) : AylaService {
     return retrofit.create(AylaService::class.java)
 }
 
-fun getAylaLogin(baseUrl: String): AylaLogin {
+private fun getAylaLogin(baseUrl: String): AylaLogin {
     val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())

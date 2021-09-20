@@ -1,9 +1,10 @@
 package org.alberto97.hisenseair.ayla.repositories
 
 import android.util.Log
-import org.alberto97.hisenseair.ayla.AylaExtensions.aylaError
-import org.alberto97.hisenseair.ayla.models.*
-import org.alberto97.hisenseair.ayla.network.api.AylaLogin
+import org.alberto97.hisenseair.ayla.internal.AylaExtensions.aylaError
+import org.alberto97.hisenseair.ayla.internal.models.*
+import org.alberto97.hisenseair.ayla.internal.network.api.AylaLogin
+import org.alberto97.hisenseair.ayla.internal.repositories.ISecretsRepository
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.repositories.AuthErrorCodes
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository

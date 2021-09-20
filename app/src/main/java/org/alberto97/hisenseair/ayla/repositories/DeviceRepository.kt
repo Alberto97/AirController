@@ -1,13 +1,15 @@
 package org.alberto97.hisenseair.ayla.repositories
 
 import android.util.Log
-import org.alberto97.hisenseair.ayla.AylaExtensions.isAvailable
+import org.alberto97.hisenseair.ayla.internal.AylaExtensions.isAvailable
 import org.alberto97.hisenseair.ayla.features.TEMP_TYPE_PROP
-import org.alberto97.hisenseair.ayla.features.converters.ITempUnitConverter
-import org.alberto97.hisenseair.ayla.models.Device
-import org.alberto97.hisenseair.ayla.models.ProductName
-import org.alberto97.hisenseair.ayla.models.ProductNameWrapper
-import org.alberto97.hisenseair.ayla.network.api.AylaService
+import org.alberto97.hisenseair.ayla.internal.converters.ITempUnitConverter
+import org.alberto97.hisenseair.ayla.internal.models.Device
+import org.alberto97.hisenseair.ayla.internal.models.ProductName
+import org.alberto97.hisenseair.ayla.internal.models.ProductNameWrapper
+import org.alberto97.hisenseair.ayla.internal.network.api.AylaService
+import org.alberto97.hisenseair.ayla.internal.repositories.IDeviceCacheRepository
+import org.alberto97.hisenseair.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.hisenseair.features.TempType
 import org.alberto97.hisenseair.models.AppDevice
 import org.alberto97.hisenseair.models.ResultWrapper

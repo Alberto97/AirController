@@ -1,12 +1,12 @@
 package org.alberto97.hisenseair.ayla.repositories
 
 import android.util.Log
-import org.alberto97.hisenseair.ayla.models.Device
-import org.alberto97.hisenseair.ayla.models.SetupDevice
-import org.alberto97.hisenseair.ayla.models.Status
-import org.alberto97.hisenseair.ayla.models.WifiScanResults
-import org.alberto97.hisenseair.ayla.network.api.AylaService
-import org.alberto97.hisenseair.ayla.network.api.PairApi
+import org.alberto97.hisenseair.ayla.internal.models.Device
+import org.alberto97.hisenseair.ayla.internal.models.SetupDevice
+import org.alberto97.hisenseair.ayla.internal.models.Status
+import org.alberto97.hisenseair.ayla.internal.models.WifiScanResults
+import org.alberto97.hisenseair.ayla.internal.network.api.AylaService
+import org.alberto97.hisenseair.ayla.internal.network.api.PairApi
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.repositories.IDevicePairRepository
 

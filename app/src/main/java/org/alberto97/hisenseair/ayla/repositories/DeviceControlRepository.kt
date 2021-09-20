@@ -1,11 +1,13 @@
 package org.alberto97.hisenseair.ayla.repositories
 
-import org.alberto97.hisenseair.ayla.AylaPropertyToStateMap
-import org.alberto97.hisenseair.ayla.AylaType
+import org.alberto97.hisenseair.ayla.internal.AylaPropertyToStateMap
+import org.alberto97.hisenseair.ayla.internal.AylaType
 import org.alberto97.hisenseair.ayla.features.*
-import org.alberto97.hisenseair.ayla.features.converters.*
-import org.alberto97.hisenseair.ayla.models.Property
-import org.alberto97.hisenseair.ayla.network.api.AylaService
+import org.alberto97.hisenseair.ayla.internal.converters.*
+import org.alberto97.hisenseair.ayla.internal.models.Property
+import org.alberto97.hisenseair.ayla.internal.network.api.AylaService
+import org.alberto97.hisenseair.ayla.internal.repositories.IDeviceCacheRepository
+import org.alberto97.hisenseair.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.features.TemperatureExtensions.isCelsius
 import org.alberto97.hisenseair.features.TemperatureExtensions.toC

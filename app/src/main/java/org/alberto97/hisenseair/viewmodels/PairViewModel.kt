@@ -7,8 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.ayla.AylaExtensions.isOpen
-import org.alberto97.hisenseair.ayla.models.WifiScanResults
+import org.alberto97.hisenseair.ayla.internal.AylaExtensions.isOpen
+import org.alberto97.hisenseair.ayla.internal.models.WifiScanResults
 import org.alberto97.hisenseair.connectivity.IPairConnectivityManager
 import org.alberto97.hisenseair.repositories.IDevicePairRepository
 
