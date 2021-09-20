@@ -5,25 +5,26 @@ import okhttp3.Request
 import okhttp3.Response
 import retrofit2.Invocation
 
-interface RequestInterceptor {
-    fun interceptRequest(builder: Request.Builder, needsAuthorization: Boolean)
-}
-
-abstract class OkHttpAppInterceptor : Interceptor, RequestInterceptor {
+/**
+ * Interceptor used to authorize every request annotated with @Authorize
+ */
+abstract class AuthorizedRequestInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
 
-        // Retrieve custom annotation: Authenticated
+        // Retrieve custom annotation: Authorized
         val invocation = original.tag(Invocation::class.java)
         val authenticated = invocation?.method()?.getAnnotation(Authorized::class.java)
         val needsAuthorization = authenticated != null
 
-        val requestBuilder = original.newBuilder()
+        val request = if (needsAuthorization)
+            authorize(original)
+        else
+            original
 
-        interceptRequest(requestBuilder, needsAuthorization)
-
-        val request = requestBuilder.build()
         return chain.proceed(request)
     }
+
+    abstract fun authorize(request: Request): Request
 }

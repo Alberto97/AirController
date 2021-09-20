@@ -2,16 +2,18 @@ package org.alberto97.hisenseair.ayla.network.interceptors
 
 import okhttp3.Request
 import org.alberto97.hisenseair.ayla.network.interceptors.AuthorizationExtension.addAuthorization
-import org.alberto97.hisenseair.network.OkHttpAppInterceptor
+import org.alberto97.hisenseair.network.AuthorizedRequestInterceptor
 import org.alberto97.hisenseair.repositories.IAuthenticationRepository
 
-class AuthInterceptor(private val repo: IAuthenticationRepository) : OkHttpAppInterceptor() {
+class AuthInterceptor(private val repo: IAuthenticationRepository) : AuthorizedRequestInterceptor() {
 
-    override fun interceptRequest(builder: Request.Builder, needsAuthorization: Boolean) {
-
-        if (!needsAuthorization) return
-
+    override fun authorize(request: Request): Request {
         val token = repo.getToken()
-        builder.addAuthorization(token)
+
+        val builder = request.newBuilder().apply {
+            addAuthorization(token)
+        }
+
+        return builder.build()
     }
 }
