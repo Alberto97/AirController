@@ -1,17 +1,16 @@
 package org.alberto97.hisenseair.demo.repositories
 
-import org.alberto97.hisenseair.ayla.internal.models.Device
-import org.alberto97.hisenseair.ayla.internal.models.Status
-import org.alberto97.hisenseair.ayla.internal.models.WifiScanResults
+import org.alberto97.hisenseair.models.DevicePairStatus
+import org.alberto97.hisenseair.models.DevicePairWifiScanResult
 import org.alberto97.hisenseair.models.ResultWrapper
 import org.alberto97.hisenseair.repositories.IDevicePairRepository
 
 class DevicePairRepository : IDevicePairRepository {
-    override suspend fun getStatus(): ResultWrapper<Status> {
+    override suspend fun getStatus(): ResultWrapper<DevicePairStatus> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getNetworks(): ResultWrapper<List<WifiScanResults.WifiScanResult>> {
+    override suspend fun getNetworks(): ResultWrapper<List<DevicePairWifiScanResult>> {
         TODO("Not yet implemented")
     }
 
@@ -23,7 +22,7 @@ class DevicePairRepository : IDevicePairRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun pair(dsn: String, setupToken: String): ResultWrapper<Device> {
+    override suspend fun pair(dsn: String, setupToken: String): ResultWrapper<DevicePairStatus> {
         TODO("Not yet implemented")
     }
 }

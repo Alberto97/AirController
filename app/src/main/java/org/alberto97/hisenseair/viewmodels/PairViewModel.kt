@@ -7,9 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.ayla.internal.AylaExtensions.isOpen
-import org.alberto97.hisenseair.ayla.internal.models.WifiScanResults
 import org.alberto97.hisenseair.connectivity.IPairConnectivityManager
+import org.alberto97.hisenseair.models.DevicePairWifiScanResult
+import org.alberto97.hisenseair.models.WifiSecurity
 import org.alberto97.hisenseair.repositories.IDevicePairRepository
 
 class PairViewModel(
@@ -38,7 +38,7 @@ class PairViewModel(
     private val _message = MutableStateFlow("")
     val message = _message.asStateFlow()
 
-    private val _scanResults = MutableStateFlow(listOf<WifiScanResults.WifiScanResult>())
+    private val _scanResults = MutableStateFlow(listOf<DevicePairWifiScanResult>())
     val scanResults = _scanResults.asStateFlow()
 
     private val _selectedSsid = MutableStateFlow("")
@@ -68,7 +68,7 @@ class PairViewModel(
     private suspend fun getDsn() {
         val status = repository.getStatus()
         if (status.data != null)
-            dsn = status.data.dsn
+            dsn = status.data.id
         else
             handleFailure(status.message)
     }
@@ -85,10 +85,10 @@ class PairViewModel(
         _loading.value = false
     }
 
-    fun setSelectedSsid(network: WifiScanResults.WifiScanResult) {
+    fun setSelectedSsid(network: DevicePairWifiScanResult) {
         _selectedSsid.value = network.ssid
 
-        if (network.isOpen()) {
+        if (network.security == WifiSecurity.OPEN) {
             connectDeviceToWifi()
         } else {
             _navAction.value = NavAction.InsertPassword
@@ -117,7 +117,7 @@ class PairViewModel(
     private suspend fun pairToAccount() {
         val device = repository.pair(dsn, setupToken)
         if (device.data != null) {
-            _deviceName.value = device.data.productName
+            _deviceName.value = device.data.name
             _navAction.value = NavAction.DevicePaired
         } else {
             handleInternetFailure(device.message)

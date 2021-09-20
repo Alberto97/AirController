@@ -1,13 +1,14 @@
 package org.alberto97.hisenseair.ayla.repositories
 
 import android.util.Log
-import org.alberto97.hisenseair.ayla.internal.models.Device
+import org.alberto97.hisenseair.ayla.internal.AylaExtensions.isOpen
 import org.alberto97.hisenseair.ayla.internal.models.SetupDevice
-import org.alberto97.hisenseair.ayla.internal.models.Status
-import org.alberto97.hisenseair.ayla.internal.models.WifiScanResults
 import org.alberto97.hisenseair.ayla.internal.network.api.AylaService
 import org.alberto97.hisenseair.ayla.internal.network.api.PairApi
+import org.alberto97.hisenseair.models.DevicePairStatus
+import org.alberto97.hisenseair.models.DevicePairWifiScanResult
 import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.models.WifiSecurity
 import org.alberto97.hisenseair.repositories.IDevicePairRepository
 
 class DevicePairRepository(
@@ -18,18 +19,19 @@ class DevicePairRepository(
         private const val LOG_TAG = "HiPair"
     }
 
-    override suspend fun getStatus(): ResultWrapper<Status> {
+    override suspend fun getStatus(): ResultWrapper<DevicePairStatus> {
         Log.d(LOG_TAG, "Retrieving device status")
         return try {
             val resp = pairApi.status()
-            ResultWrapper.Success(resp)
+            val model = DevicePairStatus(resp.dsn, "")
+            ResultWrapper.Success(model)
         } catch (ex: Exception) {
             Log.e(LOG_TAG, ex.stackTraceToString())
             ResultWrapper.Error("Cannot retrieve device status")
         }
     }
 
-    override suspend fun getNetworks(): ResultWrapper<List<WifiScanResults.WifiScanResult>> {
+    override suspend fun getNetworks(): ResultWrapper<List<DevicePairWifiScanResult>> {
         // Scan for networks on the device
         Log.d(LOG_TAG, "Device scanning wifi networks")
         val scanResp = pairApi.wifiScan()
@@ -42,7 +44,11 @@ class DevicePairRepository(
         Log.d(LOG_TAG, "Retrieve found wifi networks")
         return try {
             val results = pairApi.wifiScanResults()
-            ResultWrapper.Success(results.wifiScan.results)
+            val list = results.wifiScan.results.map { network ->
+                val security = if (network.isOpen()) WifiSecurity.OPEN else WifiSecurity.PROTECTED
+                DevicePairWifiScanResult(network.ssid, security, network.bars)
+            }
+            ResultWrapper.Success(list)
         } catch (ex: Exception) {
             Log.e(LOG_TAG, ex.stackTraceToString())
             ResultWrapper.Error("Cannot retrieve network scan result")
@@ -60,7 +66,7 @@ class DevicePairRepository(
         }
     }
 
-    override suspend fun pair(dsn: String, setupToken: String): ResultWrapper<Device> {
+    override suspend fun pair(dsn: String, setupToken: String): ResultWrapper<DevicePairStatus> {
         Log.d(LOG_TAG, "Notify server the device has been connected")
         try {
             aylaApi.connected(dsn, setupToken)
@@ -74,7 +80,8 @@ class DevicePairRepository(
             val setupDevice = SetupDevice(dsn, setupToken)
             val wrapper = SetupDevice.Wrapper(setupDevice)
             val resp = aylaApi.postDevice(wrapper)
-            ResultWrapper.Success(resp.device)
+            val model = DevicePairStatus(resp.device.dsn, resp.device.productName)
+            ResultWrapper.Success(model)
         } catch (ex: Exception) {
             Log.e(LOG_TAG, ex.stackTraceToString())
             ResultWrapper.Error("Cannot pair device to the account")

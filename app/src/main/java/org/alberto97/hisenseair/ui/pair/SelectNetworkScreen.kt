@@ -15,7 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.ayla.internal.models.WifiScanResults
+import org.alberto97.hisenseair.models.DevicePairWifiScanResult
+import org.alberto97.hisenseair.models.WifiSecurity
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.preferences.PreferenceIcon
 import org.alberto97.hisenseair.ui.theme.AppTheme
@@ -56,8 +57,8 @@ private fun SelectNetworkScreen(
     message: String,
     onClearMessage: () -> Unit,
     loading: Boolean,
-    list: List<WifiScanResults.WifiScanResult>,
-    onClick: (network: WifiScanResults.WifiScanResult) -> Unit
+    list: List<DevicePairWifiScanResult>,
+    onClick: (network: DevicePairWifiScanResult) -> Unit
 ) {
     PairScaffold(
         title = "Choose your Wi-Fi network",
@@ -77,19 +78,25 @@ private fun SelectNetworkScreen(
 @ExperimentalMaterialApi
 @Composable
 private fun NetworksList(
-    list: List<WifiScanResults.WifiScanResult>,
-    onClick: (network: WifiScanResults.WifiScanResult) -> Unit
+    list: List<DevicePairWifiScanResult>,
+    onClick: (network: DevicePairWifiScanResult) -> Unit
 ) {
     LazyColumn(Modifier.padding(vertical = 8.dp)) {
         items(list) { network ->
             ListItem(
                 text = { Text(network.ssid) },
-                secondaryText = { Text(network.security)},
-                icon = { StrengthIcon(network.bars) },
+                secondaryText = { SecurityText(network.security)},
+                icon = { StrengthIcon(network.signalStrengthBars) },
                 modifier = Modifier.clickable(onClick = { onClick(network) }),
             )
         }
     }
+}
+
+@Composable
+private fun SecurityText(value: WifiSecurity) {
+    val text = if (value == WifiSecurity.OPEN) "Open" else "Protected"
+    Text(text)
 }
 
 @Composable
@@ -115,10 +122,10 @@ private fun Preview() {
                 "", {},
                 false,
                 listOf(
-                    WifiScanResults.WifiScanResult("Access Point", "", 1, -54, 3, "WPA2 Personal AES", ""),
-                    WifiScanResults.WifiScanResult("Router", "", 1, 0, 2, "WPA2 Personal AES", ""),
-                    WifiScanResults.WifiScanResult("Access Point Bedroom", "", 1, 0, 1, "WPA2 Personal AES", ""),
-                    WifiScanResults.WifiScanResult("Access Point Living", "", 1, 0, 0, "WPA2 Personal AES", "")
+                    DevicePairWifiScanResult("Access Point", WifiSecurity.PROTECTED, 3),
+                    DevicePairWifiScanResult("Router", WifiSecurity.PROTECTED, 2),
+                    DevicePairWifiScanResult("Access Point Bedroom", WifiSecurity.PROTECTED, 1),
+                    DevicePairWifiScanResult("Access Point Living", WifiSecurity.OPEN, 0)
                 )
             ) {}
         }
