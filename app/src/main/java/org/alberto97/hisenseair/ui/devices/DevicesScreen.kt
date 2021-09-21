@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavBackStackEntry
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.models.AppDevice
+import org.alberto97.hisenseair.common.models.AppDevice
 import org.alberto97.hisenseair.models.ScreenState
 import org.alberto97.hisenseair.ui.common.AppScaffold
 import org.alberto97.hisenseair.ui.common.FullscreenError

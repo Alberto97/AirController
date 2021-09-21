@@ -9,13 +9,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.common.features.FanSpeed
+import org.alberto97.hisenseair.common.features.SleepMode
+import org.alberto97.hisenseair.common.features.SleepModeData
+import org.alberto97.hisenseair.common.features.WorkMode
 import org.alberto97.hisenseair.features.*
-import org.alberto97.hisenseair.features.controllers.*
-import org.alberto97.hisenseair.models.AppDeviceState
+import org.alberto97.hisenseair.provider.features.controllers.*
+import org.alberto97.hisenseair.common.models.AppDeviceState
 import org.alberto97.hisenseair.models.ListItemModel
-import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.common.models.ResultWrapper
 import org.alberto97.hisenseair.models.ScreenState
-import org.alberto97.hisenseair.repositories.IDeviceControlRepository
+import org.alberto97.hisenseair.provider.repositories.IDeviceControlRepository
 import org.alberto97.hisenseair.utils.IDeviceShortcutManager
 
 class DeviceViewModel(
@@ -149,13 +153,14 @@ class DeviceViewModel(
 
     private suspend fun fetchData(): ResultWrapper<AppDeviceState> {
         val resp = repo.getDeviceState(dsn)
-        if (resp.data == null) {
+        val data = resp.data
+        if (data == null) {
             _message.value = resp.message
             return resp
         }
 
-        updateUi(resp.data)
-        shortcutManager.createShortcut(resp.data.productName, dsn)
+        updateUi(data)
+        shortcutManager.createShortcut(data.productName, dsn)
 
         return resp
     }

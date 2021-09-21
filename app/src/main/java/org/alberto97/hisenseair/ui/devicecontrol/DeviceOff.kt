@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.features.WorkMode
+import org.alberto97.hisenseair.common.features.WorkMode
 import org.alberto97.hisenseair.features.modeToIconMap
 import org.alberto97.hisenseair.ui.theme.AppTheme
 import org.alberto97.hisenseair.viewmodels.DeviceViewModel

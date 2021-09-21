@@ -10,9 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.repositories.AuthErrorCodes
-import org.alberto97.hisenseair.repositories.IAuthenticationRepository
-import org.alberto97.hisenseair.repositories.ISettingsRepository
+import org.alberto97.hisenseair.common.repositories.ISettingsRepository
+import org.alberto97.hisenseair.provider.repositories.AuthErrorCodes
+import org.alberto97.hisenseair.provider.repositories.IAuthenticationRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

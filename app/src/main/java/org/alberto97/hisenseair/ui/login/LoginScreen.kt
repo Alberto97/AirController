@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.ListItemModel
 import org.alberto97.hisenseair.models.ScreenState
-import org.alberto97.hisenseair.repositories.Region
+import org.alberto97.hisenseair.common.enums.Region
 import org.alberto97.hisenseair.ui.common.AppDropDown
 import org.alberto97.hisenseair.ui.common.AppScaffold
 import org.alberto97.hisenseair.ui.common.FullscreenLoading

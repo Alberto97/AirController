@@ -1,8 +1,8 @@
 package org.alberto97.hisenseair
 
 import android.app.Application
-import org.alberto97.hisenseair.ayla.aylaLoaderModule
-import org.alberto97.hisenseair.demo.demoLoaderModule
+import org.alberto97.hisenseair.provider.ayla.aylaLoaderModule
+import org.alberto97.hisenseair.provider.demo.demoLoaderModule
 import org.alberto97.hisenseair.utils.IProviderManager
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext

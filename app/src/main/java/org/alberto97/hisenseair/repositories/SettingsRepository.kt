@@ -11,19 +11,11 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import org.alberto97.hisenseair.common.enums.Region
 import org.alberto97.hisenseair.utils.DataStoreExtensions.setOrRemove
-import org.alberto97.hisenseair.utils.Provider
+import org.alberto97.hisenseair.common.enums.Provider
+import org.alberto97.hisenseair.common.repositories.ISettingsRepository
 
-
-enum class Region {
-    EU, US
-}
-
-interface ISettingsRepository {
-    var region: Region?
-    var loggedIn: Boolean
-    var provider: Provider?
-}
 
 class SettingsRepository(private val app: Application): ISettingsRepository {
 

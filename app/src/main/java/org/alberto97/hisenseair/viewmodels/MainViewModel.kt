@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.models.AppDevice
-import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.common.models.AppDevice
+import org.alberto97.hisenseair.common.models.ResultWrapper
+import org.alberto97.hisenseair.common.repositories.ISettingsRepository
 import org.alberto97.hisenseair.models.ScreenState
-import org.alberto97.hisenseair.repositories.IAuthenticationRepository
-import org.alberto97.hisenseair.repositories.IDeviceRepository
-import org.alberto97.hisenseair.repositories.ISettingsRepository
+import org.alberto97.hisenseair.provider.repositories.IAuthenticationRepository
+import org.alberto97.hisenseair.provider.repositories.IDeviceRepository
 import org.alberto97.hisenseair.utils.IDeviceShortcutManager
 
 
@@ -65,7 +65,7 @@ class MainViewModel(
     private suspend fun fetchData(): ResultWrapper<List<AppDevice>> {
         val result = repo.getDevices()
         if (result.data != null)
-            _devices.value = result.data
+            _devices.value = result.data!!
         else
             _message.value = result.message
 

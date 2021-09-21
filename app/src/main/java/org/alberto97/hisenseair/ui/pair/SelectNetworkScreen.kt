@@ -15,8 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.hisenseair.R
-import org.alberto97.hisenseair.models.DevicePairWifiScanResult
-import org.alberto97.hisenseair.models.WifiSecurity
+import org.alberto97.hisenseair.common.models.DevicePairWifiScanResult
+import org.alberto97.hisenseair.common.enums.WifiSecurity
 import org.alberto97.hisenseair.ui.common.FullscreenLoading
 import org.alberto97.hisenseair.ui.preferences.PreferenceIcon
 import org.alberto97.hisenseair.ui.theme.AppTheme

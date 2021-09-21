@@ -2,7 +2,7 @@ package org.alberto97.hisenseair
 
 import org.alberto97.hisenseair.connectivity.IPairConnectivityManager
 import org.alberto97.hisenseair.connectivity.PairConnectivityManager
-import org.alberto97.hisenseair.repositories.ISettingsRepository
+import org.alberto97.hisenseair.common.repositories.ISettingsRepository
 import org.alberto97.hisenseair.repositories.SettingsRepository
 import org.alberto97.hisenseair.utils.DeviceShortcutManager
 import org.alberto97.hisenseair.utils.IDeviceShortcutManager

@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.BuildConfig
 import org.alberto97.hisenseair.R
 import org.alberto97.hisenseair.models.ListItemModel
-import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.common.models.ResultWrapper
 import org.alberto97.hisenseair.models.ScreenState
-import org.alberto97.hisenseair.repositories.IAuthenticationRepository
-import org.alberto97.hisenseair.repositories.ISettingsRepository
-import org.alberto97.hisenseair.repositories.Region
+import org.alberto97.hisenseair.common.repositories.ISettingsRepository
+import org.alberto97.hisenseair.common.enums.Region
 import org.alberto97.hisenseair.utils.IProviderManager
-import org.alberto97.hisenseair.utils.Provider
+import org.alberto97.hisenseair.common.enums.Provider
+import org.alberto97.hisenseair.provider.repositories.IAuthenticationRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

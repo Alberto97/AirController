@@ -20,12 +20,12 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.features.WorkMode
+import org.alberto97.hisenseair.common.features.WorkMode
 import org.alberto97.hisenseair.features.modeToControl
 import org.alberto97.hisenseair.features.modeToStringMap
-import org.alberto97.hisenseair.models.AppDeviceState
-import org.alberto97.hisenseair.repositories.IDeviceControlRepository
-import org.alberto97.hisenseair.repositories.IDeviceRepository
+import org.alberto97.hisenseair.common.models.AppDeviceState
+import org.alberto97.hisenseair.provider.repositories.IDeviceControlRepository
+import org.alberto97.hisenseair.provider.repositories.IDeviceRepository
 import org.alberto97.hisenseair.ui.MainActivity
 import org.koin.android.ext.android.inject
 import java.util.concurrent.Flow

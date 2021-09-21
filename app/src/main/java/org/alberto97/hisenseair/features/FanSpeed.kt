@@ -1,15 +1,7 @@
 package org.alberto97.hisenseair.features
 
 import org.alberto97.hisenseair.R
-
-enum class FanSpeed {
-    Auto,
-    Lower,
-    Low,
-    Normal,
-    High,
-    Higher
-}
+import org.alberto97.hisenseair.common.features.FanSpeed
 
 val fanToStringMap = mapOf(
     FanSpeed.Auto to R.string.fan_speed_auto,

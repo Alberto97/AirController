@@ -4,14 +4,7 @@ import android.os.Build
 import android.service.controls.templates.TemperatureControlTemplate
 import androidx.annotation.RequiresApi
 import org.alberto97.hisenseair.R
-
-enum class WorkMode {
-    FanOnly,
-    Heating,
-    Cooling,
-    Dry,
-    Auto
-}
+import org.alberto97.hisenseair.common.features.WorkMode
 
 val modeToIconMap = mapOf(
     WorkMode.Heating to R.drawable.outline_brightness_low,

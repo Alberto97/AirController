@@ -1,16 +1,7 @@
 package org.alberto97.hisenseair.features
 
 import org.alberto97.hisenseair.R
-
-enum class SleepMode {
-    OFF,
-    MODE1,
-    MODE2,
-    MODE3,
-    MODE4
-}
-
-class SleepModeData(val type: SleepMode, val hours: List<Int>, val temps: List<Int>)
+import org.alberto97.hisenseair.common.features.SleepMode
 
 val sleepToStringMap = mapOf(
     SleepMode.OFF to R.string.sleep_mode_off,

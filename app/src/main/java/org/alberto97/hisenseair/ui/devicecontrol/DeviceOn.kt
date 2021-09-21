@@ -20,6 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.hisenseair.R
+import org.alberto97.hisenseair.common.features.FanSpeed
+import org.alberto97.hisenseair.common.features.SleepMode
+import org.alberto97.hisenseair.common.features.WorkMode
 import org.alberto97.hisenseair.features.*
 import org.alberto97.hisenseair.ui.preferences.*
 import org.alberto97.hisenseair.ui.theme.AppTheme

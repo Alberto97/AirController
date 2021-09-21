@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.alberto97.hisenseair.connectivity.IPairConnectivityManager
-import org.alberto97.hisenseair.models.DevicePairWifiScanResult
-import org.alberto97.hisenseair.models.WifiSecurity
-import org.alberto97.hisenseair.repositories.IDevicePairRepository
+import org.alberto97.hisenseair.common.models.DevicePairWifiScanResult
+import org.alberto97.hisenseair.common.enums.WifiSecurity
+import org.alberto97.hisenseair.provider.repositories.IDevicePairRepository
 
 class PairViewModel(
     private val repository: IDevicePairRepository,
@@ -67,8 +67,9 @@ class PairViewModel(
     // Retrieve device dsn
     private suspend fun getDsn() {
         val status = repository.getStatus()
-        if (status.data != null)
-            dsn = status.data.id
+        val data = status.data
+        if (data != null)
+            dsn = data.id
         else
             handleFailure(status.message)
     }
@@ -77,8 +78,9 @@ class PairViewModel(
         _loading.value = true
 
         val result = repository.getNetworks()
-        if (result.data != null)
-            _scanResults.value = result.data
+        val data = result.data
+        if (data != null)
+            _scanResults.value = data
         else
             handleFailure(result.message)
 
@@ -116,8 +118,9 @@ class PairViewModel(
 
     private suspend fun pairToAccount() {
         val device = repository.pair(dsn, setupToken)
-        if (device.data != null) {
-            _deviceName.value = device.data.name
+        val data = device.data
+        if (data != null) {
+            _deviceName.value = data.name
             _navAction.value = NavAction.DevicePaired
         } else {
             handleInternetFailure(device.message)

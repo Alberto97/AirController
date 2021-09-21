@@ -7,11 +7,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.alberto97.hisenseair.features.TempType
-import org.alberto97.hisenseair.models.AppDevice
-import org.alberto97.hisenseair.models.ResultWrapper
+import org.alberto97.hisenseair.common.features.TempType
+import org.alberto97.hisenseair.common.models.AppDevice
+import org.alberto97.hisenseair.common.models.ResultWrapper
 import org.alberto97.hisenseair.models.ScreenState
-import org.alberto97.hisenseair.repositories.IDeviceRepository
+import org.alberto97.hisenseair.provider.repositories.IDeviceRepository
 import org.alberto97.hisenseair.utils.IDeviceShortcutManager
 
 class DevicePreferenceViewModel(
@@ -108,17 +108,16 @@ class DevicePreferenceViewModel(
 
     private suspend fun updateDeviceProps(): ResultWrapper<AppDevice> {
         val result = repo.getDevice(dsn)
-        if (result.data == null) {
+        val data = result.data
+        if (data == null) {
             _message.value = result.message
             return result
         }
 
-        with(result.data) {
-            _deviceName.value = name
-            _ip.value = lanIp
-            _mac.value = mac
-            _ssid.value = Uri.decode(ssid)
-        }
+        _deviceName.value = data.name
+        _ip.value = data.lanIp
+        _mac.value = data.mac
+        _ssid.value = Uri.decode(data.ssid)
 
         return result
     }

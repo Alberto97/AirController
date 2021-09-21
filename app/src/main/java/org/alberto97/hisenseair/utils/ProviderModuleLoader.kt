@@ -1,20 +1,12 @@
 package org.alberto97.hisenseair.utils
 
-import org.alberto97.hisenseair.repositories.ISettingsRepository
-import org.alberto97.hisenseair.repositories.Region
+import org.alberto97.hisenseair.common.enums.Provider
+import org.alberto97.hisenseair.common.repositories.ISettingsRepository
+import org.alberto97.hisenseair.common.enums.Region
+import org.alberto97.hisenseair.provider.utils.IProviderModuleLoader
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.qualifier.named
-
-enum class Provider {
-    Ayla,
-    Demo
-}
-
-interface IProviderModuleLoader {
-    fun load()
-    fun setRegion(region: Region)
-}
 
 interface IProviderManager {
     fun loadModule()
