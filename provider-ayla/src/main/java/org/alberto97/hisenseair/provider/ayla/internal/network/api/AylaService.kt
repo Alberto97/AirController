@@ -9,11 +9,11 @@ internal interface AylaService {
 
     @Authorized
     @GET("devices.json")
-    suspend fun getDevices(): List<DeviceWrapper>
+    suspend fun getDevices(): List<Device.Wrapper>
 
     @Authorized
     @POST("devices.json")
-    suspend fun postDevice(@Body device: SetupDevice.Wrapper): DeviceWrapper
+    suspend fun postDevice(@Body device: SetupDevice.Wrapper): Device.Wrapper
 
     @Authorized
     @GET("devices/connected.json")
@@ -36,7 +36,7 @@ internal interface AylaService {
     suspend fun getDevice(
         @Path("dsn")
         dsn: String
-    ): DeviceWrapper
+    ): Device.Wrapper
 
     @Authorized
     @PUT("dsns/{dsn}.json")
@@ -45,7 +45,7 @@ internal interface AylaService {
         dsn: String,
 
         @Body
-        deviceObj: ProductNameWrapper
+        deviceObj: ProductName.Wrapper
     )
 
     @Authorized
@@ -53,7 +53,7 @@ internal interface AylaService {
     suspend fun getDeviceProperties(
         @Path("dsn")
         dsn: String
-    ): List<PropertyWrapper>
+    ): List<Property.Wrapper>
 
     @Authorized
     @GET("dsns/{dsn}/properties/{property}.json")
@@ -63,7 +63,7 @@ internal interface AylaService {
 
         @Path("property")
         property: String
-    ): PropertyWrapper
+    ): Property.Wrapper
 
     @Authorized
     @POST("dsns/{dsn}/properties/{property}/datapoints.json")
@@ -75,6 +75,6 @@ internal interface AylaService {
         property: String,
 
         @Body
-        datapoint: DatapointWrapper
+        datapoint: Datapoint.Wrapper
     ): DatapointOutput
 }

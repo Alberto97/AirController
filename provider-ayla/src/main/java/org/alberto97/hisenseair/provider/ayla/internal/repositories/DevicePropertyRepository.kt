@@ -1,7 +1,6 @@
 package org.alberto97.hisenseair.provider.ayla.internal.repositories
 
 import org.alberto97.hisenseair.provider.ayla.internal.models.Datapoint
-import org.alberto97.hisenseair.provider.ayla.internal.models.DatapointWrapper
 import org.alberto97.hisenseair.provider.ayla.internal.models.Property
 import org.alberto97.hisenseair.provider.ayla.internal.network.api.AylaService
 
@@ -21,7 +20,7 @@ internal class DevicePropertyRepository(private val service: AylaService): IDevi
     }
 
     override suspend fun setProperty(dsn: String, property: String, value: Datapoint) {
-        val data = DatapointWrapper(value)
+        val data = Datapoint.Wrapper(value)
         service.setDeviceProperty(dsn, property, data)
     }
 }

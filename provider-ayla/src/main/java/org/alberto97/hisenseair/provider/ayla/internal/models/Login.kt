@@ -7,9 +7,8 @@ import com.google.gson.annotations.SerializedName
 // First access
 internal class Login(email: String, password: String, app: Application) {
     val user = User(email, password, app)
+    class User(val email: String, val password: String, val application: Application)
 }
-
-internal class User(val email: String, val password: String, val application: Application)
 
 internal class Application(
     @SerializedName("app_id")

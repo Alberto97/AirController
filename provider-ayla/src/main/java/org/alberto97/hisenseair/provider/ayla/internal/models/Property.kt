@@ -53,8 +53,9 @@ internal class Property (
 
     @SerializedName("retention_days")
     val retentionDays: Int
-)
+) {
+    class Wrapper(
+        val property: Property
+    )
+}
 
-internal class PropertyWrapper(
-    val property: Property
-)

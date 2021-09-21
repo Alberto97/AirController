@@ -9,7 +9,6 @@ import org.alberto97.hisenseair.provider.ayla.internal.TEMP_TYPE_PROP
 import org.alberto97.hisenseair.provider.ayla.internal.converters.ITempUnitConverter
 import org.alberto97.hisenseair.provider.ayla.internal.models.Device
 import org.alberto97.hisenseair.provider.ayla.internal.models.ProductName
-import org.alberto97.hisenseair.provider.ayla.internal.models.ProductNameWrapper
 import org.alberto97.hisenseair.provider.ayla.internal.network.api.AylaService
 import org.alberto97.hisenseair.provider.ayla.internal.repositories.IDeviceCacheRepository
 import org.alberto97.hisenseair.provider.ayla.internal.repositories.IDevicePropertyRepository
@@ -50,7 +49,7 @@ internal class DeviceRepository(
 
     override suspend fun setDeviceName(name: String, dsn: String): ResultWrapper<Unit> {
         val x = ProductName(name)
-        val c = ProductNameWrapper(x)
+        val c = ProductName.Wrapper(x)
         return try {
             service.putDevice(dsn, c)
             ResultWrapper.Success(Unit)

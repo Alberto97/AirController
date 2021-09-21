@@ -4,9 +4,6 @@ package org.alberto97.hisenseair.provider.ayla.internal.models
 
 import com.google.gson.annotations.SerializedName
 
-internal class DeviceWrapper(
-    val device: Device
-)
 
 internal class Device(
     @SerializedName("product_name")
@@ -55,4 +52,8 @@ internal class Device(
     val deviceType: String,
 
     val ssid: String
-)
+) {
+    class Wrapper(
+        val device: Device
+    )
+}
