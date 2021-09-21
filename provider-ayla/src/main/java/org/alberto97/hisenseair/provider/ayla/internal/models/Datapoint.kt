@@ -4,12 +4,9 @@ package org.alberto97.hisenseair.provider.ayla.internal.models
 
 import com.google.gson.annotations.SerializedName
 
-internal class Datapoint(
-    val value: Int
-) {
-    class Wrapper(
-        val datapoint: Datapoint
-    )
+internal class Datapoint(value: Int) {
+    val datapoint = Data(value)
+    class Data(val value: Int)
 }
 
 

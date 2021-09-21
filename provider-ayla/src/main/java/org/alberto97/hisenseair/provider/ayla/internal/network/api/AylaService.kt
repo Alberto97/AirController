@@ -13,7 +13,7 @@ internal interface AylaService {
 
     @Authorized
     @POST("devices.json")
-    suspend fun postDevice(@Body device: SetupDevice.Wrapper): Device.Wrapper
+    suspend fun postDevice(@Body device: SetupDevice): Device.Wrapper
 
     @Authorized
     @GET("devices/connected.json")
@@ -45,7 +45,7 @@ internal interface AylaService {
         dsn: String,
 
         @Body
-        deviceObj: ProductName.Wrapper
+        deviceObj: ProductName
     )
 
     @Authorized
@@ -75,6 +75,6 @@ internal interface AylaService {
         property: String,
 
         @Body
-        datapoint: Datapoint.Wrapper
+        datapoint: Datapoint
     ): DatapointOutput
 }

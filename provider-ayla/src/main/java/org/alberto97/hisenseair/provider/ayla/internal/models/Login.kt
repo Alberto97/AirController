@@ -19,12 +19,13 @@ internal class Application(
 )
 
 // Refresh Token
-internal class LoginRefresh(val user: UserRefresh)
-
-internal class UserRefresh(
-    @SerializedName("refresh_token")
-    val refreshToken: String
-)
+internal class LoginRefresh(refreshToken: String) {
+    val user = UserRefresh(refreshToken)
+    class UserRefresh(
+        @SerializedName("refresh_token")
+        val refreshToken: String
+    )
+}
 
 // Response
 internal class LoginOutput(

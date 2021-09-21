@@ -78,8 +78,7 @@ internal class DevicePairRepository(
         Log.d(LOG_TAG, "Pair device to account")
         return try {
             val setupDevice = SetupDevice(dsn, setupToken)
-            val wrapper = SetupDevice.Wrapper(setupDevice)
-            val resp = aylaApi.postDevice(wrapper)
+            val resp = aylaApi.postDevice(setupDevice)
             val model = DevicePairStatus(resp.device.dsn, resp.device.productName)
             ResultWrapper.Success(model)
         } catch (ex: Exception) {

@@ -71,8 +71,7 @@ internal class AuthenticationRepository(
             return ResultWrapper.Error("Missing refresh token", AuthErrorCodes.UNAUTHORIZED)
 
         return try {
-            val user = UserRefresh(refreshToken)
-            val data = LoginRefresh(user)
+            val data = LoginRefresh(refreshToken)
 
             val resultBody = service.refreshToken(data)
             saveAuthData(resultBody)

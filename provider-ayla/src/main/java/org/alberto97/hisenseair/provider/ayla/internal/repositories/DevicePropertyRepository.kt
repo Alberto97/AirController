@@ -20,7 +20,6 @@ internal class DevicePropertyRepository(private val service: AylaService): IDevi
     }
 
     override suspend fun setProperty(dsn: String, property: String, value: Datapoint) {
-        val data = Datapoint.Wrapper(value)
-        service.setDeviceProperty(dsn, property, data)
+        service.setDeviceProperty(dsn, property, value)
     }
 }

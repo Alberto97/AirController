@@ -48,10 +48,9 @@ internal class DeviceRepository(
     }
 
     override suspend fun setDeviceName(name: String, dsn: String): ResultWrapper<Unit> {
-        val x = ProductName(name)
-        val c = ProductName.Wrapper(x)
+        val productName = ProductName(name)
         return try {
-            service.putDevice(dsn, c)
+            service.putDevice(dsn, productName)
             ResultWrapper.Success(Unit)
         } catch (ex: Exception) {
             Log.e(LOG_TAG, ex.stackTraceToString())

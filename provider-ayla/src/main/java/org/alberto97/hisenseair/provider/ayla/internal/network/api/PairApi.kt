@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.provider.ayla.internal.network.api;
+package org.alberto97.hisenseair.provider.ayla.internal.network.api
 
 import org.alberto97.hisenseair.provider.ayla.internal.models.Status
 import org.alberto97.hisenseair.provider.ayla.internal.models.WifiScanResults

@@ -1,14 +1,15 @@
+@file:Suppress("unused")
+
 package org.alberto97.hisenseair.provider.ayla.internal.models
 
 import com.google.gson.annotations.SerializedName
 
-internal class SetupDevice(
-    val dsn: String,
-    @SerializedName("setup_token") val setupToken: String?,
-    @SerializedName("regtoken") val regToken: String? = null
-) {
-    class Wrapper(
-        val device: SetupDevice
+internal class SetupDevice(dsn: String, setupToken: String?, regToken: String? = null) {
+    val device = Device(dsn, setupToken, regToken)
+    class Device(
+        val dsn: String,
+        @SerializedName("setup_token") val setupToken: String?,
+        @SerializedName("regtoken") val regToken: String? = null
     )
 }
 
