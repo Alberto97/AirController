@@ -11,7 +11,7 @@ import org.alberto97.hisenseair.provider.ayla.internal.network.api.AylaService
 import org.alberto97.hisenseair.provider.ayla.internal.network.api.PairApi
 import org.alberto97.hisenseair.provider.repositories.IDevicePairRepository
 
-class DevicePairRepository(
+internal class DevicePairRepository(
     private val pairApi: PairApi,
     private val aylaApi: AylaService
 ): IDevicePairRepository {

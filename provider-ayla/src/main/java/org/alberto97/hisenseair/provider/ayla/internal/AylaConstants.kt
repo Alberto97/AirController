@@ -1,22 +1,21 @@
 package org.alberto97.hisenseair.provider.ayla.internal
 
 import org.alberto97.hisenseair.common.models.AppDeviceState
-import org.alberto97.hisenseair.provider.ayla.features.*
 
 @Suppress("unused")
-object AylaDeviceState {
+internal object AylaDeviceState {
     const val ONLINE = "Online"
     const val OFFLINE = "Offline"
 }
 
-object AylaType {
+internal object AylaType {
     const val BOOLEAN = "boolean"
     const val DECIMAL = "decimal"
     const val INTEGER = "integer"
     const val STRING = "string"
 }
 
-val AylaPropertyToStateMap = mapOf(
+internal val AylaPropertyToStateMap = mapOf(
     BACKLIGHT_PROP to AppDeviceState::backlight,
     WORK_MODE_PROP to AppDeviceState::workMode,
     HORIZONTAL_AIR_FLOW_PROP to AppDeviceState::horizontalAirFlow,

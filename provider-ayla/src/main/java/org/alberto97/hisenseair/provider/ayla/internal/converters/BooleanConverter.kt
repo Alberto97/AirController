@@ -3,9 +3,9 @@ package org.alberto97.hisenseair.provider.ayla.internal.converters
 import org.alberto97.hisenseair.provider.ayla.internal.models.Datapoint
 import org.alberto97.hisenseair.provider.ayla.internal.models.Property
 
-interface IBooleanConverter : AylaConverter<Boolean>
+internal interface IBooleanConverter : AylaConverter<Boolean>
 
-class BooleanConverter : IBooleanConverter {
+internal class BooleanConverter : IBooleanConverter {
     override fun map(data: Property): Boolean {
         val double = data.value as Double
         return double > 0

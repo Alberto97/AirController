@@ -24,12 +24,12 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-val aylaEuApi = module {
+internal val aylaEuApi = module {
     single { getAylaApi(get(), "https://ads-eu.aylanetworks.com/apiv1/") }
     single { getAylaLogin("https://user-field-eu.aylanetworks.com/users/") }
 }
 
-val aylaUsApi = module {
+internal val aylaUsApi = module {
     single { getAylaApi(get(), "https://ads-field.aylanetworks.com/apiv1/") }
     single { getAylaLogin("https://user-field.aylanetworks.com/users/") }
 }

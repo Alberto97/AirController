@@ -2,7 +2,7 @@ package org.alberto97.hisenseair.provider.ayla.internal.models
 
 import com.google.gson.annotations.SerializedName
 
-class WifiStatus(
+internal class WifiStatus(
     @SerializedName("connect_history")
     val connectHistory: Array<HistoryItem>,
     val dsn: String,
@@ -22,7 +22,7 @@ class WifiStatus(
     class Wrapper(@SerializedName("wifi_status") val wifiStatus: WifiStatus)
 }
 
-class HistoryItem(
+internal class HistoryItem(
     val ssid_info: String,
     val ssid_len: Int,
     val bssid: String,
@@ -39,7 +39,7 @@ class HistoryItem(
     val dnsServers: Array<String>
 )
 
-class WifiScanResults(
+internal class WifiScanResults(
     val mtime: Long,
     val results: List<WifiScanResult>) {
 

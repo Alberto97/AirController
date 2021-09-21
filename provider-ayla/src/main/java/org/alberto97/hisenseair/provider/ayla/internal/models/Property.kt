@@ -4,7 +4,7 @@ package org.alberto97.hisenseair.provider.ayla.internal.models
 
 import com.google.gson.annotations.SerializedName
 
-class Property (
+internal class Property (
     val type: String,
     val name: String,
 
@@ -55,6 +55,6 @@ class Property (
     val retentionDays: Int
 )
 
-class PropertyWrapper(
+internal class PropertyWrapper(
     val property: Property
 )

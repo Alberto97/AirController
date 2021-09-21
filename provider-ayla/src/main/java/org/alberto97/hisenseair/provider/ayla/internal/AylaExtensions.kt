@@ -6,7 +6,7 @@ import org.alberto97.hisenseair.provider.ayla.internal.models.Response
 import org.alberto97.hisenseair.provider.ayla.internal.models.WifiScanResults
 import retrofit2.HttpException
 
-object AylaExtensions {
+internal object AylaExtensions {
 
     fun Device.isAvailable(): Boolean {
         return this.connectionStatus == AylaDeviceState.ONLINE

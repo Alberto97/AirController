@@ -4,9 +4,9 @@ import org.alberto97.hisenseair.provider.ayla.internal.models.Datapoint
 import org.alberto97.hisenseair.provider.ayla.internal.models.Property
 import org.alberto97.hisenseair.common.features.WorkMode
 
-interface IModeConverter : AylaConverter<WorkMode>
+internal interface IModeConverter : AylaConverter<WorkMode>
 
-class ModeConverter : IModeConverter {
+internal class ModeConverter : IModeConverter {
 
     override fun map(data: Property): WorkMode {
         val double = data.value as Double

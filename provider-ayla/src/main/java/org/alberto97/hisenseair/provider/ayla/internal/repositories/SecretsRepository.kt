@@ -6,17 +6,17 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
 
-object AuthPrefs {
+internal object AuthPrefs {
     const val SHARED_PREF_TOKEN_ACCESS = "access_token"
     const val SHARED_PREF_TOKEN_REFRESH = "refresh_token"
 }
 
-interface ISecretsRepository {
+internal interface ISecretsRepository {
     var authToken: String
     var refreshToken: String
 }
 
-class SecretsRepository(app: Application) : ISecretsRepository {
+internal class SecretsRepository(app: Application) : ISecretsRepository {
 
     companion object {
         const val SECRETS_FILE_NAME = "secrets"

@@ -5,7 +5,7 @@ import org.alberto97.hisenseair.common.models.DevicePairWifiScanResult
 import org.alberto97.hisenseair.common.models.ResultWrapper
 import org.alberto97.hisenseair.provider.repositories.IDevicePairRepository
 
-class DevicePairRepository : IDevicePairRepository {
+internal class DevicePairRepository : IDevicePairRepository {
     override suspend fun getStatus(): ResultWrapper<DevicePairStatus> {
         TODO("Not yet implemented")
     }

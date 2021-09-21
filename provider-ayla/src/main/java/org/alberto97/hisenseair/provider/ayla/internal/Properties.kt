@@ -1,4 +1,4 @@
-package org.alberto97.hisenseair.provider.ayla.features
+package org.alberto97.hisenseair.provider.ayla.internal
 
 const val POWER_PROP = "t_power"
 const val BACKLIGHT_PROP = "t_backlight"

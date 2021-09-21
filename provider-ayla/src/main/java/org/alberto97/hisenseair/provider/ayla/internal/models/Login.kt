@@ -5,13 +5,13 @@ package org.alberto97.hisenseair.provider.ayla.internal.models
 import com.google.gson.annotations.SerializedName
 
 // First access
-class Login(email: String, password: String, app: Application) {
+internal class Login(email: String, password: String, app: Application) {
     val user = User(email, password, app)
 }
 
-class User(val email: String, val password: String, val application: Application)
+internal class User(val email: String, val password: String, val application: Application)
 
-class Application(
+internal class Application(
     @SerializedName("app_id")
     val appId: String,
 
@@ -20,15 +20,15 @@ class Application(
 )
 
 // Refresh Token
-class LoginRefresh(val user: UserRefresh)
+internal class LoginRefresh(val user: UserRefresh)
 
-class UserRefresh(
+internal class UserRefresh(
     @SerializedName("refresh_token")
     val refreshToken: String
 )
 
 // Response
-class LoginOutput(
+internal class LoginOutput(
     @SerializedName("access_token")
     val accessToken: String,
 

@@ -9,7 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
 
-interface PairApi {
+internal interface PairApi {
 
     @GET("status.json")
     suspend fun status(): Status

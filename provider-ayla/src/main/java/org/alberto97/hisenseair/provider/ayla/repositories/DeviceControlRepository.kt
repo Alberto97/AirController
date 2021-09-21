@@ -4,20 +4,19 @@ import org.alberto97.hisenseair.common.features.*
 import org.alberto97.hisenseair.common.features.TemperatureExtensions.isCelsius
 import org.alberto97.hisenseair.common.features.TemperatureExtensions.toC
 import org.alberto97.hisenseair.common.features.TemperatureExtensions.toF
-import org.alberto97.hisenseair.provider.ayla.internal.AylaPropertyToStateMap
-import org.alberto97.hisenseair.provider.ayla.internal.AylaType
-import org.alberto97.hisenseair.provider.ayla.features.*
 import org.alberto97.hisenseair.provider.ayla.internal.converters.*
 import org.alberto97.hisenseair.provider.ayla.internal.models.Property
 import org.alberto97.hisenseair.provider.ayla.internal.network.api.AylaService
 import org.alberto97.hisenseair.provider.ayla.internal.repositories.IDeviceCacheRepository
 import org.alberto97.hisenseair.provider.ayla.internal.repositories.IDevicePropertyRepository
-import org.alberto97.hisenseair.provider.features.*
 import org.alberto97.hisenseair.common.models.AppDeviceState
 import org.alberto97.hisenseair.common.models.ResultWrapper
+import org.alberto97.hisenseair.provider.ayla.internal.*
+import org.alberto97.hisenseair.provider.ayla.internal.AylaPropertyToStateMap
+import org.alberto97.hisenseair.provider.ayla.internal.AylaType
 import org.alberto97.hisenseair.provider.repositories.IDeviceControlRepository
 
-class DeviceControlRepository(
+internal class DeviceControlRepository(
     private val service: AylaService,
     private val propertyRepo: IDevicePropertyRepository,
     private val prefs: IDeviceCacheRepository,

@@ -9,7 +9,7 @@ import org.alberto97.hisenseair.common.models.ResultWrapper
 import org.alberto97.hisenseair.provider.ayla.internal.network.interceptors.AuthorizationExtension.addAuthorization
 import org.alberto97.hisenseair.provider.repositories.IAuthenticationRepository
 
-class TokenAuthenticator(private val repo: IAuthenticationRepository) : Authenticator {
+internal class TokenAuthenticator(private val repo: IAuthenticationRepository) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {

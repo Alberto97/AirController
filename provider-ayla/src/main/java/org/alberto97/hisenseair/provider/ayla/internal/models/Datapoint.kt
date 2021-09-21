@@ -4,15 +4,15 @@ package org.alberto97.hisenseair.provider.ayla.internal.models
 
 import com.google.gson.annotations.SerializedName
 
-class Datapoint(
+internal class Datapoint(
     val value: Int
 )
 
-class DatapointWrapper(
+internal class DatapointWrapper(
     val datapoint: Datapoint
 )
 
-class DatapointOutput(
+internal class DatapointOutput(
     @SerializedName("updated_at")
     val updatedAt: String,
 
@@ -23,6 +23,6 @@ class DatapointOutput(
     //"metadata": {},
 )
 
-class DatapointOutputWrapper(
+internal class DatapointOutputWrapper(
     val datapoint: DatapointOutput
-) : Response()
+)

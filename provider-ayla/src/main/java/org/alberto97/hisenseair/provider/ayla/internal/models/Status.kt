@@ -2,7 +2,7 @@ package org.alberto97.hisenseair.provider.ayla.internal.models
 
 import com.google.gson.annotations.SerializedName
 
-class Status (
+internal class Status (
     @SerializedName("DSN")
     val dsn: String,
 

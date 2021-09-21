@@ -4,9 +4,9 @@ import org.alberto97.hisenseair.provider.ayla.internal.models.Datapoint
 import org.alberto97.hisenseair.provider.ayla.internal.models.Property
 import org.alberto97.hisenseair.common.features.SleepMode
 
-interface ISleepModeConverter : AylaConverter<SleepMode>
+internal interface ISleepModeConverter : AylaConverter<SleepMode>
 
-class SleepModeConverter : ISleepModeConverter {
+internal class SleepModeConverter : ISleepModeConverter {
     override fun map(data: Property): SleepMode {
         val double = data.value as Double
         return when(double.toInt()) {

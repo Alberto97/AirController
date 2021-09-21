@@ -3,9 +3,9 @@ package org.alberto97.hisenseair.provider.ayla.internal.converters
 import org.alberto97.hisenseair.provider.ayla.internal.models.Datapoint
 import org.alberto97.hisenseair.provider.ayla.internal.models.Property
 
-interface IStringConverter : AylaConverter<String>
+internal interface IStringConverter : AylaConverter<String>
 
-class StringConverter : IStringConverter {
+internal class StringConverter : IStringConverter {
     override fun map(data: Property): String {
         return data.value as String
     }

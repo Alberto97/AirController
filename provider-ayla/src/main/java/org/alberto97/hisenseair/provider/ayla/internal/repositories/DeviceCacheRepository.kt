@@ -7,19 +7,19 @@ import androidx.core.content.edit
 import org.alberto97.hisenseair.provider.ayla.internal.converters.ITempUnitConverter
 import org.alberto97.hisenseair.common.features.TempType
 
-interface IDeviceCacheRepository {
+internal interface IDeviceCacheRepository {
     fun getTempUnit(dsn: String): TempType
     fun setTempUnit(dsn: String, unit: TempType)
     fun getDeviceKey(dsn: String): Int
     fun setDeviceKey(dsn: String, key: Int)
 }
 
-object DevicePreferences {
+internal object DevicePreferences {
     const val TEMP_UNIT = "TEMP_UNIT"
     const val DEVICE_KEY = "DEVICE_KEY"
 }
 
-class DeviceCacheRepository(
+internal class DeviceCacheRepository(
     private val app: Application,
     private val converter: ITempUnitConverter
 ) : IDeviceCacheRepository {

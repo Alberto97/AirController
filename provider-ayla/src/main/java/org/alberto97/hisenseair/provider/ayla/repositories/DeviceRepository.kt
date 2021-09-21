@@ -5,7 +5,7 @@ import org.alberto97.hisenseair.common.features.TempType
 import org.alberto97.hisenseair.common.models.AppDevice
 import org.alberto97.hisenseair.common.models.ResultWrapper
 import org.alberto97.hisenseair.provider.ayla.internal.AylaExtensions.isAvailable
-import org.alberto97.hisenseair.provider.ayla.features.TEMP_TYPE_PROP
+import org.alberto97.hisenseair.provider.ayla.internal.TEMP_TYPE_PROP
 import org.alberto97.hisenseair.provider.ayla.internal.converters.ITempUnitConverter
 import org.alberto97.hisenseair.provider.ayla.internal.models.Device
 import org.alberto97.hisenseair.provider.ayla.internal.models.ProductName
@@ -15,7 +15,7 @@ import org.alberto97.hisenseair.provider.ayla.internal.repositories.IDeviceCache
 import org.alberto97.hisenseair.provider.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.hisenseair.provider.repositories.IDeviceRepository
 
-class DeviceRepository(
+internal class DeviceRepository(
     private val service: AylaService,
     private val propertyRepo: IDevicePropertyRepository,
     private val prefs: IDeviceCacheRepository,

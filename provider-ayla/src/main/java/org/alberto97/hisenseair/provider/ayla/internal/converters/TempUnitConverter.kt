@@ -4,12 +4,12 @@ import org.alberto97.hisenseair.provider.ayla.internal.models.Datapoint
 import org.alberto97.hisenseair.provider.ayla.internal.models.Property
 import org.alberto97.hisenseair.common.features.TempType
 
-interface ITempUnitConverter : AylaConverter<TempType> {
+internal interface ITempUnitConverter : AylaConverter<TempType> {
     fun mapIntToUnit(value: Int): TempType
     fun mapUnitToInt(value: TempType): Int
 }
 
-class TempUnitConverter : ITempUnitConverter {
+internal class TempUnitConverter : ITempUnitConverter {
 
     override fun map(data: Property): TempType {
         val double = data.value as Double

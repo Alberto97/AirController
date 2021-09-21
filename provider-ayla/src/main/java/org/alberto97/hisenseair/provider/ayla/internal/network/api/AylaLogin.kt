@@ -6,7 +6,7 @@ import org.alberto97.hisenseair.provider.ayla.internal.models.LoginRefresh
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface AylaLogin {
+internal interface AylaLogin {
 
     @POST("sign_in.json")
     suspend fun login(@Body login: Login): LoginOutput

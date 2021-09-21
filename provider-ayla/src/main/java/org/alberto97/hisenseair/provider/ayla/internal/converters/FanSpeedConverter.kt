@@ -4,9 +4,9 @@ import org.alberto97.hisenseair.provider.ayla.internal.models.Datapoint
 import org.alberto97.hisenseair.provider.ayla.internal.models.Property
 import org.alberto97.hisenseair.common.features.FanSpeed
 
-interface IFanSpeedConverter : AylaConverter<FanSpeed>
+internal interface IFanSpeedConverter : AylaConverter<FanSpeed>
 
-class FanSpeedConverter : IFanSpeedConverter {
+internal class FanSpeedConverter : IFanSpeedConverter {
     override fun map(data: Property): FanSpeed {
         val double = data.value as Double
         val value = double.toInt()

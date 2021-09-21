@@ -13,7 +13,7 @@ import org.alberto97.hisenseair.provider.repositories.IAuthenticationRepository
 import retrofit2.HttpException
 import java.net.HttpURLConnection
 
-class AuthenticationRepository(
+internal class AuthenticationRepository(
     private val service: AylaLogin,
     private val repository: ISecretsRepository,
     private val settings: ISettingsRepository

@@ -5,7 +5,7 @@ import org.alberto97.hisenseair.provider.ayla.internal.models.*
 import retrofit2.Response
 import retrofit2.http.*
 
-interface AylaService {
+internal interface AylaService {
 
     @Authorized
     @GET("devices.json")
