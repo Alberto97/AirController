@@ -11,5 +11,5 @@ java {
 dependencies {
     implementation project(":provider-base")
 
-    implementation "io.insert-koin:koin-core:3.1.2"
+    implementation libs.koin.core
 }

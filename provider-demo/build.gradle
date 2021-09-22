@@ -12,5 +12,5 @@ dependencies {
     implementation project(":provider-base")
     implementation project(":provider-ayla-shared")
 
-    implementation "io.insert-koin:koin-core:3.1.2"
+    implementation libs.koin.core
 }
