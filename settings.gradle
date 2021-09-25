@@ -1,5 +1,5 @@
 include ':app'
-rootProject.name='Hisense Air'
+rootProject.name='AirController'
 include ':common'
 include ':provider-base'
 include ':provider-demo'

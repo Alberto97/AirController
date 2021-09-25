@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hisense Air</string>
+    <string name="app_name">AirController</string>
     <string name="unknown">Unknown</string>
     <string name="temp" translatable="false">\u0020%1$d°</string>
     <string name="device_ambient_temp">The ambient temperature currently is %1$d°</string>

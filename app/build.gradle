@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "org.alberto97.hisenseair"
+        applicationId "org.alberto97.aircontroller"
         minSdkVersion 23
         targetSdkVersion 31
         versionCode 1
