@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.Public
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -76,7 +77,7 @@ private fun LoginScreen(
         clearMessage = clearMessage,
         topBar = {
             TopAppBar(
-                title = { Text("Login") }
+                title = { Text(stringResource(R.string.login_title)) }
             )
         }
     ) {
@@ -121,7 +122,7 @@ private fun LoginContent(
         OutlinedTextField(
             value = email,
             onValueChange = setEmail,
-            label = { Text("Email address") },
+            label = { Text(stringResource(R.string.email_address)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = modifier,
             leadingIcon = {
@@ -134,7 +135,7 @@ private fun LoginContent(
         OutlinedPasswordField(
             value = password,
             onValueChange = setPassword,
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password)) },
             modifier = modifier,
             leadingIcon = {
                 Icon(
@@ -164,7 +165,7 @@ private fun LoginDropDown(
 ) {
     AppDropDown(
         value = value?.label ?: "",
-        label = { Text("Region") },
+        label = { Text(stringResource(R.string.region)) },
         leadingIcon = { RegionIcon(value?.resourceDrawable) },
         modifier = Modifier.padding(vertical = 6.dp),
         items = { close ->

@@ -28,6 +28,12 @@
     <string name="oob_requirements_1">1. Your air conditioner is supposed to work with the previously mentioned official apps.</string>
     <string name="oob_requirements_2">2. You have already created an account in the official app.</string>
 
+    <!-- Login -->
+    <string name="login_title">@string/login</string>
+    <string name="login">Login</string>
+    <string name="email_address">Email address</string>
+    <string name="region">Region</string>
+
     <!-- Fan Speed -->
     <string name="fan_speed_auto">Auto</string>
     <string name="fan_speed_lower">Low</string>
