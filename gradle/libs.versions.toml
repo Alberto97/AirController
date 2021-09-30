@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.5.30"
-compose = "1.0.2"
+compose = "1.0.3"
 koin = "3.1.2"
 retrofit = "2.9.0"
 
