@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class org.alberto97.aircontroller.common.features.* { *; }
+-keepclassmembernames class org.alberto97.aircontroller.common.models.* { *; }
+-keepclassmembers class org.alberto97.aircontroller.provider.ayla.internal.models.* { *; }
