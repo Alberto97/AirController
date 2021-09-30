@@ -8,6 +8,7 @@
     <string name="password">Password</string>
     <string name="temp" translatable="false">\u0020%1$d°</string>
 
+    <!-- Device Control -->
     <string name="device_ambient_temp">The ambient temperature currently is %1$d°</string>
     <string name="device_current_temp">Currently at %1$d°</string>
     <string name="device_room_temp">Room temperature currently at %1$d°</string>
@@ -33,6 +34,11 @@
     <string name="login">Login</string>
     <string name="email_address">Email address</string>
     <string name="region">Region</string>
+
+    <!-- Main -->
+    <string name="action_logout">Logout</string>
+    <string name="device_available">Available</string>
+    <string name="device_offline">Offline</string>
 
     <!-- Fan Speed -->
     <string name="fan_speed_auto">Auto</string>

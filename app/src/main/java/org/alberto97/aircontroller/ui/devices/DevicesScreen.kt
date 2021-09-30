@@ -129,7 +129,7 @@ fun Dropdown(
         onDismissRequest = { onDismissRequest() }
     ) {
         DropdownMenuItem(onClick = { onInfoClick() }) {
-            Text("Logout")
+            Text(stringResource(R.string.action_logout))
         }
     }
 }
@@ -156,8 +156,11 @@ private fun Devices(devices: List<AppDevice>, onDeviceClick: (id: String) -> Uni
             DeviceItem(
                 id = device.id,
                 name = device.name,
-                state = if (device.available) "Available" else "Offline",
-                onClick = { onDeviceClick(it) }
+                onClick = { onDeviceClick(it) },
+                state = if (device.available)
+                    stringResource(R.string.device_available)
+                else
+                    stringResource(R.string.device_offline)
             )
         }
     }
