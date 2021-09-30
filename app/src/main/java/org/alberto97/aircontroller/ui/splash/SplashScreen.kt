@@ -20,6 +20,7 @@ import org.koin.androidx.compose.getViewModel
 fun SplashScreen(
     openLogin: () -> Unit,
     openMain: () -> Unit,
+    openOob: () -> Unit,
     viewModel: SplashViewModel = getViewModel()
 ) {
     val showOfflineMessage by viewModel.showOfflineMessage.collectAsState()
@@ -29,6 +30,7 @@ fun SplashScreen(
         when (state) {
             SplashViewModel.SplashNavAction.Login -> openLogin()
             SplashViewModel.SplashNavAction.Main -> openMain()
+            SplashViewModel.SplashNavAction.Oob -> openOob()
             else -> {}
         }
     }

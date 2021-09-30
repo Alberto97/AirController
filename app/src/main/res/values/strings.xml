@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">AirController</string>
     <string name="unknown">Unknown</string>
+    <string name="next">Next</string>
     <string name="temp" translatable="false">\u0020%1$d°</string>
     <string name="device_ambient_temp">The ambient temperature currently is %1$d°</string>
     <string name="device_current_temp">Currently at %1$d°</string>
@@ -14,6 +15,13 @@
     <string name="splash_offline_action">Try again</string>
 
     <string name="error_message">"Oops something went wrong.\nPlease check your connection and try again"</string>
+
+    <!-- Oob -->
+    <string name="oob_title">Welcome to AirController</string>
+    <string name="oob_usage_restrictions">This app is only meant to be an alternative to Hi-Smart AC and HiSmart Air</string>
+    <string name="oob_requirements_title">Before proceeding please make sure:</string>
+    <string name="oob_requirements_1">1. Your air conditioner is supposed to work with the previously mentioned official apps.</string>
+    <string name="oob_requirements_2">2. You have already created an account in the official app.</string>
 
     <!-- Fan Speed -->
     <string name="fan_speed_auto">Auto</string>

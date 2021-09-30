@@ -13,6 +13,7 @@ import org.alberto97.aircontroller.ui.devicecontrol.DeviceControlScreen
 import org.alberto97.aircontroller.ui.devices.DevicesScreen
 import org.alberto97.aircontroller.ui.devicesettings.DeviceSettingsScreen
 import org.alberto97.aircontroller.ui.login.LoginScreen
+import org.alberto97.aircontroller.ui.oob.OobScreen
 import org.alberto97.aircontroller.ui.pair.*
 import org.alberto97.aircontroller.ui.splash.SplashScreen
 import org.alberto97.aircontroller.viewmodels.PairViewModel
@@ -20,6 +21,7 @@ import org.alberto97.aircontroller.viewmodels.PairViewModel
 
 sealed class Screen(val route: String) {
     object Splash: Screen("splash")
+    object Oob: Screen("oob")
     object Login: Screen("login")
     object Main: Screen("main")
     object Pair: Screen("pair")
@@ -63,6 +65,20 @@ fun NavGraph(
                 openMain = {
                     navController.navigate(Screen.Main.route) {
                         popUpTo(startDestination) { inclusive = true }
+                    }
+                },
+                openOob = {
+                    navController.navigate(Screen.Oob.route) {
+                        popUpTo(startDestination) { inclusive = true }
+                    }
+                }
+            )
+        }
+        composable(Screen.Oob.route) {
+            OobScreen(
+                openLogin = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Oob.route) { inclusive = true }
                     }
                 }
             )

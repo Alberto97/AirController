@@ -21,9 +21,15 @@ class SettingsRepository(private val app: Application): ISettingsRepository {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
+    private val oobKey = booleanPreferencesKey("oob")
     private val regionKey = stringPreferencesKey("region")
     private val loggedInKey = booleanPreferencesKey("logged_in")
     private val providerKey = stringPreferencesKey("provider")
+
+    private var _oob = getOutOfBox()
+    override var oob: Boolean
+        get() = _oob
+        set(value) = setOutOfBox(value)
 
     private var _region = getReg()
     override var region: Region?
@@ -39,6 +45,19 @@ class SettingsRepository(private val app: Application): ISettingsRepository {
     override var provider: Provider?
         get() = _provider
         set(value) = setProv(value)
+
+    private fun getOutOfBox(): Boolean {
+        return runBlocking {
+            app.dataStore.data.map { settings -> settings[oobKey] ?: true }.first()
+        }
+    }
+
+    private fun setOutOfBox(value: Boolean) {
+        runBlocking {
+            app.dataStore.edit { settings -> settings[oobKey] = value }
+        }
+        _oob = value
+    }
 
     private fun getReg(): Region? {
         val str = runBlocking {

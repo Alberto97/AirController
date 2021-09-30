@@ -30,4 +30,5 @@ val appModule = module {
     viewModel { MainViewModel(get(), get(), get(), get()) }
     viewModel { SplashViewModel(get(), get()) }
     viewModel { PairViewModel(get(), get()) }
+    viewModel { OobViewModel(get()) }
 }

@@ -29,7 +29,8 @@ class SplashViewModel(
 
     enum class SplashNavAction {
         Main,
-        Login
+        Login,
+        Oob
     }
 
     private val _navAction = MutableStateFlow<SplashNavAction?>(null)
@@ -45,6 +46,11 @@ class SplashViewModel(
     fun load() {
         if (!isConnected()) {
             _showOfflineMessage.value = true
+            return
+        }
+
+        if (settings.oob) {
+            _navAction.value = SplashNavAction.Oob
             return
         }
 
