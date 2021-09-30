@@ -116,7 +116,7 @@ private fun DeviceOn(
             switchVertical = switchVertical
         )
 
-        PreferenceCategory("Advanced")
+        PreferenceCategory(stringResource(R.string.device_control_advanced))
         Backlight(backlight, switchBacklight)
         Eco(eco, switchEco)
         Quiet(quiet, switchQuiet)
@@ -157,7 +157,7 @@ private fun Mode(workMode: WorkMode?, onClick: (value: DeviceControlSheet) -> Un
     val drawableId = modeToIconMap.getOrDefault(workMode, R.drawable.outline_brightness_low)
 
     Preference(
-        title = "Mode",
+        title = stringResource(R.string.device_control_mode),
         summary = stringResource(resId),
         icon = { PreferenceIcon(drawableId) },
         onClick = { onClick(DeviceControlSheet.Mode) }
@@ -170,7 +170,7 @@ private fun FanSpeed(fanSpeed: FanSpeed?, onClick: (value: DeviceControlSheet) -
     val resId = fanToStringMap.getOrDefault(fanSpeed, R.string.fan_speed_auto)
     if (fanSpeed != null) {
         Preference(
-            title = "Fan speed",
+            title = stringResource(R.string.device_control_fan_speed),
             summary = stringResource(resId),
             icon = { PreferenceIcon(R.drawable.ic_fan) },
             onClick = { onClick(DeviceControlSheet.FanSpeed) }
@@ -187,7 +187,7 @@ private fun SleepMode(
     if (sleepMode != null) {
         val resId = sleepToStringMap.getValue(sleepMode)
         Preference(
-            title = "Sleep mode",
+            title = stringResource(R.string.device_control_sleep_mode),
             summary = stringResource(resId),
             icon = { PreferenceIcon(R.drawable.ic_nights_stay) },
             onClick = { onClick(DeviceControlSheet.Sleep) }
@@ -199,8 +199,8 @@ private fun SleepMode(
 @Composable
 private fun Power(onOffClick: () -> Unit) {
     SwitchPreference(
-        title = "Power",
-        summary = "Turn off the device",
+        title = stringResource(R.string.device_control_power),
+        summary = stringResource(R.string.device_control_power_summary),
         checked = true,
         icon = { PreferenceIcon(Icons.Rounded.PowerSettingsNew) },
         onCheckedChange = { onOffClick() }
@@ -216,11 +216,11 @@ private fun AirFlow(
     switchVertical: () -> Unit
 ) {
     if (horizontal != null || vertical != null)
-        PreferenceCategory("Air Flow")
+        PreferenceCategory(stringResource(R.string.device_control_air_flow))
 
     if (horizontal != null)
         SwitchPreference(
-            title = "Horizontal",
+            title = stringResource(R.string.device_control_air_flow_horizontal),
             checked = horizontal,
             onCheckedChange = { switchHorizontal() },
             icon = { PreferenceIcon(Icons.Rounded.SwapHoriz) }
@@ -228,7 +228,7 @@ private fun AirFlow(
 
     if (vertical != null)
         SwitchPreference(
-            title = "Vertical",
+            title = stringResource(R.string.device_control_air_flow_vertical),
             checked = vertical,
             onCheckedChange = { switchVertical() },
             icon = { PreferenceIcon(Icons.Rounded.SwapVert) }
@@ -240,7 +240,7 @@ private fun AirFlow(
 private fun Backlight(backlight: Boolean?, switchBacklight: () -> Unit) {
     if (backlight != null)
         SwitchPreference(
-            title = "Dimmer",
+            title = stringResource(R.string.device_control_backlight),
             checked = backlight,
             onCheckedChange = { switchBacklight() },
             icon = { PreferenceIcon(Icons.Outlined.Lightbulb) }
@@ -252,7 +252,7 @@ private fun Backlight(backlight: Boolean?, switchBacklight: () -> Unit) {
 private fun Eco(eco: Boolean?, switchEco: () -> Unit) {
     if (eco != null)
         SwitchPreference(
-            title = "Eco",
+            title = stringResource(R.string.device_control_eco),
             checked = eco,
             onCheckedChange = { switchEco() },
             icon = { PreferenceIcon(R.drawable.ic_eco) }
@@ -264,7 +264,7 @@ private fun Eco(eco: Boolean?, switchEco: () -> Unit) {
 private fun Quiet(quiet: Boolean?, switchQuiet: () -> Unit) {
     if (quiet != null)
         SwitchPreference(
-            title = "Quiet",
+            title = stringResource(R.string.device_control_quiet),
             checked = quiet,
             onCheckedChange = { switchQuiet() },
             icon = { PreferenceIcon(Icons.Outlined.HearingDisabled) }
@@ -276,7 +276,7 @@ private fun Quiet(quiet: Boolean?, switchQuiet: () -> Unit) {
 private fun Boost(boost: Boolean?, switchBoost: () -> Unit) {
     if (boost != null)
         SwitchPreference(
-            title = "Super",
+            title = stringResource(R.string.device_control_boost),
             checked = boost,
             onCheckedChange = { switchBoost() },
             icon = { PreferenceIcon(R.drawable.ic_fan_plus) }
