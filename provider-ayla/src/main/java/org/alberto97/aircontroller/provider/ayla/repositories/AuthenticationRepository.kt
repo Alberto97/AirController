@@ -53,6 +53,7 @@ internal class AuthenticationRepository(
             saveAuthData(output)
             ResultWrapper.Success(Unit)
         } catch (e: HttpException) {
+            Log.e("HiLogin", e.stackTraceToString())
             if (e.code() == HttpURLConnection.HTTP_NOT_FOUND) {
                 Log.i(LOG_TAG, "app_id: ${app.appId}")
                 Log.i(LOG_TAG, "app_secret: ${app.appSecret}")
@@ -61,6 +62,7 @@ internal class AuthenticationRepository(
             val message = e.aylaError() ?: "Authentication failed"
             ResultWrapper.Error(message, AuthErrorCodes.UNAUTHORIZED)
         } catch (e: Exception) {
+            Log.e("HiLogin", e.stackTraceToString())
             ResultWrapper.Error("Authentication failed")
         }
     }
@@ -78,10 +80,12 @@ internal class AuthenticationRepository(
 
             ResultWrapper.Success(Unit)
         } catch (e: HttpException) {
+            Log.e("HiLogin", e.stackTraceToString())
             settings.loggedIn = false
             val message = e.aylaError() ?: "Authentication failed"
             ResultWrapper.Error(message, AuthErrorCodes.UNAUTHORIZED)
         } catch (e: Exception) {
+            Log.e("HiLogin", e.stackTraceToString())
             ResultWrapper.Error("Authentication failed")
         }
     }
