@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.aircontroller.R
@@ -45,8 +46,8 @@ private fun PickDeviceScreen(
     onClick: () -> Unit
 ) {
     PairScaffold(
-        title = "Select the device you wish to connect",
-        subtitle = "Enable pairing on your device by pressing 6 times on the remote control and wait until the display shows \"77\"",
+        title = stringResource(R.string.pair_pick_device_title),
+        subtitle = stringResource(R.string.pair_pick_device_subtitle),
         message = message,
         onClearMessage = onClearMessage
     ) {
@@ -70,7 +71,7 @@ private fun PickDeviceScreen(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text("Next")
+                Text(stringResource(R.string.next))
             }
         }
     }

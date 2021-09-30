@@ -7,8 +7,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.alberto97.aircontroller.R
 import org.alberto97.aircontroller.ui.common.FullscreenLoading
 import org.alberto97.aircontroller.ui.common.OutlinedPasswordField
 import org.alberto97.aircontroller.ui.theme.AppTheme
@@ -51,7 +53,7 @@ private fun InsertPasswordScreen(
     onClick: (password: String) -> Unit
 ) {
     PairScaffold(
-        title = "Enter Wi-Fi password",
+        title = stringResource(R.string.pair_enter_password_title),
         subtitle = ssid,
         message = message,
         onClearMessage = onClearMessage
@@ -72,13 +74,13 @@ private fun Content(onClick: (password: String) -> Unit) {
         OutlinedPasswordField(
             value = password,
             onValueChange = setPassword,
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password)) },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Button(onClick = {onClick(password)}, modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)) {
-            Text(text = "Confirm")
+            Text(stringResource(R.string.confirm))
         }
     }
 }

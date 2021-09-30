@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">AirController</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
     <string name="unknown">Unknown</string>
     <string name="next">Next</string>
+    <string name="password">Password</string>
     <string name="temp" translatable="false">\u0020%1$d°</string>
+
     <string name="device_ambient_temp">The ambient temperature currently is %1$d°</string>
     <string name="device_current_temp">Currently at %1$d°</string>
     <string name="device_room_temp">Room temperature currently at %1$d°</string>
@@ -60,5 +65,17 @@
     <string name="device_mac_address_title">MAC Address</string>
     <string name="device_ip_address_title">IP Address</string>
     <string name="device_network_title">Connected to</string>
+
+    <!-- Device Pair -->
+    <string name="pair_pick_device_title">Select the device you wish to connect</string>
+    <string name="pair_pick_device_subtitle">Enable pairing on your device by pressing 6 times on the remote control and wait until the display shows \"77\"</string>
+    <string name="pair_select_network_title">Choose your Wi-Fi network</string>
+    <string name="pair_select_network_subtitle">Select the network the device will connect to</string>
+    <string name="pair_enter_password_title">Enter Wi-Fi password</string>
+    <string name="pair_device_connected_title">Device connected successfully</string>
+
+    <!-- Wifi security -->
+    <string name="wifi_network_security_open">Open</string>
+    <string name="wifi_network_security_protected">Protected</string>
 
 </resources>

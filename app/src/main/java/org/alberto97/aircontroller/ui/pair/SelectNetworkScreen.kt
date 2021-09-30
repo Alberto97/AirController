@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.aircontroller.R
@@ -61,8 +62,8 @@ private fun SelectNetworkScreen(
     onClick: (network: DevicePairWifiScanResult) -> Unit
 ) {
     PairScaffold(
-        title = "Choose your Wi-Fi network",
-        subtitle = "Select the network the device will connect to",
+        title = stringResource(R.string.pair_select_network_title),
+        subtitle = stringResource(R.string.pair_select_network_subtitle),
         message = message,
         onClearMessage = onClearMessage
     ) {
@@ -95,7 +96,11 @@ private fun NetworksList(
 
 @Composable
 private fun SecurityText(value: WifiSecurity) {
-    val text = if (value == WifiSecurity.OPEN) "Open" else "Protected"
+    val text = if (value == WifiSecurity.OPEN)
+        stringResource(R.string.wifi_network_security_open)
+    else
+        stringResource(R.string.wifi_network_security_protected)
+
     Text(text)
 }
 

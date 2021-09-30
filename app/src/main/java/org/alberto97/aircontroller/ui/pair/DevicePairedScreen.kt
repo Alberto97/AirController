@@ -8,9 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
+import org.alberto97.aircontroller.R
 import org.alberto97.aircontroller.ui.devices.DevicesStateHandleParams
 import org.alberto97.aircontroller.ui.theme.AppTheme
 import org.alberto97.aircontroller.viewmodels.PairViewModel
@@ -36,7 +38,7 @@ fun DevicePairedScreen(
 @Composable
 private fun DevicePairedScreen(deviceName: String, onClick: () -> Unit) {
     PairScaffold(
-        title = "Device connected successfully",
+        title = stringResource(R.string.pair_device_connected_title),
         subtitle = deviceName
     ) {
         Column(
@@ -58,7 +60,7 @@ private fun DevicePairedScreen(deviceName: String, onClick: () -> Unit) {
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text("Done")
+                Text(stringResource(R.string.done))
             }
         }
     }
