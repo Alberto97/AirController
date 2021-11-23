@@ -1,5 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+import org.alberto97.aircontroller.buildsrc.DependencyUpdates
+import org.alberto97.aircontroller.buildsrc.ReleaseType
+
 buildscript {
     repositories {
         google()
@@ -14,6 +17,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.github.ben-manes.versions' version '0.39.0'
+}
+
 allprojects {
     repositories {
         google()
@@ -23,4 +30,20 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+/**
+ * Update dependencyUpdates task to reject versions which are more 'unstable' than our
+ * current version.
+ */
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        def current = DependencyUpdates.versionToRelease(it.currentVersion)
+        // If we're using a SNAPSHOT, ignore since we must be doing so for a reason.
+        if (current == ReleaseType.SNAPSHOT) return true
+
+        // Otherwise we reject if the candidate is more 'unstable' than our version
+        def candidate = DependencyUpdates.versionToRelease(it.candidate.version)
+        return candidate.isLessStableThan(current)
+    }
 }
