@@ -3,12 +3,12 @@ package org.alberto97.aircontroller.ui
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.alberto97.aircontroller.UriConstants
-import org.alberto97.aircontroller.koin.getNavGraphViewModel
 import org.alberto97.aircontroller.ui.devicecontrol.DeviceControlScreen
 import org.alberto97.aircontroller.ui.devices.DevicesScreen
 import org.alberto97.aircontroller.ui.devicesettings.DeviceSettingsScreen
@@ -17,6 +17,8 @@ import org.alberto97.aircontroller.ui.oob.OobScreen
 import org.alberto97.aircontroller.ui.pair.*
 import org.alberto97.aircontroller.ui.splash.SplashScreen
 import org.alberto97.aircontroller.viewmodels.PairViewModel
+import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.viewmodel.ViewModelOwner
 
 
 sealed class Screen(val route: String) {
@@ -141,11 +143,11 @@ fun NavGraph(
 
 @Composable
 private fun getPairViewModel(navController: NavController): PairViewModel {
-    return getNavGraphViewModel(
-        backStackEntry = remember {
-            navController.getBackStackEntry(Screen.Pair.route)
-        }
-    )
+    val backStackEntry = remember {
+        navController.getBackStackEntry(Screen.Pair.route)
+    }
+    val owner = ViewModelOwner.from(backStackEntry, LocalSavedStateRegistryOwner.current)
+    return getViewModel(owner = owner)
 }
 
 @ExperimentalMaterialApi
