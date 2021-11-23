@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.5.30"
+kotlin = "1.5.31"
 compose = "1.0.3"
 koin = "3.1.2"
 retrofit = "2.9.0"
@@ -26,7 +26,7 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidxCompose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
-kotlin-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+kotlin-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
