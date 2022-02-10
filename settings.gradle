@@ -5,5 +5,3 @@ include ':provider-base'
 include ':provider-demo'
 include ':provider-ayla'
 include ':provider-ayla-shared'
-
-enableFeaturePreview("VERSION_CATALOGS")
