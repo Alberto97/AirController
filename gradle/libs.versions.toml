@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.5.31"
 compose = "1.0.5"
-koin = "3.1.4"
+koin = "3.1.5"
 retrofit = "2.9.0"
 
 [libraries]
