@@ -3,7 +3,6 @@ package org.alberto97.aircontroller.ui
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +17,6 @@ import org.alberto97.aircontroller.ui.pair.*
 import org.alberto97.aircontroller.ui.splash.SplashScreen
 import org.alberto97.aircontroller.viewmodels.PairViewModel
 import org.koin.androidx.compose.getViewModel
-import org.koin.androidx.viewmodel.ViewModelOwner
 
 
 sealed class Screen(val route: String) {
@@ -146,8 +144,7 @@ private fun getPairViewModel(navController: NavController): PairViewModel {
     val backStackEntry = remember {
         navController.getBackStackEntry(Screen.Pair.route)
     }
-    val owner = ViewModelOwner.from(backStackEntry, LocalSavedStateRegistryOwner.current)
-    return getViewModel(owner = owner)
+    return getViewModel(owner = backStackEntry)
 }
 
 @ExperimentalMaterialApi
