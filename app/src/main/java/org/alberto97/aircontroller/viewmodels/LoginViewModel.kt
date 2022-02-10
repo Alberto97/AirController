@@ -44,9 +44,10 @@ class LoginViewModel(
     val regions = listOf(euRegion, usRegion)
 
     init {
-        when (settings.region) {
-            Region.EU -> _region.value = euRegion
-            Region.US -> _region.value = usRegion
+        _region.value = when (settings.region) {
+            Region.EU -> euRegion
+            Region.US -> usRegion
+            else -> null
         }
         providerManager.setProvider(Provider.Ayla)
     }
