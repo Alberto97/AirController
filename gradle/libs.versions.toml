@@ -5,7 +5,7 @@ koin = "3.1.4"
 retrofit = "2.9.0"
 
 [libraries]
-android-pluginGradle = "com.android.tools.build:gradle:7.0.4"
+android-pluginGradle = "com.android.tools.build:gradle:7.1.1"
 
 androidx-activity-activityCompose = "androidx.activity:activity-compose:1.4.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
