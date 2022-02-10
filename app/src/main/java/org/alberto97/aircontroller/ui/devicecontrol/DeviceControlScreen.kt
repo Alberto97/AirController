@@ -17,7 +17,7 @@ import org.alberto97.aircontroller.viewmodels.DeviceViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DeviceControlScreen(
     dsn: String,

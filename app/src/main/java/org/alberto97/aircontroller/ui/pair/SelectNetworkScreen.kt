@@ -23,7 +23,7 @@ import org.alberto97.aircontroller.ui.preferences.PreferenceIcon
 import org.alberto97.aircontroller.ui.theme.AppTheme
 import org.alberto97.aircontroller.viewmodels.PairViewModel
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SelectNetworkScreen(
     viewModel: PairViewModel,

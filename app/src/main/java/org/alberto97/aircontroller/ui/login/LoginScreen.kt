@@ -30,7 +30,7 @@ import org.alberto97.aircontroller.ui.theme.AppTheme
 import org.alberto97.aircontroller.viewmodels.LoginViewModel
 import org.koin.androidx.compose.getViewModel
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LoginScreen(
     openMain: () -> Unit,

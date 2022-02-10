@@ -26,7 +26,7 @@ object DevicesStateHandleParams {
     const val needsRefresh = "needs_refresh"
 }
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DevicesScreen(
     openDevice: (dsn: String) -> Unit,

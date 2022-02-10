@@ -1,6 +1,5 @@
 package org.alberto97.aircontroller.ui
 
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.*
@@ -47,7 +46,6 @@ sealed class PairScreen(val route: String) {
     object DevicePaired: PairScreen("devicePaired")
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun NavGraph(
     displayInPanel: Boolean,
@@ -147,7 +145,6 @@ private fun getPairViewModel(navController: NavController): PairViewModel {
     return getViewModel(owner = backStackEntry)
 }
 
-@ExperimentalMaterialApi
 private fun NavGraphBuilder.addPairGraph(navController: NavController) {
     navigation(
         route = Screen.Pair.route,
