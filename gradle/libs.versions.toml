@@ -5,7 +5,7 @@ koin = "3.1.4"
 retrofit = "2.9.0"
 
 [libraries]
-android-gradlePlugin = "com.android.tools.build:gradle:7.0.4"
+android-pluginGradle = "com.android.tools.build:gradle:7.0.4"
 
 androidx-activity-activityCompose = "androidx.activity:activity-compose:1.4.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
@@ -27,7 +27,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidxCompose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 kotlin-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
-kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
 retrofit-converterGson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
