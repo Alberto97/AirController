@@ -129,13 +129,17 @@ private fun TempControlSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
+    val temp by viewModel.temp.collectAsState()
+    val minTemp by viewModel.minTemp.collectAsState()
+    val maxTemp by viewModel.maxTemp.collectAsState()
+
     TemperatureControlDialog(
-        temp = viewModel.temp.value!!.toFloat(),
-        min = viewModel.minTemp.value!!.toFloat(),
-        max = viewModel.maxTemp.value!!.toFloat(),
+        temp = temp!!.toFloat(),
+        min = minTemp!!.toFloat(),
+        max = maxTemp!!.toFloat(),
         onOk = { value ->
-            val temp = value.toInt()
-            viewModel.setTemp(temp)
+            val tmp = value.toInt()
+            viewModel.setTemp(tmp)
             close()
         },
         onCancel = {
