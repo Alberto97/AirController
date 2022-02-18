@@ -3,22 +3,11 @@
 import org.alberto97.aircontroller.buildsrc.DependencyUpdates
 import org.alberto97.aircontroller.buildsrc.ReleaseType
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        
-    }
-    dependencies {
-        classpath libs.android.pluginGradle
-        classpath libs.kotlin.pluginGradle
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
 plugins {
-    alias(libs.plugins.gradleDependencyUpdate)
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.benManes.gradleVersions)
 }
 
 allprojects {

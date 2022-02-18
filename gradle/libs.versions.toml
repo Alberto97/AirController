@@ -1,16 +1,17 @@
 [versions]
+agp = "7.1.1"
 kotlin = "1.6.10"
 compose = "1.1.0"
 koin = "3.1.5"
 retrofit = "2.9.0"
-gradleDependencyUpdate = "0.42.0"
 
 [plugins]
-gradleDependencyUpdate = { id = "com.github.ben-manes.versions", version.ref="gradleDependencyUpdate" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+benManes-gradleVersions = "com.github.ben-manes.versions:0.42.0"
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 [libraries]
-android-pluginGradle = "com.android.tools.build:gradle:7.1.1"
-
 androidx-activity-activityCompose = "androidx.activity:activity-compose:1.4.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
@@ -31,7 +32,6 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidxCompose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 kotlin-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
-kotlin-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
 retrofit-converterGson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
