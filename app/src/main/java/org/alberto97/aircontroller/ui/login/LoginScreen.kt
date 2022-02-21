@@ -2,6 +2,7 @@ package org.alberto97.aircontroller.ui.login
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,7 +23,7 @@ import org.alberto97.aircontroller.R
 import org.alberto97.aircontroller.models.ListItemModel
 import org.alberto97.aircontroller.models.ScreenState
 import org.alberto97.aircontroller.common.enums.Region
-import org.alberto97.aircontroller.ui.common.AppDropDown
+import org.alberto97.aircontroller.ui.common.AppExposedDropdownMenu
 import org.alberto97.aircontroller.ui.common.AppScaffold
 import org.alberto97.aircontroller.ui.common.FullscreenLoading
 import org.alberto97.aircontroller.ui.common.OutlinedPasswordField
@@ -163,25 +164,31 @@ private fun LoginDropDown(
     setValue: (value: ListItemModel<Region>) -> Unit,
     options: List<ListItemModel<Region>>
 ) {
-    AppDropDown(
-        value = value?.label ?: "",
-        label = { Text(stringResource(R.string.region)) },
-        leadingIcon = { RegionIcon(value?.resourceDrawable) },
-        modifier = Modifier.padding(vertical = 6.dp),
-        items = { close ->
-            options.forEach { item ->
-                DropdownMenuItem(onClick = {
-                    setValue(item)
-                    close()
-                }) {
-                    ListItem(
-                        icon = { Image(painterResource(item.resourceDrawable), null) },
-                        text = { Text(item.label) }
-                    )
+    Box(
+        modifier = Modifier.padding(vertical = 6.dp)
+    ) {
+        AppExposedDropdownMenu(
+            value = value?.label ?: "",
+            label = { Text(stringResource(R.string.region)) },
+            leadingIcon = { RegionIcon(value?.resourceDrawable) },
+            modifier = Modifier.fillMaxWidth(),
+            items = { close ->
+                options.forEach { item ->
+                    DropdownMenuItem(
+                        onClick = {
+                            setValue(item)
+                            close()
+                        }
+                    ) {
+                        ListItem(
+                            icon = { Image(painterResource(item.resourceDrawable), null) },
+                            text = { Text(item.label) }
+                        )
+                    }
                 }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable
