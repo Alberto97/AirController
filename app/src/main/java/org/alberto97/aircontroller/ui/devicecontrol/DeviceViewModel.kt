@@ -1,6 +1,6 @@
 package org.alberto97.aircontroller.ui.devicecontrol
 
-import android.content.Context
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -13,19 +13,22 @@ import org.alberto97.aircontroller.common.features.FanSpeed
 import org.alberto97.aircontroller.common.features.SleepMode
 import org.alberto97.aircontroller.common.features.SleepModeData
 import org.alberto97.aircontroller.common.features.WorkMode
-import org.alberto97.aircontroller.features.*
-import org.alberto97.aircontroller.provider.features.controllers.*
 import org.alberto97.aircontroller.common.models.AppDeviceState
-import org.alberto97.aircontroller.models.ListItemModel
 import org.alberto97.aircontroller.common.models.ResultWrapper
+import org.alberto97.aircontroller.features.fanToStringMap
+import org.alberto97.aircontroller.features.modeToIconMap
+import org.alberto97.aircontroller.features.modeToStringMap
+import org.alberto97.aircontroller.features.sleepToStringMap
+import org.alberto97.aircontroller.models.ListItemModel
 import org.alberto97.aircontroller.models.ScreenState
+import org.alberto97.aircontroller.provider.features.controllers.*
 import org.alberto97.aircontroller.provider.repositories.IDeviceControlRepository
 import org.alberto97.aircontroller.utils.IDeviceShortcutManager
 
 class DeviceViewModel(
     private val dsn: String,
     private val repo: IDeviceControlRepository,
-    private val context: Context,
+    private val app: Application,
     private val shortcutManager: IDeviceShortcutManager,
     private val airFlowHorizontalController: IAirFlowHorizontalController,
     private val airFlowVerticalController: IAirFlowVerticalController,
@@ -96,7 +99,7 @@ class DeviceViewModel(
         modes.map { item ->
             ListItemModel(
                 value = item,
-                label = context.resources.getString(modeToStringMap.getValue(item)),
+                label = app.resources.getString(modeToStringMap.getValue(item)),
                 resourceDrawable = modeToIconMap.getValue(item),
                 selected = item == mode
             )
@@ -108,7 +111,7 @@ class DeviceViewModel(
         speeds.map { item ->
             ListItemModel(
                 value = item,
-                label = context.resources.getString(fanToStringMap.getValue(item)),
+                label = app.resources.getString(fanToStringMap.getValue(item)),
                 resourceDrawable = R.drawable.ic_fan,
                 selected = item == speed
             )
@@ -122,7 +125,7 @@ class DeviceViewModel(
         modes.map { item ->
             ListItemModel(
                 value = item.type,
-                label = context.resources.getString(sleepToStringMap.getValue(item.type)),
+                label = app.resources.getString(sleepToStringMap.getValue(item.type)),
                 resourceDrawable = R.drawable.ic_nights_stay,
                 selected = item.type == mode
             )
