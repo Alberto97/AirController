@@ -19,7 +19,6 @@ import org.alberto97.aircontroller.ui.common.AppScaffold
 import org.alberto97.aircontroller.ui.common.FullscreenError
 import org.alberto97.aircontroller.ui.common.FullscreenLoading
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.MainViewModel
 import org.koin.androidx.compose.getViewModel
 
 object DevicesStateHandleParams {
@@ -34,7 +33,7 @@ fun DevicesScreen(
     openPair: () -> Unit,
     openLogin: () -> Unit,
     currentBackStackEntry: NavBackStackEntry?,
-    viewModel: MainViewModel = getViewModel()
+    viewModel: DevicesViewModel = getViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val devices by viewModel.devices.collectAsState()

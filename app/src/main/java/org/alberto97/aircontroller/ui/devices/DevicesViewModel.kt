@@ -1,4 +1,4 @@
-package org.alberto97.aircontroller.viewmodels
+package org.alberto97.aircontroller.ui.devices
 
 import android.os.Build
 import androidx.lifecycle.ViewModel
@@ -17,7 +17,7 @@ import org.alberto97.aircontroller.provider.repositories.IDeviceRepository
 import org.alberto97.aircontroller.utils.IDeviceShortcutManager
 
 
-class MainViewModel(
+class DevicesViewModel(
     private val repo: IDeviceRepository,
     private val auth: IAuthenticationRepository,
     private val settings: ISettingsRepository,

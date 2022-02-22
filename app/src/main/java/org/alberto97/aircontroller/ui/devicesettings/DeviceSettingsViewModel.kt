@@ -1,4 +1,4 @@
-package org.alberto97.aircontroller.viewmodels
+package org.alberto97.aircontroller.ui.devicesettings
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import org.alberto97.aircontroller.models.ScreenState
 import org.alberto97.aircontroller.provider.repositories.IDeviceRepository
 import org.alberto97.aircontroller.utils.IDeviceShortcutManager
 
-class DevicePreferenceViewModel(
+class DeviceSettingsViewModel(
     private val dsn: String,
     private val repo: IDeviceRepository,
     private val shortcutManager: IDeviceShortcutManager

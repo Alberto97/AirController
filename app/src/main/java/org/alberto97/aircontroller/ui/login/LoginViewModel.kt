@@ -1,4 +1,4 @@
-package org.alberto97.aircontroller.viewmodels
+package org.alberto97.aircontroller.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

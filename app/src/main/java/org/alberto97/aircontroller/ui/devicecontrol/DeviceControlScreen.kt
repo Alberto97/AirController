@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import org.alberto97.aircontroller.models.ScreenState
 import org.alberto97.aircontroller.ui.common.*
-import org.alberto97.aircontroller.viewmodels.DeviceViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 

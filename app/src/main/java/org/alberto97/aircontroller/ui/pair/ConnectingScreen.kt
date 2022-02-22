@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import org.alberto97.aircontroller.ui.common.FullscreenLoading
-import org.alberto97.aircontroller.viewmodels.PairViewModel
 
 @Composable
 fun ConnectingScreen(

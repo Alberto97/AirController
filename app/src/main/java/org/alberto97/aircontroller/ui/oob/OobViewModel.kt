@@ -1,4 +1,4 @@
-package org.alberto97.aircontroller.viewmodels
+package org.alberto97.aircontroller.ui.oob
 
 import androidx.lifecycle.ViewModel
 import org.alberto97.aircontroller.common.repositories.ISettingsRepository

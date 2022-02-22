@@ -19,7 +19,6 @@ import org.alberto97.aircontroller.R
 import org.alberto97.aircontroller.common.features.WorkMode
 import org.alberto97.aircontroller.features.modeToIconMap
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.DeviceViewModel
 
 @Composable
 fun DeviceOff(viewModel: DeviceViewModel) {

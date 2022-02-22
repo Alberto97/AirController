@@ -12,7 +12,6 @@ import org.alberto97.aircontroller.R
 import org.alberto97.aircontroller.ui.common.AppScaffold
 import org.alberto97.aircontroller.ui.common.ExtendedTopAppBar
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.OobViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable

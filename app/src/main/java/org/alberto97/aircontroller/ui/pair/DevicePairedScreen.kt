@@ -15,7 +15,6 @@ import androidx.navigation.NavBackStackEntry
 import org.alberto97.aircontroller.R
 import org.alberto97.aircontroller.ui.devices.DevicesStateHandleParams
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.PairViewModel
 
 @Composable
 fun DevicePairedScreen(

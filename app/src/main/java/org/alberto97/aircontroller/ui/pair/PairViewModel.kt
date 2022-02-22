@@ -1,4 +1,4 @@
-package org.alberto97.aircontroller.viewmodels
+package org.alberto97.aircontroller.ui.pair
 
 import android.os.Build
 import androidx.lifecycle.ViewModel

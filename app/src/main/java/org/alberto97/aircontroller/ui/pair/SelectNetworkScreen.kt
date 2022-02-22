@@ -21,7 +21,6 @@ import org.alberto97.aircontroller.common.enums.WifiSecurity
 import org.alberto97.aircontroller.ui.common.FullscreenLoading
 import org.alberto97.aircontroller.ui.preferences.PreferenceIcon
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.PairViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

@@ -28,7 +28,6 @@ import org.alberto97.aircontroller.ui.common.AppScaffold
 import org.alberto97.aircontroller.ui.common.FullscreenLoading
 import org.alberto97.aircontroller.ui.common.OutlinedPasswordField
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.LoginViewModel
 import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterialApi::class)

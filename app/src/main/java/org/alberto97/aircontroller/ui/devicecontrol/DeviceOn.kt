@@ -26,7 +26,6 @@ import org.alberto97.aircontroller.common.features.WorkMode
 import org.alberto97.aircontroller.features.*
 import org.alberto97.aircontroller.ui.preferences.*
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.DeviceViewModel
 
 @Composable
 @ExperimentalMaterialApi

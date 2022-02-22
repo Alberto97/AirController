@@ -1,4 +1,4 @@
-package org.alberto97.aircontroller.viewmodels
+package org.alberto97.aircontroller.ui.devicecontrol
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

@@ -18,7 +18,6 @@ import org.alberto97.aircontroller.ui.preferences.Preference
 import org.alberto97.aircontroller.ui.preferences.PreferenceCategory
 import org.alberto97.aircontroller.ui.preferences.SwitchPreference
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.DevicePreferenceViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -29,7 +28,7 @@ fun DeviceSettingsScreen(
     navigateUp: () -> Unit,
     navigateHome: () -> Unit,
     homeBackStackEntry: NavBackStackEntry,
-    viewModel: DevicePreferenceViewModel = getViewModel { parametersOf(dsn) }
+    viewModel: DeviceSettingsViewModel = getViewModel { parametersOf(dsn) }
 ) {
     val deviceName by viewModel.deviceName.collectAsState()
     val state by viewModel.state.collectAsState()

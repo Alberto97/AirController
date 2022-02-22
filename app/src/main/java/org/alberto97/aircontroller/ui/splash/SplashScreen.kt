@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.alberto97.aircontroller.R
 import org.alberto97.aircontroller.ui.theme.AppTheme
-import org.alberto97.aircontroller.viewmodels.SplashViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable

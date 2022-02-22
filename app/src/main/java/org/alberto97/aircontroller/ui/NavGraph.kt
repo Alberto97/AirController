@@ -15,7 +15,7 @@ import org.alberto97.aircontroller.ui.login.LoginScreen
 import org.alberto97.aircontroller.ui.oob.OobScreen
 import org.alberto97.aircontroller.ui.pair.*
 import org.alberto97.aircontroller.ui.splash.SplashScreen
-import org.alberto97.aircontroller.viewmodels.PairViewModel
+import org.alberto97.aircontroller.ui.pair.PairViewModel
 import org.koin.androidx.compose.getViewModel
 
 
