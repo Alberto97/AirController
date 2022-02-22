@@ -29,6 +29,7 @@ object DevicesStateHandleParams {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DevicesScreen(
+    openAbout: () -> Unit,
     openDevice: (dsn: String) -> Unit,
     openPair: () -> Unit,
     openLogin: () -> Unit,
@@ -61,6 +62,9 @@ fun DevicesScreen(
         onLogoutClick = {
             viewModel.logOut()
             openLogin()
+        },
+        onInfoClick = {
+            openAbout()
         }
     )
 }
@@ -76,6 +80,7 @@ private fun DevicesScreen(
     deviceList: List<AppDevice>,
     onDeviceClick: (dsn: String) -> Unit,
     onAddClick: () -> Unit,
+    onInfoClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     AppScaffold(
@@ -87,7 +92,7 @@ private fun DevicesScreen(
                     Text(stringResource(R.string.app_name))
                 },
                 actions = {
-                    DropdownButton(onLogoutClick)
+                    DropdownButton(onInfoClick, onLogoutClick)
                 }
             )
         },
@@ -105,7 +110,10 @@ private fun DevicesScreen(
 }
 
 @Composable
-fun DropdownButton(onInfoClick: () -> Unit) {
+fun DropdownButton(
+    onInfoClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
     val (dropdownExpanded, setDropdownExpanded) = remember { mutableStateOf(false) }
 
     IconButton(onClick = { setDropdownExpanded(true) }) {
@@ -113,7 +121,8 @@ fun DropdownButton(onInfoClick: () -> Unit) {
         Dropdown(
             expanded = dropdownExpanded,
             onDismissRequest = { setDropdownExpanded(false) },
-            onInfoClick = onInfoClick
+            onLogoutClick = onLogoutClick,
+            onInfoClick = onInfoClick,
         )
     }
 }
@@ -122,14 +131,18 @@ fun DropdownButton(onInfoClick: () -> Unit) {
 fun Dropdown(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
-    onInfoClick: () -> Unit
+    onInfoClick: () -> Unit,
+    onLogoutClick: () -> Unit
 ) {
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = { onDismissRequest() }
     ) {
-        DropdownMenuItem(onClick = { onInfoClick() }) {
+        DropdownMenuItem(onClick = { onLogoutClick() }) {
             Text(stringResource(R.string.action_logout))
+        }
+        DropdownMenuItem(onClick = { onInfoClick() }) {
+            Text(stringResource(R.string.action_about))
         }
     }
 }
@@ -185,6 +198,7 @@ private fun Preview() {
             deviceList = devices,
             onDeviceClick = {},
             onAddClick = {},
+            onInfoClick = {},
             onLogoutClick = {}
         )
     }

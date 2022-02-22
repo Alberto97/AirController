@@ -4,6 +4,7 @@ import org.alberto97.aircontroller.connectivity.IPairConnectivityManager
 import org.alberto97.aircontroller.connectivity.PairConnectivityManager
 import org.alberto97.aircontroller.common.repositories.ISettingsRepository
 import org.alberto97.aircontroller.repositories.SettingsRepository
+import org.alberto97.aircontroller.ui.about.AboutViewModel
 import org.alberto97.aircontroller.utils.DeviceShortcutManager
 import org.alberto97.aircontroller.utils.IDeviceShortcutManager
 import org.alberto97.aircontroller.utils.IProviderManager
@@ -31,4 +32,5 @@ val appModule = module {
     viewModel { SplashViewModel(get(), get()) }
     viewModel { PairViewModel(get(), get()) }
     viewModel { OobViewModel(get()) }
+    viewModel { AboutViewModel(get()) }
 }

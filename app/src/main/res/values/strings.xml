@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">AirController</string>
+    <string name="about_author_fulfilling_ego" translatable="false">Alberto Pedron</string>
 
     <string name="confirm">Confirm</string>
     <string name="done">Done</string>
@@ -29,6 +30,7 @@
 
     <!-- Main -->
     <string name="action_logout">Logout</string>
+    <string name="action_about">@string/about_title</string>
     <string name="device_available">Available</string>
     <string name="device_offline">Offline</string>
 
@@ -103,4 +105,11 @@
     <string name="wifi_network_security_open">Open</string>
     <string name="wifi_network_security_protected">Protected</string>
 
+    <!-- About -->
+    <string name="about_title">About</string>
+    <string name="about_category_info">Info</string>
+    <string name="about_repository_title">Check out the source code!</string>
+    <string name="about_repository_summary">Github</string>
+    <string name="about_author">Author</string>
+    <string name="about_version">Version</string>
 </resources>

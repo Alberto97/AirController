@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.alberto97.aircontroller.UriConstants
+import org.alberto97.aircontroller.ui.about.AboutScreen
 import org.alberto97.aircontroller.ui.devicecontrol.DeviceControlScreen
 import org.alberto97.aircontroller.ui.devices.DevicesScreen
 import org.alberto97.aircontroller.ui.devicesettings.DeviceSettingsScreen
@@ -23,6 +24,7 @@ sealed class Screen(val route: String) {
     object Oob: Screen("oob")
     object Login: Screen("login")
     object Main: Screen("main")
+    object About: Screen("about")
     object Pair: Screen("pair")
     object DeviceControl: Screen("deviceControl/{dsn}") {
         object Params {
@@ -92,6 +94,9 @@ fun NavGraph(
         }
         composable(Screen.Main.route) {
             DevicesScreen(
+                openAbout = {
+                    navController.navigate(Screen.About.route)
+                },
                 openDevice = { dsn ->
                     navController.navigate(Screen.DeviceControl.createRoute(dsn))
                 },
@@ -104,6 +109,9 @@ fun NavGraph(
                 currentBackStackEntry = navController.currentBackStackEntry
             )
         }
+        composable(Screen.About.route) {
+            AboutScreen(navigateUp = { navController.popBackStack() })
+        } 
         composable(
             route = Screen.DeviceControl.route,
             deepLinks = listOf(
