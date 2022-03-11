@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,10 +40,10 @@ fun DevicesScreen(
     val pairAvailable by viewModel.pairAvailable.collectAsState(false)
 
     val savedStateHandle = currentBackStackEntry?.savedStateHandle
-    val refreshLiveData = savedStateHandle?.getLiveData<Boolean>(DevicesStateHandleParams.needsRefresh)
+    val refreshFlow = savedStateHandle?.getStateFlow(DevicesStateHandleParams.needsRefresh, false)
 
-    val needsRefresh by refreshLiveData!!.observeAsState()
-    if (needsRefresh == true) {
+    val needsRefresh by refreshFlow!!.collectAsState()
+    if (needsRefresh) {
         viewModel.refreshData()
         savedStateHandle?.set(DevicesStateHandleParams.needsRefresh, false)
     }
