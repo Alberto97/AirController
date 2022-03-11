@@ -39,19 +39,28 @@ fun DeviceSettingsScreen(
     val network by viewModel.ssid.collectAsState()
     val message by viewModel.message.collectAsState()
 
+    fun requestDevicesRefresh() {
+        val savedStateHandle = homeBackStackEntry.savedStateHandle
+        savedStateHandle.set(DevicesStateHandleParams.needsRefresh, true)
+    }
+
     LaunchedEffect(popToHome) {
         if (popToHome) {
-            val savedStateHandle = homeBackStackEntry.savedStateHandle
-            savedStateHandle.set(DevicesStateHandleParams.needsRefresh, true)
+            requestDevicesRefresh()
             navigateHome()
         }
+    }
+
+    fun renameDevice(name: String) {
+        requestDevicesRefresh()
+        viewModel.updateDeviceName(name)
     }
 
     DeviceSettingsScreen(
         deviceName = deviceName,
         state = state,
         loadData = { viewModel.loadData() },
-        renameDevice = { name -> viewModel.updateDeviceName(name) },
+        renameDevice = { name -> renameDevice(name) },
         useCelsius = usesCelsius,
         onUseCelsiusChange = { viewModel.switchTempType() },
         deleteDevice = { viewModel.deleteDevice() },
