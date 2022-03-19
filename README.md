@@ -13,9 +13,7 @@ If you are just curious about what the app looks like you can login with the acc
 
 ### Screenshots
 
-<img src="art/home.png" width="30%">
-<img src="art/device.png" width="30%">
-<img src="art/deviceSettings.png" width="30%">
+<img src="art/home.png" width="30%"> <img src="art/device.png" width="30%"> <img src="art/deviceSettings.png" width="30%">
 
 ## Development and Techical details
 
