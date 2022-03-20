@@ -23,8 +23,6 @@ class SplashViewModel(
     private val app: Application,
     private val settings: ISettingsRepository,
 ) : ViewModel(), KoinComponent {
-    private val connectivityManager =
-        app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     // This needs to be evaluated lazily because when there is no region data the retrofit
     // service, which is a dependency of the auth repository, is not registered
@@ -49,12 +47,6 @@ class SplashViewModel(
 
     fun load() {
         viewModelScope.launch {
-            if (!isConnected()) {
-                (app as App).showSplashScreen = false
-                _showOfflineMessage.value = true
-                return@launch
-            }
-
             if (settings.oob) {
                 navigateTo(SplashNavAction.Oob)
                 return@launch
@@ -88,11 +80,5 @@ class SplashViewModel(
 
     private fun hasLoginData(): Boolean {
         return settings.loggedIn && settings.region != null
-    }
-
-    private fun isConnected(): Boolean {
-        val cap = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            ?: return false
-        return cap.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 }
