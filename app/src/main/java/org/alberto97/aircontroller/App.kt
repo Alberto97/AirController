@@ -14,6 +14,7 @@ import org.koin.core.logger.Level
 class App : Application() {
 
     private val providerManager: IProviderManager by inject()
+    var showSplashScreen = true
 
     override fun onCreate() {
         super.onCreate()

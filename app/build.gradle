@@ -66,6 +66,9 @@ dependencies {
     implementation libs.androidx.compose.materialIconsExt
     implementation libs.androidx.activity.activityCompose
 
+    // AndroidX Core Splashscreen
+    implementation libs.androidx.core.splashscreen
+
     // AndroidX Data Store
     implementation libs.androidx.datastore.preferences
 
