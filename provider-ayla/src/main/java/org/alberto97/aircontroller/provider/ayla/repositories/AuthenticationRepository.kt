@@ -2,6 +2,7 @@ package org.alberto97.aircontroller.provider.ayla.repositories
 
 import android.util.Log
 import org.alberto97.aircontroller.common.enums.Region
+import org.alberto97.aircontroller.common.models.DefaultErrors
 import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.common.repositories.ISettingsRepository
 import org.alberto97.aircontroller.provider.ayla.internal.AylaExtensions.aylaError
@@ -11,6 +12,7 @@ import org.alberto97.aircontroller.provider.ayla.internal.repositories.ISecretsR
 import org.alberto97.aircontroller.provider.repositories.AuthErrorCodes
 import org.alberto97.aircontroller.provider.repositories.IAuthenticationRepository
 import retrofit2.HttpException
+import java.io.IOException
 import java.net.HttpURLConnection
 
 internal class AuthenticationRepository(
@@ -43,27 +45,25 @@ internal class AuthenticationRepository(
 
     override suspend fun login(email: String, password: String): ResultWrapper<Unit> {
         val region = settings.region
-        val app = appMap[region] ?:
-            return ResultWrapper.Error("App id and secret not found for $region")
+        val app =
+            appMap[region] ?: return ResultWrapper.Error("App id and secret not found for $region")
 
-        return try {
+        try {
             val login = Login(email, password, app)
             val output = service.login(login)
 
             saveAuthData(output)
-            ResultWrapper.Success(Unit)
-        } catch (e: HttpException) {
-            Log.e("HiLogin", e.stackTraceToString())
-            if (e.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                Log.i(LOG_TAG, "app_id: ${app.appId}")
-                Log.i(LOG_TAG, "app_secret: ${app.appSecret}")
-                throw IllegalArgumentException("The app_id or app_secret are invalid")
-            }
-            val message = e.aylaError() ?: "Authentication failed"
-            ResultWrapper.Error(message, AuthErrorCodes.UNAUTHORIZED)
+            return ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            when (e) {
+                is HttpException -> when (e.code()) {
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> return handleHttpUnauthorized(e.aylaError())
+                    HttpURLConnection.HTTP_NOT_FOUND -> handleHttpNotFound(app)
+                }
+                is IOException -> return DefaultErrors.connectivityError()
+            }
             Log.e("HiLogin", e.stackTraceToString())
-            ResultWrapper.Error("Authentication failed")
+            return ResultWrapper.Error("Authentication failed")
         }
     }
 
@@ -72,22 +72,35 @@ internal class AuthenticationRepository(
         if (refreshToken.isEmpty())
             return ResultWrapper.Error("Missing refresh token", AuthErrorCodes.UNAUTHORIZED)
 
-        return try {
+        try {
             val data = LoginRefresh(refreshToken)
 
             val resultBody = service.refreshToken(data)
             saveAuthData(resultBody)
 
-            ResultWrapper.Success(Unit)
-        } catch (e: HttpException) {
-            Log.e("HiLogin", e.stackTraceToString())
-            settings.loggedIn = false
-            val message = e.aylaError() ?: "Authentication failed"
-            ResultWrapper.Error(message, AuthErrorCodes.UNAUTHORIZED)
+            return ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            when (e) {
+                is HttpException -> when (e.code()) {
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> return handleHttpUnauthorized(e.aylaError())
+                }
+                is IOException -> return DefaultErrors.connectivityError()
+            }
             Log.e("HiLogin", e.stackTraceToString())
-            ResultWrapper.Error("Authentication failed")
+            return ResultWrapper.Error("Authentication failed")
         }
+    }
+
+    private fun handleHttpUnauthorized(msg: String?): ResultWrapper<Unit> {
+        settings.loggedIn = false
+        val message = msg ?: "Authentication failed"
+        return ResultWrapper.Error(message, AuthErrorCodes.UNAUTHORIZED)
+    }
+
+    private fun handleHttpNotFound(app: Application): ResultWrapper<Unit> {
+        Log.i(LOG_TAG, "app_id: ${app.appId}")
+        Log.i(LOG_TAG, "app_secret: ${app.appSecret}")
+        throw IllegalArgumentException("The app_id or app_secret are invalid")
     }
 
     override fun logout() {

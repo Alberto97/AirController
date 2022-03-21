@@ -9,3 +9,9 @@ sealed class ResultWrapper<T>(
     //class Loading<T>(data: T? = null) : ResultWrapper<T>(data)
     class Error<T>(message: String, code: Int? = null, data: T? = null) : ResultWrapper<T>(data, code, message)
 }
+
+object DefaultErrors {
+    fun <T> connectivityError(): ResultWrapper.Error<T> {
+        return ResultWrapper.Error("Check your connectivity and try again")
+    }
+}

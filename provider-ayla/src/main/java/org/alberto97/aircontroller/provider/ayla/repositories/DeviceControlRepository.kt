@@ -10,11 +10,13 @@ import org.alberto97.aircontroller.provider.ayla.internal.network.api.AylaServic
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDeviceCacheRepository
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.aircontroller.common.models.AppDeviceState
+import org.alberto97.aircontroller.common.models.DefaultErrors
 import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.provider.ayla.internal.*
 import org.alberto97.aircontroller.provider.ayla.internal.AylaPropertyToStateMap
 import org.alberto97.aircontroller.provider.ayla.internal.AylaType
 import org.alberto97.aircontroller.provider.repositories.IDeviceControlRepository
+import java.io.IOException
 
 internal class DeviceControlRepository(
     private val service: AylaService,
@@ -35,6 +37,8 @@ internal class DeviceControlRepository(
         val wrappedProps = try {
             service.getDeviceProperties(dsn)
         } catch (e: Exception) {
+            if (e is IOException)
+                return DefaultErrors.connectivityError()
             return ResultWrapper.Error("Cannot retrieve device state")
         }
         val props = wrappedProps.map { it.property }

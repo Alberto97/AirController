@@ -3,6 +3,7 @@ package org.alberto97.aircontroller.provider.ayla.repositories
 import android.util.Log
 import org.alberto97.aircontroller.common.features.TempType
 import org.alberto97.aircontroller.common.models.AppDevice
+import org.alberto97.aircontroller.common.models.DefaultErrors
 import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.provider.ayla.internal.AylaExtensions.isAvailable
 import org.alberto97.aircontroller.provider.ayla.internal.TEMP_TYPE_PROP
@@ -13,6 +14,7 @@ import org.alberto97.aircontroller.provider.ayla.internal.network.api.AylaServic
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDeviceCacheRepository
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.aircontroller.provider.repositories.IDeviceRepository
+import java.io.IOException
 
 internal class DeviceRepository(
     private val service: AylaService,
@@ -25,13 +27,15 @@ internal class DeviceRepository(
     }
 
     override suspend fun getDevices(): ResultWrapper<List<AppDevice>> {
-        return try {
+        try {
             val devicesWrapperList = service.getDevices()
             val devices = devicesWrapperList.map { mapDeviceData(it.device) }
-            ResultWrapper.Success(devices)
+            return ResultWrapper.Success(devices)
         } catch (ex: Exception) {
+            if (ex is IOException)
+                return DefaultErrors.connectivityError()
             Log.e(LOG_TAG, ex.stackTraceToString())
-            ResultWrapper.Error("Cannot retrieve devices data")
+            return ResultWrapper.Error("Cannot retrieve devices data")
         }
     }
 
