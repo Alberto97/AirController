@@ -134,5 +134,5 @@ internal interface AylaService {
 
         @Body
         datapoint: Datapoint
-    ): DatapointOutput
+    ): DatapointOutput.Wrapper
 }
