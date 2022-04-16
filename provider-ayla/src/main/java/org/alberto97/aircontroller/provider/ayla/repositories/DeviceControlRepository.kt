@@ -4,22 +4,18 @@ import org.alberto97.aircontroller.common.features.*
 import org.alberto97.aircontroller.common.features.TemperatureExtensions.isCelsius
 import org.alberto97.aircontroller.common.features.TemperatureExtensions.toC
 import org.alberto97.aircontroller.common.features.TemperatureExtensions.toF
-import org.alberto97.aircontroller.provider.ayla.internal.converters.*
-import org.alberto97.aircontroller.provider.ayla.internal.models.Property
-import org.alberto97.aircontroller.provider.ayla.internal.network.api.AylaService
-import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDeviceCacheRepository
-import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.aircontroller.common.models.AppDeviceState
 import org.alberto97.aircontroller.common.models.DefaultErrors
 import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.provider.ayla.internal.*
-import org.alberto97.aircontroller.provider.ayla.internal.AylaPropertyToStateMap
-import org.alberto97.aircontroller.provider.ayla.internal.AylaType
+import org.alberto97.aircontroller.provider.ayla.internal.converters.*
+import org.alberto97.aircontroller.provider.ayla.internal.models.Property
+import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDeviceCacheRepository
+import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.aircontroller.provider.repositories.IDeviceControlRepository
 import java.io.IOException
 
 internal class DeviceControlRepository(
-    private val service: AylaService,
     private val propertyRepo: IDevicePropertyRepository,
     private val prefs: IDeviceCacheRepository,
     private val boolConverter: IBooleanConverter,
@@ -34,14 +30,13 @@ internal class DeviceControlRepository(
     override suspend fun getDeviceState(dsn: String): ResultWrapper<AppDeviceState> {
         val deviceState = AppDeviceState()
 
-        val wrappedProps = try {
-            service.getDeviceProperties(dsn)
+        val props = try {
+            propertyRepo.getProperties(dsn)
         } catch (e: Exception) {
             if (e is IOException)
                 return DefaultErrors.connectivityError()
             return ResultWrapper.Error("Cannot retrieve device state")
         }
-        val props = wrappedProps.map { it.property }
 
         // Set device name
         deviceState.productName = props.first().productName

@@ -65,7 +65,7 @@ val aylaModule = aylaInternal + aylaControllers + module {
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get(), get()) }
     single<IDeviceRepository> { DeviceRepository(get(), get(), get(), get()) }
     single<IDeviceControlRepository> {
-        DeviceControlRepository(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+        DeviceControlRepository(get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
     single<IDevicePairRepository> { DevicePairRepository(get(), get()) }
 }
