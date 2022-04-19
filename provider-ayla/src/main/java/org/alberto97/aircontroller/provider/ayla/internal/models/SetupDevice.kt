@@ -2,27 +2,33 @@
 
 package org.alberto97.aircontroller.provider.ayla.internal.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal class SetupDevice(dsn: String, setupToken: String?, regToken: String? = null) {
-    val device = Device(dsn, setupToken, regToken)
+@JsonClass(generateAdapter = true)
+internal class SetupDevice(val device: Device) {
+    constructor(dsn: String, setupToken: String?, regToken: String? = null) : this(Device(dsn, setupToken, regToken))
+
+    @JsonClass(generateAdapter = true)
     class Device(
         val dsn: String,
-        @SerializedName("setup_token") val setupToken: String?,
-        @SerializedName("regtoken") val regToken: String? = null
+        @Json(name = "setup_token") val setupToken: String?,
+        @Json(name = "regtoken") val regToken: String? = null
     )
 }
 
+@JsonClass(generateAdapter = true)
 internal class ConnectedDevice(
-    @SerializedName("connected_at")
+    @Json(name = "connected_at")
     val connectedAt: String,
-    @SerializedName("device_type")
+    @Json(name = "device_type")
     val deviceType: String,
-    @SerializedName("lan_ip")
+    @Json(name = "lan_ip")
     val lanIp: String?,
-    @SerializedName("registration_type")
+    @Json(name = "registration_type")
     val registrationType: String
 ) {
+    @JsonClass(generateAdapter = true)
     class Wrapper(
         val device: ConnectedDevice
     )

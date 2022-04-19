@@ -2,28 +2,32 @@
 
 package org.alberto97.aircontroller.provider.ayla.internal.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 internal class WifiStatus(
-    @SerializedName("connect_history")
+    @Json(name = "connect_history")
     val connectHistory: Array<HistoryItem>,
     val dsn: String,
-    @SerializedName("device_service")
+    @Json(name = "device_service")
     val deviceService: String,
     val mac: String,
     val mtime: Long,
-    @SerializedName("host_symname")
+    @Json(name = "host_symname")
     val hostSymname: String,
-    @SerializedName("connected_ssid")
+    @Json(name = "connected_ssid")
     val connectedSsid: String,
     val ant: Int,
     val wps: String,
     val rssi: Int,
     val bars: Int,
 ) {
-    class Wrapper(@SerializedName("wifi_status") val wifiStatus: WifiStatus)
+    @JsonClass(generateAdapter = true)
+    class Wrapper(@Json(name = "wifi_status") val wifiStatus: WifiStatus)
 }
 
+@JsonClass(generateAdapter = true)
 internal class HistoryItem(
     val ssid_info: String,
     val ssid_len: Int,
@@ -32,19 +36,22 @@ internal class HistoryItem(
     val msg: String,
     val mtime: Long,
     val last: Int,
-    @SerializedName("ip_addr")
+    @Json(name = "ip_addr")
     val ipAddr: String,
     val netmask: String,
-    @SerializedName("default_route")
+    @Json(name = "default_route")
     val defaultRoute: String,
-    @SerializedName("dns_servers")
+    @Json(name = "dns_servers")
     val dnsServers: Array<String>
 )
 
+@JsonClass(generateAdapter = true)
 internal class WifiScanResults(
     val mtime: Long,
-    val results: List<WifiScanResult>) {
+    val results: List<WifiScanResult>
+) {
 
+    @JsonClass(generateAdapter = true)
     class WifiScanResult(
         val ssid: String,
         val type: String,
@@ -55,8 +62,9 @@ internal class WifiScanResults(
         val bssid: String
     )
 
-    class Wrapper (
-        @SerializedName("wifi_scan")
+    @JsonClass(generateAdapter = true)
+    class Wrapper(
+        @Json(name = "wifi_scan")
         val wifiScan: WifiScanResults
     )
 }

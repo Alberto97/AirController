@@ -10,7 +10,6 @@ import org.alberto97.aircontroller.common.models.DefaultErrors
 import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.provider.ayla.internal.*
 import org.alberto97.aircontroller.provider.ayla.internal.converters.*
-import org.alberto97.aircontroller.provider.ayla.internal.models.Property
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDeviceCacheRepository
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.aircontroller.provider.repositories.IDeviceControlRepository
@@ -21,7 +20,6 @@ internal class DeviceControlRepository(
     private val prefs: IDeviceCacheRepository,
     private val boolConverter: IBooleanConverter,
     private val intConverter: IIntConverter,
-    private val stringConverter: IStringConverter,
     private val fanSpeedConverter: IFanSpeedConverter,
     private val modeConverter: IModeConverter,
     private val tempUnitConverter: ITempUnitConverter,
@@ -53,7 +51,7 @@ internal class DeviceControlRepository(
                 FAN_SPEED_PROP -> fanSpeedConverter.map(it)
                 TEMP_TYPE_PROP -> tempUnitConverter.map(it)
                 SLEEP_MODE_PROP -> sleepModeConverter.map(it)
-                else -> mapByType(it)
+                else -> it.value
             }
 
             val prop = AylaPropertyToStateMap[it.name]
@@ -76,18 +74,6 @@ internal class DeviceControlRepository(
         }
 
         return ResultWrapper.Success(deviceState)
-    }
-
-    private fun mapByType(prop: Property): Any? {
-        prop.value ?: return null
-
-        return when (prop.baseType) {
-            AylaType.BOOLEAN -> boolConverter.map(prop)
-            AylaType.DECIMAL,
-            AylaType.INTEGER -> intConverter.map(prop)
-            AylaType.STRING -> stringConverter.map(prop)
-            else -> throw Exception("Unknown base_type for ${prop.name}")
-        }
     }
 
     private fun getSupportedModes(): List<WorkMode> {

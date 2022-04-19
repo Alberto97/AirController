@@ -2,57 +2,60 @@
 
 package org.alberto97.aircontroller.provider.ayla.internal.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 
+@JsonClass(generateAdapter = true)
 internal class Device(
-    @SerializedName("product_name")
+    @Json(name = "product_name")
     val productName: String,
     val model: String,
     val dsn: String,
 
-    @SerializedName("oem_model")
+    @Json(name = "oem_model")
     val oemModel: String,
 
-    @SerializedName("sw_version")
+    @Json(name = "sw_version")
     val swVersion: String,
 
-    @SerializedName("template_id")
+    @Json(name = "template_id")
     val templateId: Int,
     val mac: String,
 
-    @SerializedName("unique_hardware_id")
-    val uniqueHardwareId: String,
+    @Json(name = "unique_hardware_id")
+    val uniqueHardwareId: String?,
     val hwsig: String,
 
-    @SerializedName("lan_ip")
+    @Json(name = "lan_ip")
     val lanIp: String,
 
-    @SerializedName("connected_at")
+    @Json(name = "connected_at")
     val connectedAt: String,
     val key: Int,
 
-    @SerializedName("lan_enabled")
+    @Json(name = "lan_enabled")
     val lanEnabled: Boolean,
 
-    @SerializedName("has_properties")
+    @Json(name = "has_properties")
     val hasProperties: Boolean,
 
-    @SerializedName("product_class")
-    val productClass: String,
+    @Json(name = "product_class")
+    val productClass: String?,
 
-    @SerializedName("connection_status")
+    @Json(name = "connection_status")
     val connectionStatus: String,
 
     val lat: String,
     val lng: String,
     val locality: String,
 
-    @SerializedName("device_type")
+    @Json(name = "device_type")
     val deviceType: String,
 
-    val ssid: String
+    val ssid: String?
 ) {
+    @JsonClass(generateAdapter = true)
     class Wrapper(
         val device: Device
     )

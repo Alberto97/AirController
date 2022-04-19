@@ -4,6 +4,7 @@ kotlin = "1.6.10"
 compose = "1.1.1"
 lifecycle = "2.5.0-alpha06"
 koin = "3.1.6"
+moshi = "1.13.0"
 retrofit = "2.9.0"
 
 [plugins]
@@ -38,5 +39,9 @@ koin-androidxCompose = { module = "io.insert-koin:koin-androidx-compose", versio
 kotlin-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
-retrofit-converterGson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
+moshi-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlinCodegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+
+retrofit-converterMoshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 retrofit-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
