@@ -5,8 +5,8 @@ pluginManagement {
         mavenCentral()
     }
 }
-include ':app'
 rootProject.name='AirController'
+include ':app'
 include ':common'
 include ':provider-base'
 include ':provider-demo'
