@@ -38,6 +38,8 @@ koin-androidxCompose = { module = "io.insert-koin:koin-androidx-compose", versio
 
 kotlin-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
 
+mockito-mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
+
 moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
 moshi-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlinCodegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }

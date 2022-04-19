@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 import org.alberto97.aircontroller.provider.ayla.internal.models.adapters.AylaBoolean
 
 @JsonClass(generateAdapter = true)
-internal open class Property(
+open class Property(
     val type: String,
     val name: String,
 
@@ -64,7 +64,7 @@ internal open class Property(
 }
 
 @JsonClass(generateAdapter = true)
-internal class BooleanProperty(
+class BooleanProperty(
     @AylaBoolean
     override val value: Boolean?,
     type: String,
@@ -107,7 +107,7 @@ internal class BooleanProperty(
 
 
 @JsonClass(generateAdapter = true)
-internal class IntProperty(
+class IntProperty(
     override val value: Int?,
     type: String,
     name: String,
@@ -148,7 +148,7 @@ internal class IntProperty(
 )
 
 @JsonClass(generateAdapter = true)
-internal class StringProperty(
+class StringProperty(
     override val value: String?,
     type: String,
     name: String,
