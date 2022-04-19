@@ -9,9 +9,14 @@ import org.alberto97.aircontroller.common.models.AppDeviceState
 import org.alberto97.aircontroller.common.models.DefaultErrors
 import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.provider.ayla.internal.*
-import org.alberto97.aircontroller.provider.ayla.internal.converters.*
+import org.alberto97.aircontroller.provider.ayla.internal.converters.IFanSpeedConverter
+import org.alberto97.aircontroller.provider.ayla.internal.converters.IModeConverter
+import org.alberto97.aircontroller.provider.ayla.internal.converters.ISleepModeConverter
+import org.alberto97.aircontroller.provider.ayla.internal.converters.ITempUnitConverter
 import org.alberto97.aircontroller.provider.ayla.internal.models.BooleanDatapoint
+import org.alberto97.aircontroller.provider.ayla.internal.models.BooleanProperty
 import org.alberto97.aircontroller.provider.ayla.internal.models.IntDatapoint
+import org.alberto97.aircontroller.provider.ayla.internal.models.IntProperty
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDeviceCacheRepository
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.aircontroller.provider.repositories.IDeviceControlRepository
@@ -44,26 +49,49 @@ internal class DeviceControlRepository(
         // Set device name
         deviceState.productName = props.first().productName
 
-        // Update device state
-        props.forEach {
-            val value = when (it.name) {
-                WORK_MODE_PROP -> modeConverter.fromAyla(it.value as Int)
-                FAN_SPEED_PROP -> fanSpeedConverter.fromAyla(it.value as Int)
-                TEMP_TYPE_PROP -> tempUnitConverter.fromAyla(it.value as Boolean)
-                SLEEP_MODE_PROP -> sleepModeConverter.fromAyla(it.value as Int)
-                else -> it.value
+        val intMap = mutableMapOf<String, Int?>()
+        val boolMap = mutableMapOf<String, Boolean?>()
+        props.forEach { property ->
+            when (property) {
+                is BooleanProperty -> boolMap[property.name] = property.value
+                is IntProperty -> intMap[property.name] = property.value
+                else -> {}
             }
-
-            val prop = AylaPropertyToStateMap[it.name]
-
-            @Suppress("IfThenToSafeAccess")
-            if (prop != null)
-                prop.setter.call(deviceState, value)
         }
 
+        val intWorkMode = intMap[WORK_MODE_PROP]!!
+        val workMode = modeConverter.fromAyla(intWorkMode)
+
+        val intFanSpeed = intMap[FAN_SPEED_PROP]!!
+        val fanSpeed = fanSpeedConverter.fromAyla(intFanSpeed)
+
+        val boolTempUnit = boolMap[TEMP_TYPE_PROP]!!
+        val tempUnit = tempUnitConverter.fromAyla(boolTempUnit)
+
+        val intSleepMode = intMap[SLEEP_MODE_PROP]!!
+        val sleepMode = sleepModeConverter.fromAyla(intSleepMode)
+
+        // Modes
         deviceState.supportedModes = getSupportedModes()
+        deviceState.workMode = workMode
         deviceState.supportedSpeeds = getSupportedFanSpeeds()
+        deviceState.fanSpeed = fanSpeed
         deviceState.supportedSleepModes = getSupportedSleepModes(deviceState.workMode)
+        deviceState.sleepMode = sleepMode
+        deviceState.tempUnit = tempUnit
+
+        // Booleans
+        deviceState.on = boolMap[POWER_PROP] ?: false
+        deviceState.backlight = boolMap[BACKLIGHT_PROP] ?: false
+        deviceState.eco = boolMap[ECO_PROP] ?: false
+        deviceState.quiet = boolMap[QUIET_PROP] ?: false
+        deviceState.boost = boolMap[BOOST_PROP] ?: false
+        deviceState.horizontalAirFlow = boolMap[HORIZONTAL_AIR_FLOW_PROP] ?: false
+        deviceState.verticalAirFlow = boolMap[VERTICAL_AIR_FLOW_PROP] ?: false
+
+        // Temperatures
+        deviceState.roomTemp = intMap[ROOM_TEMP_PROP] ?: 0
+        deviceState.temp = intMap[TEMP_PROP] ?: 0
         deviceState.maxTemp = getMaxTemp(deviceState.tempUnit)
         deviceState.minTemp = getMinTemp(deviceState.tempUnit)
 

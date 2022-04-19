@@ -24,7 +24,6 @@ dependencies {
     implementation project(":provider-base")
     implementation project(":provider-ayla-shared")
 
-    implementation libs.kotlin.reflect
     implementation libs.kotlin.coroutines.android
 
     // AndroidX
