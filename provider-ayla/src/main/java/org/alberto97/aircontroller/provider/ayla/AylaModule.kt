@@ -47,9 +47,7 @@ private val aylaInternal = module {
     single { getPairApi(get(), get()) }
 
     // Converter
-    single<IBooleanConverter> { BooleanConverter() }
     single<IFanSpeedConverter> { FanSpeedConverter() }
-    single<IIntConverter> { IntConverter() }
     single<IModeConverter> { ModeConverter() }
     single<ISleepModeConverter> { SleepModeConverter() }
     single<ITempUnitConverter> { TempUnitConverter() }
@@ -67,7 +65,7 @@ val aylaModule = aylaInternal + aylaControllers + module {
     single<IAuthenticationRepository> { AuthenticationRepository(get(), get(), get()) }
     single<IDeviceRepository> { DeviceRepository(get(), get(), get(), get()) }
     single<IDeviceControlRepository> {
-        DeviceControlRepository(get(), get(), get(), get(), get(), get(), get(), get())
+        DeviceControlRepository(get(), get(), get(), get(), get(), get())
     }
     single<IDevicePairRepository> { DevicePairRepository(get(), get()) }
 }

@@ -1,18 +1,11 @@
 package org.alberto97.aircontroller.provider.ayla.internal.converters
 
-import org.alberto97.aircontroller.provider.ayla.internal.models.Datapoint
-import org.alberto97.aircontroller.provider.ayla.internal.models.Property
 import org.alberto97.aircontroller.common.features.FanSpeed
-import org.alberto97.aircontroller.provider.ayla.internal.models.IntDatapoint
-import org.alberto97.aircontroller.provider.ayla.internal.models.IntProperty
 
-internal interface IFanSpeedConverter : AylaConverter<FanSpeed>
+internal interface IFanSpeedConverter : AylaConverter<FanSpeed, Int>
 
 internal class FanSpeedConverter : IFanSpeedConverter {
-    override fun map(data: Property): FanSpeed {
-        val property = data as IntProperty
-        val value = property.value
-
+    override fun fromAyla(value: Int): FanSpeed {
         if (value == 1) {
             // Quiet mode is on
             return FanSpeed.Lower
@@ -29,8 +22,8 @@ internal class FanSpeedConverter : IFanSpeedConverter {
         }
     }
 
-    override fun map(data: FanSpeed): Datapoint {
-        val int = when (data) {
+    override fun toAyla(data: FanSpeed): Int {
+        return when (data) {
             FanSpeed.Auto -> 0
             FanSpeed.Lower -> 5
             FanSpeed.Low -> 6
@@ -38,6 +31,5 @@ internal class FanSpeedConverter : IFanSpeedConverter {
             FanSpeed.High -> 8
             FanSpeed.Higher -> 9
         }
-        return IntDatapoint(int)
     }
 }
