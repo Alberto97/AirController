@@ -1,5 +1,6 @@
 package org.alberto97.aircontroller.provider.ayla.repositories
 
+import android.util.Log
 import org.alberto97.aircontroller.common.features.*
 import org.alberto97.aircontroller.common.features.TemperatureExtensions.isCelsius
 import org.alberto97.aircontroller.common.features.TemperatureExtensions.toC
@@ -26,6 +27,9 @@ internal class DeviceControlRepository(
     private val tempUnitConverter: ITempUnitConverter,
     private val sleepModeConverter: ISleepModeConverter
 ) : IDeviceControlRepository {
+    companion object {
+        private const val LOG_TAG = "HiDeviceControl"
+    }
 
     override suspend fun getDeviceState(dsn: String): ResultWrapper<AppDeviceState> {
         val deviceState = AppDeviceState()
@@ -35,6 +39,7 @@ internal class DeviceControlRepository(
         } catch (e: Exception) {
             if (e is IOException)
                 return DefaultErrors.connectivityError()
+            Log.e(LOG_TAG, e.stackTraceToString())
             return ResultWrapper.Error("Cannot retrieve device state")
         }
 
@@ -73,7 +78,7 @@ internal class DeviceControlRepository(
         return ResultWrapper.Success(deviceState)
     }
 
-    private fun mapByType(prop: Property) : Any? {
+    private fun mapByType(prop: Property): Any? {
         prop.value ?: return null
 
         return when (prop.baseType) {
@@ -150,6 +155,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, HORIZONTAL_AIR_FLOW_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update horizontal air flow")
         }
     }
@@ -160,6 +166,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, VERTICAL_AIR_FLOW_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update vertical air flow")
         }
     }
@@ -170,6 +177,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, BACKLIGHT_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update backlight")
         }
     }
@@ -180,6 +188,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, BOOST_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update boost mode")
         }
     }
@@ -190,6 +199,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, ECO_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update eco mode")
         }
     }
@@ -200,8 +210,9 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, FAN_SPEED_PROP, data)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
-        ResultWrapper.Error("Cannot update fan speed")
-    }
+            Log.e(LOG_TAG, e.stackTraceToString())
+            ResultWrapper.Error("Cannot update fan speed")
+        }
     }
 
     override suspend fun setMode(dsn: String, value: WorkMode): ResultWrapper<Unit> {
@@ -210,6 +221,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, WORK_MODE_PROP, data)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update work mode")
         }
     }
@@ -220,6 +232,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, POWER_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update power status")
         }
     }
@@ -230,6 +243,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, QUIET_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update quiet mode")
         }
     }
@@ -240,6 +254,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, SLEEP_MODE_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update sleep mode")
         }
     }
@@ -252,6 +267,7 @@ internal class DeviceControlRepository(
             propertyRepo.setProperty(dsn, TEMP_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot update temperature")
         }
     }

@@ -81,6 +81,7 @@ internal class DeviceRepository(
             prefs.setTempUnit(dsn, unit)
             ResultWrapper.Success(unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot get temperature unit")
         }
     }
@@ -92,6 +93,7 @@ internal class DeviceRepository(
             propertyRepo.setProperty(dsn, TEMP_TYPE_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
+            Log.e(LOG_TAG, e.stackTraceToString())
             ResultWrapper.Error("Cannot set temperature unit")
         }
     }
