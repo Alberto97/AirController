@@ -11,6 +11,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import org.alberto97.aircontroller.R
+import org.alberto97.aircontroller.features.fanToStringMap
+import org.alberto97.aircontroller.features.modeToIconMap
+import org.alberto97.aircontroller.features.modeToStringMap
+import org.alberto97.aircontroller.features.sleepToStringMap
 import org.alberto97.aircontroller.models.ScreenState
 import org.alberto97.aircontroller.ui.common.*
 import org.koin.androidx.compose.getViewModel
@@ -153,18 +159,22 @@ private fun ModeSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
-    val supportedModes by viewModel.supportedModes.collectAsState(emptyList())
+    val supportedModes by viewModel.supportedModes.collectAsState()
+    val currentMode by viewModel.workMode.collectAsState()
 
     BottomSheetContent(
         title = "Mode",
         content = {
             supportedModes.forEach { mode ->
+                val stringId = modeToStringMap.getValue(mode)
+                val drawableId = modeToIconMap.getValue(mode)
+
                 BottomSheetListItem(
-                    text = mode.label,
-                    icon = { SheetIcon(mode.resourceDrawable) },
-                    selected = mode.selected,
+                    text = stringResource(stringId),
+                    icon = { SheetIcon(drawableId) },
+                    selected = mode == currentMode,
                     onClick = {
-                        viewModel.setMode(mode.value)
+                        viewModel.setMode(mode)
                         close()
                     }
                 )
@@ -180,18 +190,21 @@ private fun FanSpeedSheet(
     viewModel: DeviceViewModel,
     close: () -> Unit
 ) {
-    val supportedFanSpeeds by viewModel.supportedFanSpeeds.collectAsState(emptyList())
+    val supportedFanSpeeds by viewModel.supportedFanSpeeds.collectAsState()
+    val currentFanSpeed by viewModel.fanSpeed.collectAsState()
 
     BottomSheetContent(
         title = "Fan Speed",
         content = {
-            supportedFanSpeeds.forEach { mode ->
+            supportedFanSpeeds.forEach { fanSpeed ->
+                val stringId = fanToStringMap.getValue(fanSpeed)
+
                 BottomSheetListItem(
-                    text = mode.label,
-                    icon = { SheetIcon(mode.resourceDrawable) },
-                    selected = mode.selected,
+                    text = stringResource(stringId),
+                    icon = { SheetIcon(R.drawable.ic_fan) },
+                    selected = fanSpeed == currentFanSpeed,
                     onClick = {
-                        viewModel.setFanSpeed(mode.value)
+                        viewModel.setFanSpeed(fanSpeed)
                         close()
                     }
                 )
@@ -207,17 +220,20 @@ private fun SleepSheet(
     close: () -> Unit
 ) {
     val supportedSleepModes by viewModel.supportedSleepModes.collectAsState(emptyList())
+    val currentSleepMode by viewModel.sleepMode.collectAsState()
 
     BottomSheetContent(
         title = "Sleep Mode",
         content = {
             supportedSleepModes.forEach { mode ->
+                val stringId = sleepToStringMap.getValue(mode.type)
+
                 BottomSheetListItem(
-                    text = mode.label,
-                    icon = { SheetIcon(mode.resourceDrawable) },
-                    selected = mode.selected,
+                    text = stringResource(stringId),
+                    icon = { SheetIcon(R.drawable.ic_nights_stay) },
+                    selected = mode.type == currentSleepMode,
                     onClick = {
-                        viewModel.setSleepMode(mode.value)
+                        viewModel.setSleepMode(mode.type)
                         close()
                     }
                 )
