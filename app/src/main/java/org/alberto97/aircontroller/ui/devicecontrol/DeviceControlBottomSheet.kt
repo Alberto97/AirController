@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.alberto97.aircontroller.ui.common.FullscreenLoading
 
@@ -34,9 +33,8 @@ fun DeviceControlBottomSheet(
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     val openSheet = { sheet: DeviceControlSheet ->
-        setSheetType(sheet)
         sheetScope.launch {
-            delay(100L)
+            setSheetType(sheet)
             sheetState.show()
         }
     }
