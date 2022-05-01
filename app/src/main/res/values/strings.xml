@@ -51,8 +51,8 @@
     <string name="device_control_air_flow">Air Flow</string>
     <string name="device_control_air_flow_horizontal">Horizontal</string>
     <string name="device_control_air_flow_vertical">Vertical</string>
-    <string name="device_control_advanced">Dimmer</string>
-    <string name="device_control_backlight">Dimmer</string>
+    <string name="device_control_advanced">Advanced</string>
+    <string name="device_control_backlight">Backlight</string>
     <string name="device_control_eco">Eco</string>
     <string name="device_control_quiet">Quiet</string>
     <string name="device_control_boost">Super</string>
