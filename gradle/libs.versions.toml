@@ -15,7 +15,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 [libraries]
 androidx-activity-activityCompose = "androidx.activity:activity-compose:1.4.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
-androidx-core-splashscreen = "androidx.core:core-splashscreen:1.0.0-beta02"
+androidx-core-splashscreen = "androidx.core:core-splashscreen:1.0.0-rc01"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-navigation-compose = "androidx.navigation:navigation-compose:2.4.2"
 androidx-preference = "androidx.preference:preference-ktx:1.2.0"
