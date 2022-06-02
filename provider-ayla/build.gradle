@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -23,7 +24,6 @@ dependencies {
     implementation project(":provider-base")
     implementation project(":provider-ayla-shared")
 
-    implementation libs.kotlin.reflect
     implementation libs.kotlin.coroutines.android
 
     // AndroidX
@@ -33,7 +33,16 @@ dependencies {
     // Koin
     implementation libs.koin.android
 
+    // Moshi
+    implementation libs.moshi.adapters
+    implementation libs.moshi.moshi
+    kapt libs.moshi.kotlinCodegen
+
     // Retrofit
     implementation libs.retrofit.retrofit
-    implementation libs.retrofit.converterGson
+    implementation libs.retrofit.converterMoshi
+
+    // Test
+    testImplementation libs.junit
+    testImplementation libs.mockito.mockitoKotlin
 }

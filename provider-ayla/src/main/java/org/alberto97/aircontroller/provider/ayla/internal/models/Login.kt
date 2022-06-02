@@ -2,44 +2,53 @@
 
 package org.alberto97.aircontroller.provider.ayla.internal.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 // First access
-internal class Login(email: String, password: String, app: Application) {
-    val user = User(email, password, app)
+@JsonClass(generateAdapter = true)
+internal class Login(val user: User) {
+    constructor(email: String, password: String, app: Application) : this(User(email, password, app))
+
+    @JsonClass(generateAdapter = true)
     class User(val email: String, val password: String, val application: Application)
 }
 
+@JsonClass(generateAdapter = true)
 internal class Application(
-    @SerializedName("app_id")
+    @Json(name = "app_id")
     val appId: String,
 
-    @SerializedName("app_secret")
+    @Json(name = "app_secret")
     val appSecret: String
 )
 
 // Refresh Token
-internal class LoginRefresh(refreshToken: String) {
-    val user = UserRefresh(refreshToken)
+@JsonClass(generateAdapter = true)
+internal class LoginRefresh(val user: UserRefresh) {
+    constructor(refreshToken: String) : this(UserRefresh(refreshToken))
+
+    @JsonClass(generateAdapter = true)
     class UserRefresh(
-        @SerializedName("refresh_token")
+        @Json(name = "refresh_token")
         val refreshToken: String
     )
 }
 
 // Response
+@JsonClass(generateAdapter = true)
 internal class LoginOutput(
-    @SerializedName("access_token")
+    @Json(name = "access_token")
     val accessToken: String,
 
-    @SerializedName("refresh_token")
+    @Json(name = "refresh_token")
     val refreshToken: String,
 
-    @SerializedName("expires_in")
+    @Json(name = "expires_in")
     val expiresIn: Int,
 
     val role: String,
 
-    @SerializedName("role_tags")
+    @Json(name = "role_tags")
     val roleTags: List<String>
 )

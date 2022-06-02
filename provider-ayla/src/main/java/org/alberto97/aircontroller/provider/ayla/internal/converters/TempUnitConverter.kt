@@ -1,25 +1,26 @@
 package org.alberto97.aircontroller.provider.ayla.internal.converters
 
-import org.alberto97.aircontroller.provider.ayla.internal.models.Datapoint
-import org.alberto97.aircontroller.provider.ayla.internal.models.Property
 import org.alberto97.aircontroller.common.features.TempType
 
-internal interface ITempUnitConverter : AylaConverter<TempType> {
+internal interface ITempUnitConverter : AylaConverter<TempType, Boolean> {
     fun mapIntToUnit(value: Int): TempType
     fun mapUnitToInt(value: TempType): Int
 }
 
 internal class TempUnitConverter : ITempUnitConverter {
 
-    override fun map(data: Property): TempType {
-        val double = data.value as Double
-        val value = double.toInt()
-        return mapIntToUnit(value)
+    override fun fromAyla(value: Boolean): TempType {
+        return when(value) {
+            false -> TempType.Celsius
+            true -> TempType.Fahrenheit
+        }
     }
 
-    override fun map(data: TempType): Datapoint {
-        val value = mapUnitToInt(data)
-        return Datapoint(value)
+    override fun toAyla(data: TempType): Boolean {
+        return when (data) {
+            TempType.Celsius -> false
+            TempType.Fahrenheit -> true
+        }
     }
 
     override fun mapIntToUnit(value: Int): TempType {

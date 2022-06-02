@@ -7,15 +7,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.alberto97.aircontroller.BuildConfig
-import org.alberto97.aircontroller.R
-import org.alberto97.aircontroller.models.ListItemModel
-import org.alberto97.aircontroller.common.models.ResultWrapper
-import org.alberto97.aircontroller.models.ScreenState
-import org.alberto97.aircontroller.common.repositories.ISettingsRepository
-import org.alberto97.aircontroller.common.enums.Region
-import org.alberto97.aircontroller.utils.IProviderManager
 import org.alberto97.aircontroller.common.enums.Provider
+import org.alberto97.aircontroller.common.enums.Region
+import org.alberto97.aircontroller.common.models.ResultWrapper
+import org.alberto97.aircontroller.common.repositories.ISettingsRepository
+import org.alberto97.aircontroller.models.ScreenState
 import org.alberto97.aircontroller.provider.repositories.IAuthenticationRepository
+import org.alberto97.aircontroller.utils.IProviderManager
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -35,20 +33,12 @@ class LoginViewModel(
     private val _message = MutableStateFlow("")
     val message = _message.asStateFlow()
 
-    private val _region = MutableStateFlow<ListItemModel<Region>?>(null)
+    private val _region = MutableStateFlow(settings.region)
     val region = _region.asStateFlow()
 
-    private val euRegion = ListItemModel(Region.EU, "Europe", R.drawable.ic_eu)
-    private val usRegion = ListItemModel(Region.US, "United States", R.drawable.ic_us)
-
-    val regions = listOf(euRegion, usRegion)
+    val regions = listOf(Region.EU, Region.US)
 
     init {
-        _region.value = when (settings.region) {
-            Region.EU -> euRegion
-            Region.US -> usRegion
-            else -> null
-        }
         providerManager.setProvider(Provider.Ayla)
     }
 
@@ -71,11 +61,11 @@ class LoginViewModel(
             providerManager.setProvider(Provider.Demo)
     }
 
-    fun setRegion(region: ListItemModel<Region>) {
+    fun setRegion(region: Region) {
         _region.value = region
-        providerManager.setRegion(region.value)
+        providerManager.setRegion(region)
         // Once region and appsecrets are untied, move this on login success
-        settings.region = region.value
+        settings.region = region
     }
 
     fun clearMessage() {

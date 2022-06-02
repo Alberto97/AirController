@@ -28,7 +28,7 @@ val appModule = module {
 
     viewModel { parameters ->
         DeviceViewModel(
-            parameters.get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
+            parameters.get(), get(), get(), get(), get(), get(), get(), get(), get(),
             get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()
         )
     }

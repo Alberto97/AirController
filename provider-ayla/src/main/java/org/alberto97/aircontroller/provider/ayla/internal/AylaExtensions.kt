@@ -1,9 +1,10 @@
 package org.alberto97.aircontroller.provider.ayla.internal
 
-import com.google.gson.Gson
+import com.squareup.moshi.Moshi
 import org.alberto97.aircontroller.provider.ayla.internal.models.Device
 import org.alberto97.aircontroller.provider.ayla.internal.models.Response
 import org.alberto97.aircontroller.provider.ayla.internal.models.WifiScanResults
+import org.alberto97.aircontroller.provider.ayla.serialization.MoshiAylaExtensions.addAyla
 import retrofit2.HttpException
 
 internal object AylaExtensions {
@@ -17,8 +18,10 @@ internal object AylaExtensions {
     }
 
     fun HttpException.aylaError(): String? {
-        val text = this.response()?.errorBody()?.charStream()?.readText()
-        val response = Gson().fromJson(text, Response::class.java)
-        return response.error
+        val text = this.response()?.errorBody()?.charStream()?.readText() ?: ""
+        val moshi = Moshi.Builder().addAyla().build()
+        val adapter = moshi.adapter(Response::class.java)
+        val response = adapter.fromJson(text)
+        return response?.error
     }
 }

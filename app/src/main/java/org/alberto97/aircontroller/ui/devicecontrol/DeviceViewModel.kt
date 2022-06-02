@@ -1,25 +1,17 @@
 package org.alberto97.aircontroller.ui.devicecontrol
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import org.alberto97.aircontroller.R
 import org.alberto97.aircontroller.common.features.FanSpeed
 import org.alberto97.aircontroller.common.features.SleepMode
 import org.alberto97.aircontroller.common.features.SleepModeData
 import org.alberto97.aircontroller.common.features.WorkMode
 import org.alberto97.aircontroller.common.models.AppDeviceState
 import org.alberto97.aircontroller.common.models.ResultWrapper
-import org.alberto97.aircontroller.features.fanToStringMap
-import org.alberto97.aircontroller.features.modeToIconMap
-import org.alberto97.aircontroller.features.modeToStringMap
-import org.alberto97.aircontroller.features.sleepToStringMap
-import org.alberto97.aircontroller.models.ListItemModel
 import org.alberto97.aircontroller.models.ScreenState
 import org.alberto97.aircontroller.provider.features.controllers.*
 import org.alberto97.aircontroller.provider.repositories.IDeviceControlRepository
@@ -28,7 +20,6 @@ import org.alberto97.aircontroller.utils.IDeviceShortcutManager
 class DeviceViewModel(
     private val dsn: String,
     private val repo: IDeviceControlRepository,
-    private val app: Application,
     private val shortcutManager: IDeviceShortcutManager,
     private val airFlowHorizontalController: IAirFlowHorizontalController,
     private val airFlowVerticalController: IAirFlowVerticalController,
@@ -95,42 +86,15 @@ class DeviceViewModel(
     val minTemp = _minTemp.asStateFlow()
 
     private val _supportedModes = MutableStateFlow<List<WorkMode>>(emptyList())
-    val supportedModes = combine(_supportedModes, workMode) { modes, mode ->
-        modes.map { item ->
-            ListItemModel(
-                value = item,
-                label = app.resources.getString(modeToStringMap.getValue(item)),
-                resourceDrawable = modeToIconMap.getValue(item),
-                selected = item == mode
-            )
-        }
-    }
+    val supportedModes = _supportedModes.asStateFlow()
 
     private val _supportedFanSpeeds = MutableStateFlow<List<FanSpeed>>(emptyList())
-    val supportedFanSpeeds = combine(_supportedFanSpeeds, fanSpeed) { speeds, speed ->
-        speeds.map { item ->
-            ListItemModel(
-                value = item,
-                label = app.resources.getString(fanToStringMap.getValue(item)),
-                resourceDrawable = R.drawable.ic_fan,
-                selected = item == speed
-            )
-        }
-    }
+    val supportedFanSpeeds = _supportedFanSpeeds.asStateFlow()
 
     // TODO: This *really* needs to be improved by showing a graph
     //  or something else to visually differentiate the modes
     private val _supportedSleepModes = MutableStateFlow<List<SleepModeData>>(emptyList())
-    val supportedSleepModes = combine(_supportedSleepModes, sleepMode) { modes, mode ->
-        modes.map { item ->
-            ListItemModel(
-                value = item.type,
-                label = app.resources.getString(sleepToStringMap.getValue(item.type)),
-                resourceDrawable = R.drawable.ic_nights_stay,
-                selected = item.type == mode
-            )
-        }
-    }
+    val supportedSleepModes = _supportedSleepModes.asStateFlow()
 
     // Info
     private val _deviceName = MutableStateFlow("")

@@ -2,26 +2,28 @@
 
 package org.alberto97.aircontroller.provider.ayla.internal.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 internal class Status (
-    @SerializedName("DSN")
+    @Json(name = "DSN")
     val dsn: String,
 
-    @SerializedName("dsn")
+    @Json(name = "dsn")
     val DSN: String,
 
     val model: String,
 
-    @SerializedName("api_version")
+    @Json(name = "api_version")
     val apiVersion: String,
 
-    @SerializedName("device_service")
+    @Json(name = "device_service")
     val deviceService: String,
 
     val mac: String,
 
-    @SerializedName("last_connect_mtime")
+    @Json(name = "last_connect_mtime")
     val lastConnectMtime: Long,
 
     val mtime: Long,

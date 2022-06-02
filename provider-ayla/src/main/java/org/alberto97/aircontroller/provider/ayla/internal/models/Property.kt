@@ -2,42 +2,45 @@
 
 package org.alberto97.aircontroller.provider.ayla.internal.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import org.alberto97.aircontroller.provider.ayla.internal.models.adapters.AylaBoolean
 
-internal class Property (
+@JsonClass(generateAdapter = true)
+open class Property(
     val type: String,
     val name: String,
 
-    @SerializedName("base_type")
+    @property:Json(name = "base_type")
     val baseType: String,
 
-    @SerializedName("read_only")
+    @property:Json(name = "read_only")
     val readOnly: Boolean,
 
     val direction: String,
     val scope: String,
 
-    @SerializedName("data_updated_at")
+    @property:Json(name = "data_updated_at")
     val dataUpdatedAt: String,
 
     val key: Int,
 
-    @SerializedName("device_key")
+    @property:Json(name = "device_key")
     val deviceKey: Int,
 
-    @SerializedName("product_name")
+    @property:Json(name = "product_name")
     val productName: String,
 
-    @SerializedName("track_only_changes")
+    @property:Json(name = "track_only_changes")
     val trackOnlyChanges: Boolean,
 
-    @SerializedName("display_name")
+    @property:Json(name = "display_name")
     val displayName: String,
 
-    @SerializedName("host_sw_version")
+    @property:Json(name = "host_sw_version")
     val hostSwVersion: Boolean,
 
-    @SerializedName("time_series")
+    @property:Json(name = "time_series")
     val timeSeries: Boolean,
 
     val derived: Boolean,
@@ -46,16 +49,143 @@ internal class Property (
 //    "recipe": null,
 //    "value": null,
 //    "denied_roles": [],
-    val value: Any?,
+    open val value: Any?,
 
-    @SerializedName("ack_enabled")
+    @property:Json(name = "ack_enabled")
     val ackEnabled: Boolean,
 
-    @SerializedName("retention_days")
-    val retentionDays: Int
+    @property:Json(name = "retention_days")
+    val retentionDays: Int?
 ) {
+    @JsonClass(generateAdapter = true)
     class Wrapper(
         val property: Property
     )
 }
+
+@JsonClass(generateAdapter = true)
+class BooleanProperty(
+    @AylaBoolean
+    override val value: Boolean?,
+    type: String,
+    name: String,
+    baseType: String,
+    readOnly: Boolean,
+    direction: String,
+    scope: String,
+    dataUpdatedAt: String,
+    key: Int,
+    deviceKey: Int,
+    productName: String,
+    trackOnlyChanges: Boolean,
+    displayName: String,
+    hostSwVersion: Boolean,
+    timeSeries: Boolean,
+    derived: Boolean,
+    ackEnabled: Boolean,
+    retentionDays: Int?
+) : Property(
+    type,
+    name,
+    baseType,
+    readOnly,
+    direction,
+    scope,
+    dataUpdatedAt,
+    key,
+    deviceKey,
+    productName,
+    trackOnlyChanges,
+    displayName,
+    hostSwVersion,
+    timeSeries,
+    derived,
+    value,
+    ackEnabled,
+    retentionDays
+)
+
+
+@JsonClass(generateAdapter = true)
+class IntProperty(
+    override val value: Int?,
+    type: String,
+    name: String,
+    baseType: String,
+    readOnly: Boolean,
+    direction: String,
+    scope: String,
+    dataUpdatedAt: String,
+    key: Int,
+    deviceKey: Int,
+    productName: String,
+    trackOnlyChanges: Boolean,
+    displayName: String,
+    hostSwVersion: Boolean,
+    timeSeries: Boolean,
+    derived: Boolean,
+    ackEnabled: Boolean,
+    retentionDays: Int?
+) : Property(
+    type,
+    name,
+    baseType,
+    readOnly,
+    direction,
+    scope,
+    dataUpdatedAt,
+    key,
+    deviceKey,
+    productName,
+    trackOnlyChanges,
+    displayName,
+    hostSwVersion,
+    timeSeries,
+    derived,
+    value,
+    ackEnabled,
+    retentionDays
+)
+
+@JsonClass(generateAdapter = true)
+class StringProperty(
+    override val value: String?,
+    type: String,
+    name: String,
+    baseType: String,
+    readOnly: Boolean,
+    direction: String,
+    scope: String,
+    dataUpdatedAt: String,
+    key: Int,
+    deviceKey: Int,
+    productName: String,
+    trackOnlyChanges: Boolean,
+    displayName: String,
+    hostSwVersion: Boolean,
+    timeSeries: Boolean,
+    derived: Boolean,
+    ackEnabled: Boolean,
+    retentionDays: Int?
+) : Property(
+    type,
+    name,
+    baseType,
+    readOnly,
+    direction,
+    scope,
+    dataUpdatedAt,
+    key,
+    deviceKey,
+    productName,
+    trackOnlyChanges,
+    displayName,
+    hostSwVersion,
+    timeSeries,
+    derived,
+    value,
+    ackEnabled,
+    retentionDays
+)
+
 

@@ -27,6 +27,8 @@
     <string name="login">Login</string>
     <string name="email_address">Email address</string>
     <string name="region">Region</string>
+    <string name="region_eu">Europe</string>
+    <string name="region_us">United States</string>
 
     <!-- Main -->
     <string name="action_logout">Logout</string>

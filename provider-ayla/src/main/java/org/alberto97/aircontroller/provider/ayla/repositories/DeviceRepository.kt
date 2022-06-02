@@ -8,6 +8,8 @@ import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.provider.ayla.internal.AylaExtensions.isAvailable
 import org.alberto97.aircontroller.provider.ayla.internal.TEMP_TYPE_PROP
 import org.alberto97.aircontroller.provider.ayla.internal.converters.ITempUnitConverter
+import org.alberto97.aircontroller.provider.ayla.internal.models.BooleanDatapoint
+import org.alberto97.aircontroller.provider.ayla.internal.models.BooleanProperty
 import org.alberto97.aircontroller.provider.ayla.internal.models.Device
 import org.alberto97.aircontroller.provider.ayla.internal.models.ProductName
 import org.alberto97.aircontroller.provider.ayla.internal.network.api.AylaService
@@ -76,8 +78,8 @@ internal class DeviceRepository(
 
     override suspend fun getTempUnit(dsn: String): ResultWrapper<TempType> {
         return try {
-            val value = propertyRepo.getProperty(TEMP_TYPE_PROP, dsn)
-            val unit = tempUnitConverter.map(value)
+            val property = propertyRepo.getProperty(TEMP_TYPE_PROP, dsn) as BooleanProperty
+            val unit = tempUnitConverter.fromAyla(property.value!!)
             prefs.setTempUnit(dsn, unit)
             ResultWrapper.Success(unit)
         } catch (e: Exception) {
@@ -89,7 +91,8 @@ internal class DeviceRepository(
     override suspend fun setTempUnit(dsn: String, value: TempType): ResultWrapper<Unit> {
         return try {
             prefs.setTempUnit(dsn, value)
-            val datapoint = tempUnitConverter.map(value)
+            val data = tempUnitConverter.toAyla(value)
+            val datapoint = BooleanDatapoint(data)
             propertyRepo.setProperty(dsn, TEMP_TYPE_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {

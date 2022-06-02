@@ -2,14 +2,17 @@
 
 package org.alberto97.aircontroller.provider.ayla.internal.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 
-internal class ProductName(productName: String) {
-    val device = Device(productName)
+@JsonClass(generateAdapter = true)
+internal class ProductName(val device: Device) {
+    constructor(productName: String) : this(Device(productName))
 
+    @JsonClass(generateAdapter = true)
     class Device(
-        @SerializedName("product_name")
+        @Json(name = "product_name")
         val productName: String
     )
 }

@@ -9,8 +9,14 @@ import org.alberto97.aircontroller.common.models.AppDeviceState
 import org.alberto97.aircontroller.common.models.DefaultErrors
 import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.provider.ayla.internal.*
-import org.alberto97.aircontroller.provider.ayla.internal.converters.*
-import org.alberto97.aircontroller.provider.ayla.internal.models.Property
+import org.alberto97.aircontroller.provider.ayla.internal.converters.IFanSpeedConverter
+import org.alberto97.aircontroller.provider.ayla.internal.converters.IModeConverter
+import org.alberto97.aircontroller.provider.ayla.internal.converters.ISleepModeConverter
+import org.alberto97.aircontroller.provider.ayla.internal.converters.ITempUnitConverter
+import org.alberto97.aircontroller.provider.ayla.internal.models.BooleanDatapoint
+import org.alberto97.aircontroller.provider.ayla.internal.models.BooleanProperty
+import org.alberto97.aircontroller.provider.ayla.internal.models.IntDatapoint
+import org.alberto97.aircontroller.provider.ayla.internal.models.IntProperty
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDeviceCacheRepository
 import org.alberto97.aircontroller.provider.ayla.internal.repositories.IDevicePropertyRepository
 import org.alberto97.aircontroller.provider.repositories.IDeviceControlRepository
@@ -19,9 +25,6 @@ import java.io.IOException
 internal class DeviceControlRepository(
     private val propertyRepo: IDevicePropertyRepository,
     private val prefs: IDeviceCacheRepository,
-    private val boolConverter: IBooleanConverter,
-    private val intConverter: IIntConverter,
-    private val stringConverter: IStringConverter,
     private val fanSpeedConverter: IFanSpeedConverter,
     private val modeConverter: IModeConverter,
     private val tempUnitConverter: ITempUnitConverter,
@@ -46,26 +49,49 @@ internal class DeviceControlRepository(
         // Set device name
         deviceState.productName = props.first().productName
 
-        // Update device state
-        props.forEach {
-            val value = when (it.name) {
-                WORK_MODE_PROP -> modeConverter.map(it)
-                FAN_SPEED_PROP -> fanSpeedConverter.map(it)
-                TEMP_TYPE_PROP -> tempUnitConverter.map(it)
-                SLEEP_MODE_PROP -> sleepModeConverter.map(it)
-                else -> mapByType(it)
+        val intMap = mutableMapOf<String, Int?>()
+        val boolMap = mutableMapOf<String, Boolean?>()
+        props.forEach { property ->
+            when (property) {
+                is BooleanProperty -> boolMap[property.name] = property.value
+                is IntProperty -> intMap[property.name] = property.value
+                else -> {}
             }
-
-            val prop = AylaPropertyToStateMap[it.name]
-
-            @Suppress("IfThenToSafeAccess")
-            if (prop != null)
-                prop.setter.call(deviceState, value)
         }
 
+        val intWorkMode = intMap[WORK_MODE_PROP]!!
+        val workMode = modeConverter.fromAyla(intWorkMode)
+
+        val intFanSpeed = intMap[FAN_SPEED_PROP]!!
+        val fanSpeed = fanSpeedConverter.fromAyla(intFanSpeed)
+
+        val boolTempUnit = boolMap[TEMP_TYPE_PROP]!!
+        val tempUnit = tempUnitConverter.fromAyla(boolTempUnit)
+
+        val intSleepMode = intMap[SLEEP_MODE_PROP]!!
+        val sleepMode = sleepModeConverter.fromAyla(intSleepMode)
+
+        // Modes
         deviceState.supportedModes = getSupportedModes()
+        deviceState.workMode = workMode
         deviceState.supportedSpeeds = getSupportedFanSpeeds()
+        deviceState.fanSpeed = fanSpeed
         deviceState.supportedSleepModes = getSupportedSleepModes(deviceState.workMode)
+        deviceState.sleepMode = sleepMode
+        deviceState.tempUnit = tempUnit
+
+        // Booleans
+        deviceState.on = boolMap[POWER_PROP] ?: false
+        deviceState.backlight = boolMap[BACKLIGHT_PROP] ?: false
+        deviceState.eco = boolMap[ECO_PROP] ?: false
+        deviceState.quiet = boolMap[QUIET_PROP] ?: false
+        deviceState.boost = boolMap[BOOST_PROP] ?: false
+        deviceState.horizontalAirFlow = boolMap[HORIZONTAL_AIR_FLOW_PROP] ?: false
+        deviceState.verticalAirFlow = boolMap[VERTICAL_AIR_FLOW_PROP] ?: false
+
+        // Temperatures
+        deviceState.roomTemp = intMap[ROOM_TEMP_PROP] ?: 0
+        deviceState.temp = intMap[TEMP_PROP] ?: 0
         deviceState.maxTemp = getMaxTemp(deviceState.tempUnit)
         deviceState.minTemp = getMinTemp(deviceState.tempUnit)
 
@@ -76,18 +102,6 @@ internal class DeviceControlRepository(
         }
 
         return ResultWrapper.Success(deviceState)
-    }
-
-    private fun mapByType(prop: Property): Any? {
-        prop.value ?: return null
-
-        return when (prop.baseType) {
-            AylaType.BOOLEAN -> boolConverter.map(prop)
-            AylaType.DECIMAL,
-            AylaType.INTEGER -> intConverter.map(prop)
-            AylaType.STRING -> stringConverter.map(prop)
-            else -> throw Exception("Unknown base_type for ${prop.name}")
-        }
     }
 
     private fun getSupportedModes(): List<WorkMode> {
@@ -151,7 +165,7 @@ internal class DeviceControlRepository(
 
     override suspend fun setAirFlowHorizontal(dsn: String, value: Boolean): ResultWrapper<Unit> {
         return try {
-            val datapoint = boolConverter.map(value)
+            val datapoint = BooleanDatapoint(value)
             propertyRepo.setProperty(dsn, HORIZONTAL_AIR_FLOW_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
@@ -162,7 +176,7 @@ internal class DeviceControlRepository(
 
     override suspend fun setAirFlowVertical(dsn: String, value: Boolean): ResultWrapper<Unit> {
         return try {
-            val datapoint = boolConverter.map(value)
+            val datapoint = BooleanDatapoint(value)
             propertyRepo.setProperty(dsn, VERTICAL_AIR_FLOW_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
@@ -173,7 +187,7 @@ internal class DeviceControlRepository(
 
     override suspend fun setBacklight(dsn: String, value: Boolean): ResultWrapper<Unit> {
         return try {
-            val datapoint = boolConverter.map(value)
+            val datapoint = BooleanDatapoint(value)
             propertyRepo.setProperty(dsn, BACKLIGHT_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
@@ -184,7 +198,7 @@ internal class DeviceControlRepository(
 
     override suspend fun setBoost(dsn: String, value: Boolean): ResultWrapper<Unit> {
         return try {
-            val datapoint = boolConverter.map(value)
+            val datapoint = BooleanDatapoint(value)
             propertyRepo.setProperty(dsn, BOOST_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
@@ -195,7 +209,7 @@ internal class DeviceControlRepository(
 
     override suspend fun setEco(dsn: String, value: Boolean): ResultWrapper<Unit> {
         return try {
-            val datapoint = boolConverter.map(value)
+            val datapoint = BooleanDatapoint(value)
             propertyRepo.setProperty(dsn, ECO_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
@@ -206,8 +220,9 @@ internal class DeviceControlRepository(
 
     override suspend fun setFanSpeed(dsn: String, value: FanSpeed): ResultWrapper<Unit> {
         return try {
-            val data = fanSpeedConverter.map(value)
-            propertyRepo.setProperty(dsn, FAN_SPEED_PROP, data)
+            val data = fanSpeedConverter.toAyla(value)
+            val datapoint = IntDatapoint(data)
+            propertyRepo.setProperty(dsn, FAN_SPEED_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.stackTraceToString())
@@ -217,8 +232,9 @@ internal class DeviceControlRepository(
 
     override suspend fun setMode(dsn: String, value: WorkMode): ResultWrapper<Unit> {
         return try {
-            val data = modeConverter.map(value)
-            propertyRepo.setProperty(dsn, WORK_MODE_PROP, data)
+            val data = modeConverter.toAyla(value)
+            val datapoint = IntDatapoint(data)
+            propertyRepo.setProperty(dsn, WORK_MODE_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.stackTraceToString())
@@ -228,7 +244,7 @@ internal class DeviceControlRepository(
 
     override suspend fun setPower(dsn: String, value: Boolean): ResultWrapper<Unit> {
         return try {
-            val datapoint = boolConverter.map(value)
+            val datapoint = BooleanDatapoint(value)
             propertyRepo.setProperty(dsn, POWER_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
@@ -239,7 +255,7 @@ internal class DeviceControlRepository(
 
     override suspend fun setQuiet(dsn: String, value: Boolean): ResultWrapper<Unit> {
         return try {
-            val datapoint = boolConverter.map(value)
+            val datapoint = BooleanDatapoint(value)
             propertyRepo.setProperty(dsn, QUIET_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
@@ -250,7 +266,8 @@ internal class DeviceControlRepository(
 
     override suspend fun setSleepMode(dsn: String, value: SleepMode): ResultWrapper<Unit> {
         return try {
-            val datapoint = sleepModeConverter.map(value)
+            val data = sleepModeConverter.toAyla(value)
+            val datapoint = IntDatapoint(data)
             propertyRepo.setProperty(dsn, SLEEP_MODE_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
@@ -263,7 +280,7 @@ internal class DeviceControlRepository(
         return try {
             val unit = prefs.getTempUnit(dsn)
             val temp = if (unit.isCelsius()) value.toF() else value
-            val datapoint = intConverter.map(temp)
+            val datapoint = IntDatapoint(temp)
             propertyRepo.setProperty(dsn, TEMP_PROP, datapoint)
             ResultWrapper.Success(Unit)
         } catch (e: Exception) {
