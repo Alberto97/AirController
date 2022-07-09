@@ -72,10 +72,6 @@ dependencies {
     // AndroidX Data Store
     implementation libs.androidx.datastore.preferences
 
-    // AndroidX Lifecycle
-    implementation libs.androidx.lifecycle.viewmodel.compose
-    implementation libs.androidx.lifecycle.viewmodel.savedstate
-
     // AndroidX Navigation
     implementation libs.androidx.navigation.compose
 

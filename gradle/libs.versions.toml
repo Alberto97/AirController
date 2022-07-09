@@ -2,7 +2,6 @@
 agp = "7.2.1"
 kotlin = "1.6.10"
 compose = "1.1.1"
-lifecycle = "2.5.0"
 koin = "3.2.0"
 moshi = "1.13.0"
 retrofit = "2.9.0"
@@ -26,9 +25,6 @@ androidx-compose-materialIconsExt = { module = "androidx.compose.material:materi
 androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 androidx-compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-
-androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-androidx-lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
 
 junit = "junit:junit:4.13.2"
 
