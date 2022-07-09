@@ -136,7 +136,7 @@ fun NavGraph(
                 dsn = dsn,
                 navigateUp = navController::navigateUp,
                 navigateHome = { navController.popBackStack(Screen.Main.route, false) },
-                homeBackStackEntry = remember {
+                homeBackStackEntry = remember(backStackEntry) {
                     navController.getBackStackEntry(Screen.Main.route)
                 }
             )
@@ -146,11 +146,11 @@ fun NavGraph(
 }
 
 @Composable
-private fun getPairViewModel(navController: NavController): PairViewModel {
-    val backStackEntry = remember {
-        navController.getBackStackEntry(Screen.Pair.route)
+private fun NavController.getPairViewModel(backStackEntry: NavBackStackEntry): PairViewModel {
+    val pairBackStackEntry = remember(backStackEntry) {
+        getBackStackEntry(Screen.Pair.route)
     }
-    return getViewModel(owner = backStackEntry)
+    return getViewModel(owner = pairBackStackEntry)
 }
 
 private fun NavGraphBuilder.addPairGraph(navController: NavController) {
@@ -158,8 +158,8 @@ private fun NavGraphBuilder.addPairGraph(navController: NavController) {
         route = Screen.Pair.route,
         startDestination = PairScreen.PickDevice.route
     ) {
-        composable(PairScreen.PickDevice.route) {
-            val viewModel: PairViewModel = getPairViewModel(navController)
+        composable(PairScreen.PickDevice.route) { backStackEntry ->
+            val viewModel: PairViewModel = navController.getPairViewModel(backStackEntry)
             PickDeviceScreen(
                 viewModel = viewModel,
                 exit = navController::popBackStack,
@@ -168,8 +168,8 @@ private fun NavGraphBuilder.addPairGraph(navController: NavController) {
                 }
             )
         }
-        composable(PairScreen.SelectNetwork.route) {
-            val viewModel: PairViewModel = getPairViewModel(navController)
+        composable(PairScreen.SelectNetwork.route) { backStackEntry ->
+            val viewModel: PairViewModel = navController.getPairViewModel(backStackEntry)
             SelectNetworkScreen(
                 viewModel = viewModel,
                 exit = navController::popBackStack,
@@ -178,8 +178,8 @@ private fun NavGraphBuilder.addPairGraph(navController: NavController) {
                 }
             )
         }
-        composable(PairScreen.InsertPassword.route) {
-            val viewModel: PairViewModel = getPairViewModel(navController)
+        composable(PairScreen.InsertPassword.route) { backStackEntry ->
+            val viewModel: PairViewModel = navController.getPairViewModel(backStackEntry)
             InsertPasswordScreen(
                 viewModel = viewModel,
                 exit = navController::popBackStack,
@@ -190,8 +190,8 @@ private fun NavGraphBuilder.addPairGraph(navController: NavController) {
                 }
             )
         }
-        composable(PairScreen.Connecting.route) {
-            val viewModel: PairViewModel = getPairViewModel(navController)
+        composable(PairScreen.Connecting.route) { backStackEntry ->
+            val viewModel: PairViewModel = navController.getPairViewModel(backStackEntry)
             ConnectingScreen(
                 viewModel = viewModel,
                 exit = navController::popBackStack,
@@ -202,8 +202,8 @@ private fun NavGraphBuilder.addPairGraph(navController: NavController) {
                 }
             )
         }
-        composable(PairScreen.DevicePaired.route) {
-            val viewModel: PairViewModel = getPairViewModel(navController)
+        composable(PairScreen.DevicePaired.route) { backStackEntry ->
+            val viewModel: PairViewModel = navController.getPairViewModel(backStackEntry)
             DevicePairedScreen(
                 viewModel = viewModel,
                 previousBackStackEntry = navController.previousBackStackEntry,
