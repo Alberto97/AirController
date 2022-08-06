@@ -2,9 +2,8 @@ name: Build
 
 on:
   push:
-    branches-ignore:
-      - 'dependabot/**'
-      - 'renovate/**'
+    branches:
+      - master
   pull_request:
 
 jobs:
