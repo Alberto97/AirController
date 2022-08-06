@@ -41,11 +41,12 @@ private fun OobScreen(openLogin: () -> Unit) {
                 }
             }
         }
-    ) {
+    ) { contentPadding ->
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxSize()
+                .padding(contentPadding)
                 .padding(16.dp)
         ) {
             Column {

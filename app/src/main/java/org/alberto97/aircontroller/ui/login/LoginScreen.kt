@@ -79,20 +79,22 @@ private fun LoginScreen(
                 title = { Text(stringResource(R.string.login_title)) }
             )
         }
-    ) {
-        if (state == ScreenState.Loading)
-            FullscreenLoading()
-        else
-            LoginContent(
-                password = password,
-                setPassword = setPassword,
-                email = email,
-                setEmail = setEmail,
-                region = region,
-                setRegion = setRegion,
-                regionOptions = regionOptions,
-                onLogin = onLogin
-            )
+    ) { contentPadding ->
+        Box(Modifier.padding(contentPadding)) {
+            if (state == ScreenState.Loading)
+                FullscreenLoading()
+            else
+                LoginContent(
+                    password = password,
+                    setPassword = setPassword,
+                    email = email,
+                    setEmail = setEmail,
+                    region = region,
+                    setRegion = setRegion,
+                    regionOptions = regionOptions,
+                    onLogin = onLogin
+                )
+        }
     }
 }
 

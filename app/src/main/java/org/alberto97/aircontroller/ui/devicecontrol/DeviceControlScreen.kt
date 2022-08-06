@@ -1,5 +1,7 @@
 package org.alberto97.aircontroller.ui.devicecontrol
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -9,6 +11,7 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -82,11 +85,13 @@ private fun DeviceControlScreen(
                     navigateToSettings = navigateSettings
                 )
             }
-        ) {
-            when (state) {
-                ScreenState.Loading -> FullscreenLoading()
-                ScreenState.Error -> FullscreenError(loadData)
-                else -> LoadedScreen(viewModel, isOn, openSheet)
+        ) { contentPadding ->
+            Box(Modifier.padding(contentPadding)) {
+                when (state) {
+                    ScreenState.Loading -> FullscreenLoading()
+                    ScreenState.Error -> FullscreenError(loadData)
+                    else -> LoadedScreen(viewModel, isOn, openSheet)
+                }
             }
         }
     }

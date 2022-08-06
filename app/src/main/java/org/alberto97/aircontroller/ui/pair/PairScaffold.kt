@@ -27,10 +27,11 @@ fun PairScaffold(
         message = message,
         clearMessage = onClearMessage,
         scaffoldState = scaffoldState
-    ) {
+    ) { contentPadding ->
         Column(
             Modifier
                 .fillMaxSize()
+                .padding(contentPadding)
                 .padding(8.dp)
         ) {
 

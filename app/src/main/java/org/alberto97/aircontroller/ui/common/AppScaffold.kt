@@ -1,5 +1,6 @@
 package org.alberto97.aircontroller.ui.common
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
@@ -12,7 +13,7 @@ fun AppScaffold(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable (contentPadding: PaddingValues) -> Unit
 ) {
 
     AppSnackbar(
@@ -25,7 +26,7 @@ fun AppScaffold(
         scaffoldState = scaffoldState,
         topBar = topBar,
         floatingActionButton = floatingActionButton,
-    ) {
-        content()
+    ) { contentPadding ->
+        content(contentPadding)
     }
 }
