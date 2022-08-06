@@ -1,6 +1,6 @@
 [versions]
 agp = "7.2.2"
-kotlin = "1.6.10"
+kotlin = "1.7.0"
 compose = "1.1.1"
 koin = "3.2.0"
 moshi = "1.13.0"
@@ -32,7 +32,7 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidxCompose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
-kotlin-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+kotlin-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2"
 
 mockito-mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
 
