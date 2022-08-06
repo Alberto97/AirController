@@ -2,6 +2,7 @@ package org.alberto97.aircontroller.ui.about
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -41,8 +42,8 @@ private fun AboutScreen(
             title = { Text(stringResource(R.string.about_title)) },
             navigateUp = { onBackClick() }
         )
-    }) {
-        Column {
+    }) { contentPadding ->
+        Column(Modifier.padding(contentPadding)) {
             ListItem(
                 icon = { Icon(painterResource(R.drawable.ic_github), null)},
                 text = { Text(stringResource(R.string.about_repository_title)) },

@@ -1,8 +1,11 @@
 package org.alberto97.aircontroller.ui.devicesettings
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavBackStackEntry
@@ -98,20 +101,22 @@ private fun DeviceSettingsScreen(
                 navigateUp = navigateUp
             )
         }
-    ) {
-        when(state) {
-            ScreenState.Loading -> FullscreenLoading()
-            ScreenState.Error -> FullscreenError(loadData)
-            else -> DeviceSettingsContent(
-                deviceName = deviceName,
-                renameDevice = renameDevice,
-                useCelsius = useCelsius,
-                onUseCelsiusChange = onUseCelsiusChange,
-                deleteDevice = deleteDevice,
-                macAddress = macAddress,
-                ipAddress = ipAddress,
-                network = network
-            )
+    ) { contentPadding ->
+        Box(Modifier.padding(contentPadding)) {
+            when (state) {
+                ScreenState.Loading -> FullscreenLoading()
+                ScreenState.Error -> FullscreenError(loadData)
+                else -> DeviceSettingsContent(
+                    deviceName = deviceName,
+                    renameDevice = renameDevice,
+                    useCelsius = useCelsius,
+                    onUseCelsiusChange = onUseCelsiusChange,
+                    deleteDevice = deleteDevice,
+                    macAddress = macAddress,
+                    ipAddress = ipAddress,
+                    network = network
+                )
+            }
         }
     }
 }
