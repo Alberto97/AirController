@@ -37,7 +37,7 @@ fun DeviceOn(viewModel: DeviceViewModel, showSheet: (data: DeviceControlSheet) -
     val sleepMode by viewModel.sleepMode.collectAsState()
     val horizontalAirFlow by viewModel.horizontalAirFlow.collectAsState()
     val verticalAirFlow by viewModel.verticalAirFlow.collectAsState()
-    //val backlight by viewModel.backlight.collectAsState()
+    val backlight by viewModel.backlight.collectAsState()
     val eco by viewModel.isEco.collectAsState()
     val quiet by viewModel.isQuiet.collectAsState()
     val boost by viewModel.isBoost.collectAsState()
@@ -55,7 +55,7 @@ fun DeviceOn(viewModel: DeviceViewModel, showSheet: (data: DeviceControlSheet) -
         switchHorizontal = { viewModel.switchAirFlowHorizontal() },
         verticalAirFlow = verticalAirFlow,
         switchVertical = { viewModel.switchAirFlowVertical() },
-        backlight = null,
+        backlight = backlight,
         switchBacklight = { viewModel.switchBacklight() },
         eco = eco,
         switchEco = { viewModel.switchEco() },
