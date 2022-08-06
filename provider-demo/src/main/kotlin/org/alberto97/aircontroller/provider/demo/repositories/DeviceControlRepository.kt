@@ -12,8 +12,8 @@ internal class DeviceControlRepository(val state: DemoStateHolder): IDeviceContr
     override suspend fun getDeviceState(dsn: String): ResultWrapper<AppDeviceState> {
         val deviceState = state.states.getValue(dsn)
         val device = state.devices.getValue(dsn)
-        deviceState.productName = device.name
-        return ResultWrapper.Success(deviceState)
+        val state = deviceState.copy(productName = device.name)
+        return ResultWrapper.Success(state)
     }
 
     override suspend fun setAirFlowHorizontal(dsn: String, value: Boolean): ResultWrapper<Unit> {

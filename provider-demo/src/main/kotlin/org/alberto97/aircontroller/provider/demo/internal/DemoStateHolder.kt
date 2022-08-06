@@ -1,9 +1,6 @@
 package org.alberto97.aircontroller.provider.demo.internal
 
-import org.alberto97.aircontroller.common.features.FanSpeed
-import org.alberto97.aircontroller.common.features.SleepMode
-import org.alberto97.aircontroller.common.features.SleepModeData
-import org.alberto97.aircontroller.common.features.WorkMode
+import org.alberto97.aircontroller.common.features.*
 import org.alberto97.aircontroller.common.models.AppDevice
 import org.alberto97.aircontroller.common.models.AppDeviceState
 
@@ -26,6 +23,30 @@ internal class DemoStateHolder {
         )
     }
 
+    private fun getDeviceState(): AppDeviceState {
+        return AppDeviceState(
+            productName = "Device",
+            backlight = false,
+            supportedModes = emptyList(),
+            workMode = WorkMode.Auto,
+            horizontalAirFlow = false,
+            verticalAirFlow = false,
+            quiet = false,
+            eco = false,
+            boost = false,
+            sleepMode = SleepMode.OFF,
+            supportedSleepModes = emptyList(),
+            supportedSpeeds = emptyList(),
+            fanSpeed = FanSpeed.Auto,
+            temp = 0,
+            roomTemp = 0,
+            tempUnit = TempType.Fahrenheit,
+            on = false,
+            maxTemp = 90,
+            minTemp = 61
+        )
+    }
+
     private fun loadInitialStates(): MutableMap<String, AppDeviceState> {
         val sleep1 = SleepModeData(SleepMode.MODE1, listOf(2), listOf(-2))
         val sleep2 = SleepModeData(SleepMode.MODE2, listOf(2, 6, 7), listOf(-2, -1, -1))
@@ -33,13 +54,13 @@ internal class DemoStateHolder {
         val supportedModes = listOf(WorkMode.Heating, WorkMode.Cooling, WorkMode.Dry, WorkMode.FanOnly, WorkMode.Auto)
         val supportedFanSpeed = listOf(FanSpeed.Lower, FanSpeed.Low, FanSpeed.Normal, FanSpeed.High, FanSpeed.Higher, FanSpeed.Auto)
 
-        val state1 = AppDeviceState(
+        val state1 = getDeviceState().copy(
             supportedModes = supportedModes,
             supportedSpeeds = supportedFanSpeed, supportedSleepModes = supportedSleepMode,
             roomTemp = 82, temp = 77
         )
 
-        val state2 = AppDeviceState(
+        val state2 = getDeviceState().copy(
             supportedModes = supportedModes,
             supportedSpeeds = supportedFanSpeed, supportedSleepModes = supportedSleepMode,
             roomTemp = 79, temp = 75

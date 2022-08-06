@@ -35,8 +35,6 @@ internal class DeviceControlRepository(
     }
 
     override suspend fun getDeviceState(dsn: String): ResultWrapper<AppDeviceState> {
-        val deviceState = AppDeviceState()
-
         val props = try {
             propertyRepo.getProperties(dsn)
         } catch (e: Exception) {
@@ -45,9 +43,6 @@ internal class DeviceControlRepository(
             Log.e(LOG_TAG, e.stackTraceToString())
             return ResultWrapper.Error("Cannot retrieve device state")
         }
-
-        // Set device name
-        deviceState.productName = props.first().productName
 
         val intMap = mutableMapOf<String, Int?>()
         val boolMap = mutableMapOf<String, Boolean?>()
@@ -71,35 +66,41 @@ internal class DeviceControlRepository(
         val intSleepMode = intMap[SLEEP_MODE_PROP]!!
         val sleepMode = sleepModeConverter.fromAyla(intSleepMode)
 
-        // Modes
-        deviceState.supportedModes = getSupportedModes()
-        deviceState.workMode = workMode
-        deviceState.supportedSpeeds = getSupportedFanSpeeds()
-        deviceState.fanSpeed = fanSpeed
-        deviceState.supportedSleepModes = getSupportedSleepModes(deviceState.workMode)
-        deviceState.sleepMode = sleepMode
-        deviceState.tempUnit = tempUnit
-
-        // Booleans
-        deviceState.on = boolMap[POWER_PROP] ?: false
-        deviceState.backlight = boolMap[BACKLIGHT_PROP] ?: false
-        deviceState.eco = boolMap[ECO_PROP] ?: false
-        deviceState.quiet = boolMap[QUIET_PROP] ?: false
-        deviceState.boost = boolMap[BOOST_PROP] ?: false
-        deviceState.horizontalAirFlow = boolMap[HORIZONTAL_AIR_FLOW_PROP] ?: false
-        deviceState.verticalAirFlow = boolMap[VERTICAL_AIR_FLOW_PROP] ?: false
+        // Product name
+        val productName = props.first().productName
 
         // Temperatures
-        deviceState.roomTemp = intMap[ROOM_TEMP_PROP] ?: 0
-        deviceState.temp = intMap[TEMP_PROP] ?: 0
-        deviceState.maxTemp = getMaxTemp(deviceState.tempUnit)
-        deviceState.minTemp = getMinTemp(deviceState.tempUnit)
+        var roomTemp = intMap[ROOM_TEMP_PROP] ?: 0
+        var temp = intMap[TEMP_PROP] ?: 0
 
-        prefs.setTempUnit(dsn, deviceState.tempUnit)
-        if (deviceState.tempUnit.isCelsius()) {
-            deviceState.temp = deviceState.temp.toC()
-            deviceState.roomTemp = deviceState.roomTemp.toC()
+        prefs.setTempUnit(dsn, tempUnit)
+
+        if (tempUnit.isCelsius()) {
+            temp = temp.toC()
+            roomTemp = roomTemp.toC()
         }
+
+        val deviceState = AppDeviceState(
+            productName = productName,
+            backlight = boolMap[BACKLIGHT_PROP] ?: false,
+            supportedModes = getSupportedModes(),
+            workMode = workMode,
+            horizontalAirFlow = boolMap[HORIZONTAL_AIR_FLOW_PROP] ?: false,
+            verticalAirFlow = boolMap[VERTICAL_AIR_FLOW_PROP] ?: false,
+            quiet = boolMap[QUIET_PROP] ?: false,
+            eco = boolMap[ECO_PROP] ?: false,
+            boost = boolMap[BOOST_PROP] ?: false,
+            sleepMode = sleepMode,
+            supportedSleepModes = getSupportedSleepModes(workMode),
+            supportedSpeeds = getSupportedFanSpeeds(),
+            fanSpeed = fanSpeed,
+            temp = temp,
+            roomTemp = roomTemp,
+            tempUnit = tempUnit,
+            on = boolMap[POWER_PROP] ?: false,
+            maxTemp = getMaxTemp(tempUnit),
+            minTemp = getMinTemp(tempUnit)
+        )
 
         return ResultWrapper.Success(deviceState)
     }
