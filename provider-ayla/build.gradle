@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+    alias(libs.plugins.google.ksp)
 }
 
 android {
@@ -36,7 +36,7 @@ dependencies {
     // Moshi
     implementation libs.moshi.adapters
     implementation libs.moshi.moshi
-    kapt libs.moshi.kotlinCodegen
+    ksp libs.moshi.kotlinCodegen
 
     // Retrofit
     implementation libs.retrofit.retrofit
