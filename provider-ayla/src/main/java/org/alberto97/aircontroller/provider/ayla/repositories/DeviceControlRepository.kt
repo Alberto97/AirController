@@ -82,6 +82,12 @@ internal class DeviceControlRepository(
 
         val deviceState = AppDeviceState(
             productName = productName,
+            // While using the REST APIs the backlight will turn on after any state change and,
+            // unlike the remote control operation, it will turn off shortly after that.
+            // Since the state gets refreshed after any app-initiated property change
+            // the wrong value might be shown (backlight on while the actual setting might be off).
+            // Do not show or use the state because that's unreliable.
+            backlightType = BacklightType.Stateless,
             backlight = boolMap[BACKLIGHT_PROP] ?: false,
             supportedModes = getSupportedModes(),
             workMode = workMode,

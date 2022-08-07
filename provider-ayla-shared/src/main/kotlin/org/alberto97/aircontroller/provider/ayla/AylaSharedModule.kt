@@ -10,6 +10,7 @@ import org.koin.dsl.module
 val aylaControllers = module {
     single<IAirFlowHorizontalController> { AirFlowHorizontalController() }
     single<IAirFlowVerticalController> { AirFlowVerticalController() }
+    single<IBacklightTypeController> { BacklightTypeController() }
     single<IBacklightController> { BacklightController() }
     single<IBoostController> { BoostController() }
     single<IEcoController> { EcoController() }

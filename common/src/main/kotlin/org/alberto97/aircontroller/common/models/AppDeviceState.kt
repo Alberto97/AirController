@@ -5,6 +5,7 @@ import org.alberto97.aircontroller.common.features.*
 
 data class AppDeviceState(
     val productName: String,
+    val backlightType: BacklightType,
     val backlight: Boolean,
     val supportedModes: List<WorkMode>,
     val workMode: WorkMode,
