@@ -6,10 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.alberto97.aircontroller.common.features.FanSpeed
-import org.alberto97.aircontroller.common.features.SleepMode
-import org.alberto97.aircontroller.common.features.SleepModeData
-import org.alberto97.aircontroller.common.features.WorkMode
+import org.alberto97.aircontroller.common.features.*
 import org.alberto97.aircontroller.common.models.AppDeviceState
 import org.alberto97.aircontroller.common.models.ResultWrapper
 import org.alberto97.aircontroller.models.ScreenState
@@ -23,6 +20,7 @@ class DeviceViewModel(
     private val shortcutManager: IDeviceShortcutManager,
     private val airFlowHorizontalController: IAirFlowHorizontalController,
     private val airFlowVerticalController: IAirFlowVerticalController,
+    private val backlightTypeController: IBacklightTypeController,
     private val backlightController: IBacklightController,
     private val boostController: IBoostController,
     private val ecoController: IEcoController,
@@ -51,6 +49,9 @@ class DeviceViewModel(
 
     private val _fanSpeed = MutableStateFlow<FanSpeed?>(FanSpeed.Auto)
     val fanSpeed = _fanSpeed.asStateFlow()
+
+    private val _backlightType = MutableStateFlow(BacklightType.Stateful)
+    val backlightType = _backlightType.asStateFlow()
 
     private val _backlight = MutableStateFlow<Boolean?>(true)
     val backlight = _backlight.asStateFlow()
@@ -134,6 +135,7 @@ class DeviceViewModel(
 
     private fun updateUi(data: AppDeviceState) {
         _deviceName.value = data.productName
+        _backlightType.value = backlightTypeController.getValue(data)!!
         _backlight.value = backlightController.getValue(data)
         _workMode.value = modeController.getValue(data)!!
         _horizontalAirFlow.value = airFlowHorizontalController.getValue(data)
@@ -194,6 +196,14 @@ class DeviceViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             setProp {
                 repo.setFanSpeed(dsn, speed)
+            }
+        }
+    }
+
+    fun setBacklight(enabled: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            setProp {
+                repo.setBacklight(dsn, enabled)
             }
         }
     }

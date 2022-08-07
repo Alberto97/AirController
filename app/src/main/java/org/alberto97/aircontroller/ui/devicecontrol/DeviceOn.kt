@@ -7,6 +7,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.outlined.HearingDisabled
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.Thermostat
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.alberto97.aircontroller.R
+import org.alberto97.aircontroller.common.features.BacklightType
 import org.alberto97.aircontroller.common.features.FanSpeed
 import org.alberto97.aircontroller.common.features.SleepMode
 import org.alberto97.aircontroller.common.features.WorkMode
@@ -37,6 +39,7 @@ fun DeviceOn(viewModel: DeviceViewModel, showSheet: (data: DeviceControlSheet) -
     val sleepMode by viewModel.sleepMode.collectAsState()
     val horizontalAirFlow by viewModel.horizontalAirFlow.collectAsState()
     val verticalAirFlow by viewModel.verticalAirFlow.collectAsState()
+    val backlightType by viewModel.backlightType.collectAsState()
     val backlight by viewModel.backlight.collectAsState()
     val eco by viewModel.isEco.collectAsState()
     val quiet by viewModel.isQuiet.collectAsState()
@@ -55,8 +58,10 @@ fun DeviceOn(viewModel: DeviceViewModel, showSheet: (data: DeviceControlSheet) -
         switchHorizontal = { viewModel.switchAirFlowHorizontal() },
         verticalAirFlow = verticalAirFlow,
         switchVertical = { viewModel.switchAirFlowVertical() },
+        backlightType = backlightType,
         backlight = backlight,
         switchBacklight = { viewModel.switchBacklight() },
+        setBacklight = { enable -> viewModel.setBacklight(enable) },
         eco = eco,
         switchEco = { viewModel.switchEco() },
         quiet = quiet,
@@ -82,8 +87,10 @@ private fun DeviceOn(
     switchHorizontal: () -> Unit,
     verticalAirFlow: Boolean?,
     switchVertical: () -> Unit,
+    backlightType: BacklightType,
     backlight: Boolean?,
     switchBacklight: () -> Unit,
+    setBacklight: (enable: Boolean) -> Unit,
     eco: Boolean?,
     switchEco: () -> Unit,
     quiet: Boolean?,
@@ -115,8 +122,14 @@ private fun DeviceOn(
             switchVertical = switchVertical
         )
 
+        if (backlightType == BacklightType.Stateless) {
+            BacklightUntracked(setBacklight)
+        }
+
         PreferenceCategory(stringResource(R.string.device_control_advanced))
-        Backlight(backlight, switchBacklight)
+        if (backlightType == BacklightType.Stateful) {
+            BacklightTracked(backlight, switchBacklight)
+        }
         Eco(eco, switchEco)
         Quiet(quiet, switchQuiet)
         Boost(boost, switchBoost)
@@ -236,10 +249,27 @@ private fun AirFlow(
 
 @ExperimentalMaterialApi
 @Composable
-private fun Backlight(backlight: Boolean?, switchBacklight: () -> Unit) {
+private fun BacklightUntracked(setBacklight: (enabled: Boolean) -> Unit) {
+    PreferenceCategory(stringResource(R.string.device_control_backlight))
+
+    Preference(
+        title = stringResource(R.string.device_control_backlight_untracked_on),
+        icon = { PreferenceIcon(Icons.Outlined.Lightbulb) },
+        onClick = { setBacklight(true) }
+    )
+    Preference(
+        title = stringResource(R.string.device_control_backlight_untracked_off),
+        icon = { PreferenceIcon(Icons.Default.Lightbulb) },
+        onClick = { setBacklight(false) }
+    )
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun BacklightTracked(backlight: Boolean?, switchBacklight: () -> Unit) {
     if (backlight != null)
         SwitchPreference(
-            title = stringResource(R.string.device_control_backlight),
+            title = stringResource(R.string.device_control_backlight_tracked),
             checked = backlight,
             onCheckedChange = { switchBacklight() },
             icon = { PreferenceIcon(Icons.Outlined.Lightbulb) }
@@ -301,8 +331,10 @@ private fun Preview() {
                 switchHorizontal = { },
                 verticalAirFlow = false,
                 switchVertical = { },
+                backlightType = BacklightType.Stateless,
                 backlight = false,
                 switchBacklight = { },
+                setBacklight = { },
                 eco = true,
                 switchEco = { },
                 quiet = true,

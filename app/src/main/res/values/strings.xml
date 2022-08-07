@@ -53,6 +53,9 @@
     <string name="device_control_air_flow_vertical">Vertical</string>
     <string name="device_control_advanced">Advanced</string>
     <string name="device_control_backlight">Backlight</string>
+    <string name="device_control_backlight_tracked">Backlight</string>
+    <string name="device_control_backlight_untracked_on">Turn on</string>
+    <string name="device_control_backlight_untracked_off">Turn off</string>
     <string name="device_control_eco">Eco</string>
     <string name="device_control_quiet">Quiet</string>
     <string name="device_control_boost">Super</string>

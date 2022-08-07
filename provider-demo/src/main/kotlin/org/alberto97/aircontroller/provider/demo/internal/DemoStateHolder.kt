@@ -26,6 +26,7 @@ internal class DemoStateHolder {
     private fun getDeviceState(): AppDeviceState {
         return AppDeviceState(
             productName = "Device",
+            backlightType = BacklightType.Stateful,
             backlight = false,
             supportedModes = emptyList(),
             workMode = WorkMode.Auto,
