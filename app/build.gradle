@@ -54,9 +54,6 @@ dependencies {
     implementation project(":provider-ayla")
     implementation project(":provider-demo")
 
-    // AndroidX Appcompat
-    implementation libs.androidx.appcompat
-
     // AndroidX Compose
     implementation libs.androidx.compose.ui.ui
     implementation libs.androidx.compose.ui.tooling
