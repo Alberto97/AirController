@@ -3,7 +3,7 @@ agp = "7.2.2"
 kotlin = "1.7.10"
 compose = "1.2.1"
 koin = "3.2.0"
-moshi = "1.13.0"
+moshi = "1.14.0"
 retrofit = "2.9.0"
 
 [plugins]
