@@ -150,7 +150,7 @@ private fun NavController.getPairViewModel(backStackEntry: NavBackStackEntry): P
     val pairBackStackEntry = remember(backStackEntry) {
         getBackStackEntry(Screen.Pair.route)
     }
-    return getViewModel(owner = pairBackStackEntry)
+    return getViewModel(viewModelStoreOwner = pairBackStackEntry)
 }
 
 private fun NavGraphBuilder.addPairGraph(navController: NavController) {
