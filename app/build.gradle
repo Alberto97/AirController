@@ -55,11 +55,14 @@ dependencies {
     implementation project(":provider-demo")
 
     // AndroidX Compose
-    implementation libs.androidx.compose.ui.ui
-    implementation libs.androidx.compose.ui.tooling
+    def composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
     implementation libs.androidx.compose.material
     implementation libs.androidx.compose.materialIconsExt
     implementation libs.androidx.activity.activityCompose
+    implementation libs.androidx.compose.ui.tooling.preview
+    debugImplementation libs.androidx.compose.ui.tooling
 
     // AndroidX Core Splashscreen
     implementation libs.androidx.core.splashscreen
