@@ -1,6 +1,6 @@
 [versions]
 agp = "7.3.1"
-kotlin = "1.7.10"
+kotlin = "1.7.20"
 compose = "2022.12.00"
 koin = "3.2.0"
 koin-android = "3.2.0"
