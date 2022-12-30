@@ -4,7 +4,7 @@ kotlin = "1.7.20"
 compose = "2022.12.00"
 koin = "3.3.2"
 koin-android = "3.3.2"
-koin-android-compose = "3.4.0"
+koin-android-compose = "3.4.1"
 moshi = "1.14.0"
 retrofit = "2.9.0"
 
