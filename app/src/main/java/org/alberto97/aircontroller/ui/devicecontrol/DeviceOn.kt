@@ -165,8 +165,8 @@ private fun AmbientTemp(roomTemp: Int?) {
 @ExperimentalMaterialApi
 @Composable
 private fun Mode(workMode: WorkMode?, onClick: (value: DeviceControlSheet) -> Unit) {
-    val resId = modeToStringMap.getOrDefault(workMode, R.string.work_mode_unknown)
-    val drawableId = modeToIconMap.getOrDefault(workMode, R.drawable.outline_brightness_low)
+    val resId = modeToStringMap[workMode] ?: R.string.work_mode_unknown
+    val drawableId = modeToIconMap[workMode] ?: R.drawable.outline_brightness_low
 
     Preference(
         title = stringResource(R.string.device_control_mode),
@@ -179,7 +179,7 @@ private fun Mode(workMode: WorkMode?, onClick: (value: DeviceControlSheet) -> Un
 @ExperimentalMaterialApi
 @Composable
 private fun FanSpeed(fanSpeed: FanSpeed?, onClick: (value: DeviceControlSheet) -> Unit) {
-    val resId = fanToStringMap.getOrDefault(fanSpeed, R.string.fan_speed_auto)
+    val resId = fanToStringMap[fanSpeed] ?: R.string.fan_speed_auto
     if (fanSpeed != null) {
         Preference(
             title = stringResource(R.string.device_control_fan_speed),
