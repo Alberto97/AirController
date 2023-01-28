@@ -13,6 +13,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 benManes-gradleVersions = "com.github.ben-manes.versions:0.44.0"
 google-ksp = "com.google.devtools.ksp:1.7.20-1.0.8"
+gradle-android-cachefix = "org.gradle.android.cache-fix:2.6.3"
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 [libraries]
