@@ -10,6 +10,7 @@ android {
 
     defaultConfig {
         minSdk 23
+        namespace "org.alberto97.aircontroller.provider.ayla"
     }
 
     compileOptions {
