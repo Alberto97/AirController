@@ -2,7 +2,7 @@
 agp = "7.4.1"
 kotlin = "1.8.0"
 compose = "2022.12.00"
-koin = "3.3.2"
+koin = "3.3.3"
 koin-android = "3.3.2"
 koin-android-compose = "3.4.1"
 moshi = "1.14.0"
