@@ -44,7 +44,7 @@ fun DeviceSettingsScreen(
 
     fun requestDevicesRefresh() {
         val savedStateHandle = homeBackStackEntry.savedStateHandle
-        savedStateHandle.set(DevicesStateHandleParams.needsRefresh, true)
+        savedStateHandle[DevicesStateHandleParams.needsRefresh] = true
     }
 
     LaunchedEffect(popToHome) {
