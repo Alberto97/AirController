@@ -30,7 +30,6 @@ dependencies {
 
     // AndroidX
     implementation libs.androidx.preference
-    implementation libs.androidx.security.crypto
 
     // Koin
     implementation libs.koin.android
