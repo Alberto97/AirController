@@ -15,7 +15,11 @@ import org.alberto97.aircontroller.ui.theme.AppTheme
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun OobScreen(openLogin: () -> Unit, viewModel: OobViewModel = getViewModel()) {
+fun OobScreen(
+    openLogin: () -> Unit,
+    @Suppress("UNUSED_PARAMETER")
+    viewModel: OobViewModel = getViewModel()
+) {
     OobScreen(openLogin)
 }
 
