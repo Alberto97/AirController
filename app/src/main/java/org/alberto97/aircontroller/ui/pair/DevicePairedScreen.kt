@@ -70,7 +70,7 @@ private fun DevicePairedScreen(deviceName: String, onClick: () -> Unit) {
 private fun Preview() {
     AppTheme {
         Surface{
-            DevicePairedScreen("Hi-Smart-serialNumber", {})
+            DevicePairedScreen(deviceName = "Hi-Smart-serialNumber", onClick = {})
         }
     }
 }
