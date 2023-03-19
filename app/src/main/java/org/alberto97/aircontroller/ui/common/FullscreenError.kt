@@ -49,7 +49,7 @@ fun FullscreenError(tryAgain: () -> Unit) {
 private fun Preview() {
     AppTheme(darkTheme = false) {
         Surface {
-            FullscreenError({})
+            FullscreenError(tryAgain = {})
         }
     }
 }

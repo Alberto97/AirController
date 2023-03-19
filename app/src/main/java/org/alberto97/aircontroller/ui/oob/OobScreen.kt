@@ -91,7 +91,7 @@ private fun OobScreen(openLogin: () -> Unit) {
 @Preview("Light")
 private fun PreviewLight() {
     AppTheme {
-        OobScreen({})
+        OobScreen(openLogin = {})
     }
 }
 
@@ -99,6 +99,6 @@ private fun PreviewLight() {
 @Preview("Dark")
 private fun PreviewDark() {
     AppTheme(darkTheme = true) {
-        OobScreen({})
+        OobScreen(openLogin = {})
     }
 }
