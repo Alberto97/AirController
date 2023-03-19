@@ -1,9 +1,8 @@
 package org.alberto97.aircontroller.provider.ayla.internal.repositories
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 
 
 internal object AuthPrefs {
@@ -19,20 +18,11 @@ internal interface ISecretsRepository {
 internal class SecretsRepository(app: Application) : ISecretsRepository {
 
     companion object {
-        const val SECRETS_FILE_NAME = "secrets"
+        const val SECRETS_FILE_NAME = "secrets_prefs"
     }
 
-    private val masterKey = MasterKey.Builder(app, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
-
-    private val preferences: SharedPreferences = EncryptedSharedPreferences.create(
-        app,
-        SECRETS_FILE_NAME,
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+    private val preferences: SharedPreferences =
+        app.getSharedPreferences(SECRETS_FILE_NAME, Context.MODE_PRIVATE)
 
     private var _authToken = getAuth()
     private var _refreshToken = getRefresh()
