@@ -28,9 +28,6 @@ dependencies {
 
     implementation libs.kotlin.coroutines.android
 
-    // AndroidX
-    implementation libs.androidx.preference
-
     // Koin
     implementation libs.koin.android
 
